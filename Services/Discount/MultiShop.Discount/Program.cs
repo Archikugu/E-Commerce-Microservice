@@ -22,7 +22,6 @@ if (app.Environment.IsDevelopment())
     {
         // This is the endpoint for the Swagger UI
         options.SwaggerEndpoint("/openapi/v1.json", "MultiShop Discount API");
-        options.RoutePrefix = string.Empty; // This will make Swagger UI available at the root (e.g., https://localhost:7212)
     });
     app.MapOpenApi();
     app.MapScalarApiReference();
