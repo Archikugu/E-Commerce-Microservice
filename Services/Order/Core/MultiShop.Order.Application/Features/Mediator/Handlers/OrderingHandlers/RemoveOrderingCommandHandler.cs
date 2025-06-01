@@ -17,7 +17,7 @@ namespace MultiShop.Order.Application.Features.Mediator.Handlers.OrderingHandler
         public async Task Handle(RemoveOrderingCommand request, CancellationToken cancellationToken)
         {
             var values = await _orderingRepository.GetByIdAsync(request.Id);
-            await _orderingRepository.UpdateAsync(values);
+            await _orderingRepository.DeleteAsync(values);
         }
     }
 }
