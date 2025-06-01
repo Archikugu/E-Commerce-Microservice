@@ -27,7 +27,7 @@ public class ProductDetailService : IProductDetailService
 
     public async Task DeleteProductDetailAsync(string id)
     {
-        await _productDetailCollection.DeleteOneAsync(id);
+        await _productDetailCollection.DeleteOneAsync(x => x.ProductId == id);
     }
 
     public async Task<List<ResultProductDetailDto>> GetAllProductDetailAsync()
