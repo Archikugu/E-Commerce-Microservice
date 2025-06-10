@@ -18,7 +18,8 @@ public static class Config
         new ApiResource("ResourceOrder")
         {
             Scopes = { "OrderFullPermission" }
-        }
+        },
+        new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
     };
 
     public static IEnumerable<IdentityResource> IdentityResources = new IdentityResource[]
@@ -33,7 +34,8 @@ public static class Config
         new ApiScope("CatalogFullPermission", "Full access to catalog operations"),
         new ApiScope("CatalogReadPermission", "Read-only access to catalog operations"),
         new ApiScope("DiscountFullPermission", "Full access to discount operations"),
-        new ApiScope("OrderFullPermission", "Full access to order operations")
+        new ApiScope("OrderFullPermission", "Full access to order operations"),
+        new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
     };
 
     public static IEnumerable<Client> Clients => new Client[]
