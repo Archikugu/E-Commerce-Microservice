@@ -1,0 +1,42 @@
+﻿@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Breadcrumb Start -->
+<div class="container-fluid">
+	<div class="row px-xl-5">
+		<div class="col-12">
+			<nav class="breadcrumb bg-light mb-30">
+				<a class="breadcrumb-item text-dark" href="#">Home</a>
+				<span class="breadcrumb-item active">Product List</span>
+			</nav>
+		</div>
+	</div>
+</div>
+<!-- Breadcrumb End -->
+
+
+<!-- Carousel Start -->
+@await Component.InvokeAsync("_CarouselViewComponentPartial")
+<!-- Carousel End -->
+
+<!-- Featured Start -->
+@await Component.InvokeAsync("_FeaturedViewComponentPartial")
+<!-- Featured End -->
+
+<!-- Categories Start -->
+@await Component.InvokeAsync("_CategoriesViewComponentPartial")
+<!-- Categories End -->
+
+<!-- Products Start -->
+@await Component.InvokeAsync("_FeaturedProductsViewComponentPartial")
+<!-- Products End -->
+
+<!-- Offer Start -->
+@await Component.InvokeAsync("_OfferDiscountViewComponentPartial")
+<!-- Offer End -->
+
+<!-- Vendor Start -->
+@await Component.InvokeAsync("_VendorViewComponentPartial")
+<!-- Vendor End -->
