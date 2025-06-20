@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MultiShop.WebUI.ViewComponents.HomeViewComponents
+namespace MultiShop.WebUI.ViewComponents.LayoutViewComponents
 {
-    public class _CarouselViewComponentPartial : ViewComponent
+    public class LayoutFooterViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke()
         {

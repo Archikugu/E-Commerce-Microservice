@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MultiShop.WebUI.ViewComponents.LayoutViewComponents
+namespace MultiShop.WebUI.ViewComponents.HomeViewComponents
 {
-    public class _NavbarViewComponentPartial : ViewComponent
+    public class HomeVendorViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke()
         {

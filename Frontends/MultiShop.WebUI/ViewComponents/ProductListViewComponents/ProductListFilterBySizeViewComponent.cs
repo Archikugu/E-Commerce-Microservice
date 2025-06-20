@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MultiShop.WebUI.ViewComponents.LayoutViewComponents
+namespace MultiShop.WebUI.ViewComponents.ProductsViewComponents
 {
-    public class _TopbarViewComponentPartial : ViewComponent
+    public class ProductListFilterBySizeViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke()
         {

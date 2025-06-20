@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MultiShop.WebUI.ViewComponents.HomeViewComponents
+namespace MultiShop.WebUI.ViewComponents.ProductListViewComponents
 {
-    public class _VendorViewComponentPartial : ViewComponent
+    public class ProductListSortingAndShowingViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke()
         {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MultiShop.WebUI.ViewComponents.HomeViewComponents
+namespace MultiShop.WebUI.ViewComponents.ProductListViewComponents
 {
-    public class _FeaturedViewComponentPartial:ViewComponent
+    public class ProductListPaginationViewComponent : ViewComponent
     {
         public IViewComponentResult Invoke()
         {

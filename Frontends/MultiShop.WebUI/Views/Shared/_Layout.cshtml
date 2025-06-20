@@ -1,15 +1,15 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 
- @await Component.InvokeAsync("_HeadViewComponentPartial")
+ @await Component.InvokeAsync("LayoutHead")
 
 <body>
 	<!-- Topbar Start -->
-	@await Component.InvokeAsync("_TopbarViewComponentPartial")
+	@await Component.InvokeAsync("LayoutTopbar")
 	<!-- Topbar End -->
 
 	<!-- Navbar Start -->
-	@await Component.InvokeAsync("_NavbarViewComponentPartial")
+	@await Component.InvokeAsync("LayoutNavbar")
 	<!-- Navbar End -->
 
 	<div class="main-content">
@@ -17,7 +17,7 @@
 	</div>
 
 	<!-- Footer Start -->
-	@await Component.InvokeAsync("_FooterViewComponentPartial")
+	@await Component.InvokeAsync("LayoutFooter")
 	<!-- Footer End -->
 
 	<!-- Scripts Start -->
