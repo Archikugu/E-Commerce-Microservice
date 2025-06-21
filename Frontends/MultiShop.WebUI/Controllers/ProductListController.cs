@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MultiShop.WebUI.Controllers
+namespace MultiShop.WebUI.Controllers;
+
+public class ProductListController : Controller
 {
-    public class ProductListController : Controller
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return View();
     }
+    public IActionResult ProductDetail()
+    {
+        return View();
+    }
+
 }
