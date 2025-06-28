@@ -7,13 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Admin\Controllers\" />
+    <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="ViewComponents\HomeViewComponents\HomeFeaturedProductsViewComponent.cs" />
+    <None Include="wwwroot\OvioAdminTemplate\help-documentation\assets\.DS_Store" />
+    <None Include="wwwroot\OvioAdminTemplate\help-documentation\assets\blueprint-css\plugins\.DS_Store" />
+    <None Include="wwwroot\OvioAdminTemplate\html\app\et-line-font\fonts\.DS_Store" />
+    <None Include="wwwroot\OvioAdminTemplate\html\charts\et-line-font\fonts\.DS_Store" />
+    <None Include="wwwroot\OvioAdminTemplate\html\component\et-line-font\fonts\.DS_Store" />
+    <None Include="wwwroot\OvioAdminTemplate\html\dist\et-line-font\fonts\.DS_Store" />
+    <None Include="wwwroot\OvioAdminTemplate\html\forms\et-line-font\fonts\.DS_Store" />
+    <None Include="wwwroot\OvioAdminTemplate\html\maps\et-line-font\fonts\.DS_Store" />
+    <None Include="wwwroot\OvioAdminTemplate\html\pages\et-line-font\fonts\.DS_Store" />
+    <None Include="wwwroot\OvioAdminTemplate\html\tables\et-line-font\fonts\.DS_Store" />
   </ItemGroup>
 
   <ItemGroup>
