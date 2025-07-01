@@ -6,7 +6,8 @@ using MultiShop.Catalog.Services.ProductServices;
 
 namespace MultiShop.Catalog.Controllers;
 
-[Authorize]
+//[Authorize]
+[AllowAnonymous] // For testing purposes, remove in production
 [Route("api/[controller]")]
 [ApiController]
 public class ProductsController : ControllerBase
@@ -37,7 +38,7 @@ public class ProductsController : ControllerBase
         return Ok("Product Successfully Added");
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProducts(string id)
     {
         await _ProductsService.DeleteProductAsync(id);
