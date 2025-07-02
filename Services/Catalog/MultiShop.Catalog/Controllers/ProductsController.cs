@@ -51,4 +51,11 @@ public class ProductsController : ControllerBase
         await _ProductsService.UpdateProductAsync(updateProductsDto);
         return Ok("Product Successfully Updated");
     }
+
+    [HttpGet("GetProductsWithCategory")]
+    public async Task<IActionResult> GetProductsWithCategory()
+    {
+        var values = await _ProductsService.GetProductsWithCategoryAsync();
+        return Ok(values);
+    }
 }
