@@ -1,0 +1,70 @@
+@model MultiShop.WebUI.Dtos.CatalogDtos.AboutDtos.UpdateAboutDto
+
+@{
+    ViewData["Title"] = "Update About";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <h4>Update About</h4>
+                <p>Update the about information below.</p>
+
+                <form asp-area="Admin" asp-controller="About" asp-action="UpdateAbout" method="post">
+                    <input type="hidden" asp-for="AboutId" />
+                    
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    
+                    <div class="form-group">
+                        <label asp-for="Title">Title</label>
+                        <input asp-for="Title" class="form-control" placeholder="Enter title" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="Description">Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter description"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="ImageUrl">Image Url</label>
+                        <input asp-for="ImageUrl" class="form-control" placeholder="Enter image url" />
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="Address">Address</label>
+                        <input asp-for="Address" class="form-control" placeholder="Enter address" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="Phone">Phone</label>
+                        <input asp-for="Phone" class="form-control" placeholder="Enter phone number" />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="Email">Email</label>
+                        <input asp-for="Email" class="form-control" placeholder="Enter email address" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label asp-for="WorkingHours">Working Hours</label>
+                        <input asp-for="WorkingHours" class="form-control" placeholder="Enter working hours" />
+                        <span asp-validation-for="WorkingHours" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-warning">Update About</button>
+                        <a asp-area="Admin" asp-controller="About" asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section> 

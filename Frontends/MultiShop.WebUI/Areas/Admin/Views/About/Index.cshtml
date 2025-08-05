@@ -1,0 +1,69 @@
+@using MultiShop.WebUI.Dtos.CatalogDtos.AboutDtos
+@model List<ResultAboutDto>
+
+@{
+	ViewData["Title"] = "About List";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+	int count = 0;
+}
+
+<section class="content container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="chart-box">
+				<h4>About List</h4>
+				<p>This table displays all existing about information in the system. You can view, update, or remove about details as needed.</p>
+
+				<div class="bs-example" data-example-id="simple-table">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Title</th>
+								<th>Description</th>
+								<th>Image</th>
+								<th>Address</th>
+								<th>Phone</th>
+								<th>Email</th>
+								<th>Working Hours</th>
+								<th>Delete</th>
+								<th>Update</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model)
+							{
+								count++;
+								<tr>
+									<th scope="row">@count</th>
+									<td>@item.Title</td>
+									<td>@(item.Description?.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description)</td>
+									<td>
+										@if (!string.IsNullOrEmpty(item.ImageUrl))
+										{
+											<img src="@item.ImageUrl" alt="@item.Title" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;" />
+										}
+										else
+										{
+											<span class="text-muted">No Image</span>
+										}
+									</td>
+									<td>@item.Address</td>
+									<td>@item.Phone</td>
+									<td>@item.Email</td>
+									<td>@item.WorkingHours</td>
+									<td><a asp-area="Admin" asp-controller="About" asp-action="DeleteAbout" asp-route-id="@item.AboutId" class="btn btn-danger">Delete</a></td>
+									<td><a asp-area="Admin" asp-controller="About" asp-action="UpdateAbout" asp-route-id="@item.AboutId" class="btn btn-warning">Update</a></td>
+								</tr>
+							}
+						</tbody>
+					</table>
+
+					<a asp-area="Admin" asp-controller="About" asp-action="CreateAbout" class="btn btn-success">
+						Add New About
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section> 
