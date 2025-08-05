@@ -1,0 +1,72 @@
+﻿@using MultiShop.WebUI.Dtos.CatalogDtos.FeatureSliderDtos
+@model List<ResultFeatureSliderDto>
+
+@{
+	ViewData["Title"] = "Feature Slider Management";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+	int count = 0;
+
+}
+
+<section class="content container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="chart-box">
+				<h4>Feature Slider List</h4>
+				<div class="bs-example" data-example-id="simple-table">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Image</th>
+								<th>Feature Slider Title</th>
+								<th>Status</th>
+								<th>Delete</th>
+								<th>Update</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model)
+							{
+								count++;
+								<tr>
+									<th scope="row">@count</th>
+									<td>
+										@if (!string.IsNullOrEmpty(item.ImageUrl))
+										{
+											<img src="@item.ImageUrl" alt="@item.Title" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;" />
+										}
+										else
+										{
+											<span class="text-muted">No Image</span>
+										}
+									</td>
+									<td>@item.Title</td>
+									<td>
+										@if (item.Status)
+										{
+											<span class="badge badge-success">Active</span>
+											<a asp-area="Admin" asp-controller="FeatureSlider" asp-action="ChangeStatusFalse" asp-route-id="@item.FeatureSliderId" class="btn btn-danger btn-sm">Deactivate</a>
+										}
+										else
+										{
+											<span class="badge badge-danger">Passive</span>
+											<a asp-area="Admin" asp-controller="FeatureSlider" asp-action="ChangeStatusTrue" asp-route-id="@item.FeatureSliderId" class="btn btn-success btn-sm">Activate</a>
+										}
+									</td>
+									<td><a asp-area="Admin" asp-controller="FeatureSlider" asp-action="DeleteFeatureSlider" asp-route-id="@item.FeatureSliderId" class="btn btn-danger">Delete</a></td>
+									<td><a asp-area="Admin" asp-controller="FeatureSlider" asp-action="UpdateFeatureSlider" asp-route-id="@item.FeatureSliderId" class="btn btn-warning">Update</a></td>
+								</tr>
+							}
+						</tbody>
+					</table>
+
+					<a asp-area="Admin" asp-controller="FeatureSlider" asp-action="CreateFeatureSlider" class="btn btn-success">
+						Add New Feature Slider Image
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+

@@ -1,0 +1,31 @@
+﻿@using MultiShop.WebUI.Dtos.CatalogDtos.FeatureDtos
+@model CreateFeatureDto
+
+@{
+	ViewData["Title"] = "CreateFeature";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<section class="content container-fluid">
+	<div class="row">
+
+		<div class="col-md-12">
+			<div class="chart-box">
+				<h4>Feature Creation Page</h4>
+				<br />
+				<div class="bs-example" data-example-id="bordered-table">
+					<form method="post">
+						<label>Feature Title</label>
+						<input type="text" class="form-control" asp-for="Title" />
+						<br />
+						<label>Feature Icon</label>
+						<input type="text" class="form-control" asp-for="Icon" />
+						<br />
+						<button class="btn btn-success">Add Feature</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

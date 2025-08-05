@@ -1,0 +1,36 @@
+﻿@model UpdateSpecialOfferDto
+
+@{
+	ViewData["Title"] = "UpdateSpecialOffer";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+	<div class="row">
+
+		<div class="col-md-12">
+			<div class="chart-box">
+				<h4>Special Offer Update Page</h4>
+				<br />
+				<div class="bs-example" data-example-id="bordered-table">
+
+					<form method="post">
+						<input type="hidden" asp-for="SpecialOfferId" />
+						<label>Special Offer Title</label>
+						<input type="text" class="form-control" asp-for="Title" />
+						<br />
+						<label>Special Offer SubTitle</label>
+						<input type="text" class="form-control" asp-for="SubTitle" />
+						<br />
+						<label>Special Offer Image Url</label>
+						<input type="text" class="form-control" asp-for="ImageUrl" />
+						<br />
+						<button class="btn btn-warning">Update Special Offer</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+

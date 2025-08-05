@@ -1,0 +1,39 @@
+@model MultiShop.WebUI.Dtos.CatalogDtos.BrandDtos.UpdateBrandDto
+
+@{
+    ViewData["Title"] = "Update Brand";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <h4>Update Brand</h4>
+                <p>Update the brand information below.</p>
+
+                <form asp-area="Admin" asp-controller="Brand" asp-action="UpdateBrand" method="post">
+                    <input type="hidden" asp-for="BrandId" />
+                    
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    
+                    <div class="form-group">
+                        <label asp-for="BrandName">Brand Name</label>
+                        <input asp-for="BrandName" class="form-control" placeholder="Enter brand name" />
+                        <span asp-validation-for="BrandName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ImageUrl">Brand Image Url</label>
+                        <input asp-for="ImageUrl" class="form-control" placeholder="Enter brand image url" />
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-warning">Update Brand</button>
+                        <a asp-area="Admin" asp-controller="Brand" asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section> 

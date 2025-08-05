@@ -1,0 +1,56 @@
+﻿@model List<ResultSpecialOfferDto>
+@{
+	ViewData["Title"] = "Special Offer Management";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="chart-box">
+				<h4>Special Offers</h4>
+
+				<div class="bs-example" data-example-id="simple-table">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Image</th>
+								<th>SpecialOffer Title</th>
+								<th>SpecialOffer SubTitle</th>
+								<th>Delete</th>
+								<th>Update</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model)
+							{
+								<tr>
+									<td>
+										@if (!string.IsNullOrEmpty(item.ImageUrl))
+										{
+											<img src="@item.ImageUrl" alt="@item.Title" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;" />
+										}
+										else
+										{
+											<span class="text-muted">No Image</span>
+										}
+									</td>
+									<td>@item.Title</td>
+									<td>@item.SubTitle</td>
+									<td><a asp-area="Admin" asp-controller="SpecialOffer" asp-action="DeleteSpecialOffer" asp-route-id="@item.SpecialOfferId" class="btn btn-danger">Delete</a></td>
+									<td><a asp-area="Admin" asp-controller="SpecialOffer" asp-action="UpdateSpecialOffer" asp-route-id="@item.SpecialOfferId" class="btn btn-warning">Update</a></td>
+								</tr>
+							}
+						</tbody>
+					</table>
+
+					<a asp-area="Admin" asp-controller="SpecialOffer" asp-action="CreateSpecialOffer" class="btn btn-success">
+						Add New Special Offer
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+

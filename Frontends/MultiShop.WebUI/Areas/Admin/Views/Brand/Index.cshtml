@@ -1,0 +1,59 @@
+@using MultiShop.WebUI.Dtos.CatalogDtos.BrandDtos
+@model List<ResultBrandDto>
+
+@{
+	ViewData["Title"] = "Brand List";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+	int count = 0;
+}
+
+<section class="content container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="chart-box">
+				<h4>Brand List</h4>
+				<p>This table displays all existing brands in the system. You can view products within each brand, update brand details, or remove brands as needed.</p>
+
+				<div class="bs-example" data-example-id="simple-table">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Brand Name</th>
+								<th>Image</th>
+								<th>Delete</th>
+								<th>Update</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model)
+							{
+								count++;
+								<tr>
+									<th scope="row">@count</th>
+									<td>@item.BrandName</td>
+									<td>
+										@if (!string.IsNullOrEmpty(item.ImageUrl))
+										{
+											<img src="@item.ImageUrl" alt="@item.BrandName" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;" />
+										}
+										else
+										{
+											<span class="text-muted">No Image</span>
+										}
+									</td>
+									<td><a asp-area="Admin" asp-controller="Brand" asp-action="DeleteBrand" asp-route-id="@item.BrandId" class="btn btn-danger">Delete</a></td>
+									<td><a asp-area="Admin" asp-controller="Brand" asp-action="UpdateBrand" asp-route-id="@item.BrandId" class="btn btn-warning">Update</a></td>
+								</tr>
+							}
+						</tbody>
+					</table>
+
+					<a asp-area="Admin" asp-controller="Brand" asp-action="CreateBrand" class="btn btn-success">
+						Add New Brand
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section> 

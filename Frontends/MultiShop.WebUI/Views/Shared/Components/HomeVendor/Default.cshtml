@@ -1,32 +1,25 @@
-﻿ <!-- Vendor Start -->
+﻿@using MultiShop.WebUI.Dtos.CatalogDtos.BrandDtos
+@model List<ResultBrandDto>
+
+<!-- Vendor Start -->
 <div class="container-fluid py-5">
     <div class="row px-xl-5">
         <div class="col">
             <div class="owl-carousel vendor-carousel">
-                <div class="bg-light p-4">
-                    <img src="~/MultiShopTemplate/img/vendor-1.jpg" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="~/MultiShopTemplate/img/vendor-2.jpg" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="~/MultiShopTemplate/img/vendor-3.jpg" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="~/MultiShopTemplate/img/vendor-4.jpg" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="~/MultiShopTemplate/img/vendor-5.jpg" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="~/MultiShopTemplate/img/vendor-6.jpg" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="~/MultiShopTemplate/img/vendor-7.jpg" alt="">
-                </div>
-                <div class="bg-light p-4">
-                    <img src="~/MultiShopTemplate/img/vendor-8.jpg" alt="">
-                </div>
+              
+                    @foreach (var brand in Model)
+                    {
+                        <div class="bg-light p-4">
+                            @if (!string.IsNullOrEmpty(brand.ImageUrl))
+                            {
+                                <img src="@brand.ImageUrl" alt="@brand.BrandName" style="max-width: 100%; height: auto;">
+                            }
+                            else
+                            {
+                                <img src="~/MultiShopTemplate/img/vendor-default.jpg" alt="@brand.BrandName" style="max-width: 100%; height: auto;">
+                            }
+                        </div>
+                    }    
             </div>
         </div>
     </div>

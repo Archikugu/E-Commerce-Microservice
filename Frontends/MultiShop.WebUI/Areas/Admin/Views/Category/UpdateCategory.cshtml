@@ -22,6 +22,11 @@
                         <input asp-for="CategoryName" class="form-control" placeholder="Enter category name" />
                         <span asp-validation-for="CategoryName" class="text-danger"></span>
                     </div>
+                    <div class="form-group">
+                        <label asp-for="ImageUrl">Category Image Url</label>
+                        <input asp-for="ImageUrl" class="form-control" placeholder="Enter category image url" />
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    </div>
 
                     <div class="form-group">
                         <button type="submit" class="btn btn-warning">Update Category</button>
