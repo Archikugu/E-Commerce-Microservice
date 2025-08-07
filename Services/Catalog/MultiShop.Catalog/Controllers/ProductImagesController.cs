@@ -28,6 +28,20 @@ public class ProductImagesController : ControllerBase
         var values = await _ProductImageService.GetByIdProductImageAsync(id);
         return Ok(values);
     }
+
+    [HttpGet("ProductImagesByProductId/{productId}")]
+    public async Task<IActionResult> GetProductImagesByProductId(string productId)
+    {
+        var values = await _ProductImageService.GetProductImagesByProductIdAsync(productId);
+        return Ok(values);
+    }
+
+    [HttpGet("ProductImageSliderByProductId/{productId}")]
+    public async Task<IActionResult> GetProductImageSliderByProductId(string productId)
+    {
+        var values = await _ProductImageService.GetProductImageSliderByProductIdAsync(productId);
+        return Ok(values);
+    }
     [HttpPost]
     public async Task<IActionResult> CreateProductImage(CreateProductImageDto createProductImageDto)
     {
@@ -35,7 +49,7 @@ public class ProductImagesController : ControllerBase
         return Ok("Product Images Successfully Added");
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProductImage(string id)
     {
         await _ProductImageService.DeleteProductImageAsync(id);

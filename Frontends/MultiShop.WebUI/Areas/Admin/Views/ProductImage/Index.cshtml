@@ -1,0 +1,73 @@
+@using MultiShop.WebUI.Dtos.CatalogDtos.ProductImageDtos
+@using MultiShop.WebUI.Dtos.CatalogDtos.ProductDtos
+@model List<ResultProductImageDto>
+@{
+	ViewData["Title"] = "Index";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+	int count = 0;
+	var products = ViewBag.Products as List<ResultProductDto>;
+}
+
+<section class="content container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="chart-box">
+				<h4>Product Image List</h4>
+				<div class="bs-example" data-example-id="simple-table">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Product ID</th>
+								<th>Product Name</th>
+								<th>Images</th>
+								<th>Image Count</th>
+								<th>Delete</th>
+								<th>Update</th>
+								<th>Gallery</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model)
+							{
+								count++;
+								<tr>
+									<th scope="row">@count</th>
+									<td>@item.ProductId</td>
+									<td>@(products?.FirstOrDefault(p => p.ProductId == item.ProductId)?.ProductName ?? "N/A")</td>
+									<td>
+										@if (item.Images != null && item.Images.Any())
+										{
+											@foreach (var image in item.Images.Take(3))
+											{
+												<img src="@image" alt="Product Image" style="width: 60px; height: 40px; object-fit: cover; border-radius: 4px; margin-right: 5px;" />
+											}
+											@if (item.Images.Count > 3)
+											{
+												<span class="text-muted">+@(item.Images.Count - 3) more</span>
+											}
+										}
+										else
+										{
+											<span class="text-muted">No Images</span>
+										}
+									</td>
+									<td>
+										<span class="badge badge-info">@(item.Images?.Count ?? 0)</span>
+									</td>
+									<td><a asp-area="Admin" asp-controller="ProductImage" asp-action="DeleteProductImage" asp-route-id="@item.ProductImageId" class="btn btn-danger btn-sm">Delete</a></td>
+									<td><a asp-area="Admin" asp-controller="ProductImage" asp-action="UpdateProductImage" asp-route-id="@item.ProductImageId" class="btn btn-warning btn-sm">Update</a></td>
+									<td><a asp-area="Admin" asp-controller="ProductImage" asp-action="ProductImageGallery" asp-route-productId="@item.ProductId" class="btn btn-info btn-sm">Gallery</a></td>
+								</tr>
+							}
+						</tbody>
+					</table>
+
+					<a asp-area="Admin" asp-controller="ProductImage" asp-action="CreateProductImage" class="btn btn-success">
+						Add New Product Images
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,6 +1,6 @@
-namespace MultiShop.Catalog.Dtos.ProductImageDtos;
+namespace MultiShop.WebUI.Dtos.CatalogDtos.ProductImageDtos;
 
-public class ResultProductImageDto
+public class UpdateProductImageDto
 {
     public string ProductImageId { get; set; }
     public List<string> Images { get; set; } = new List<string>();

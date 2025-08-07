@@ -26,7 +26,7 @@ public class ProductImageService : IProductImageService
 
     public async Task DeleteProductImageAsync(string id)
     {
-        await _productImageCollection.DeleteOneAsync(x => x.ProductId == id);
+        await _productImageCollection.DeleteOneAsync(x => x.ProductImageId == id);
     }
 
     public async Task<List<ResultProductImageDto>> GetAllProductImageAsync()
@@ -45,5 +45,32 @@ public class ProductImageService : IProductImageService
     {
         var values = _mapper.Map<ProductImage>(updateProductImageDto);
         await _productImageCollection.FindOneAndReplaceAsync(x => x.ProductImageId == updateProductImageDto.ProductImageId, values);
+    }
+
+    public async Task<List<ResultProductImageDto>> GetProductImagesByProductIdAsync(string productId)
+    {
+        var values = await _productImageCollection.Find<ProductImage>(x => x.ProductId == productId).ToListAsync();
+        return _mapper.Map<List<ResultProductImageDto>>(values);
+    }
+
+    public async Task<ProductImageSliderDto> GetProductImageSliderByProductIdAsync(string productId)
+    {
+        var productImages = await _productImageCollection.Find<ProductImage>(x => x.ProductId == productId).ToListAsync();
+        
+        var allImageUrls = new List<string>();
+        foreach (var productImage in productImages)
+        {
+            if (productImage.Images != null)
+            {
+                allImageUrls.AddRange(productImage.Images);
+            }
+        }
+
+        return new ProductImageSliderDto
+        {
+            ProductId = productId,
+            ImageUrls = allImageUrls,
+            TotalImageCount = allImageUrls.Count
+        };
     }
 }

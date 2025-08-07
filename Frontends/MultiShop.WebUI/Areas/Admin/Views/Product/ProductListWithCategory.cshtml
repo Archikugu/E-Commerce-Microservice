@@ -21,6 +21,8 @@
 								<th>Product Category</th>
 								<th>Delete</th>
 								<th>Update</th>
+								<th>Product Images</th>
+								<th>Product Description an Info</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -34,6 +36,8 @@
 									<td>@item.Category.CategoryName</td>
 									<td><a asp-area="Admin" asp-controller="Product" asp-action="DeleteProduct" asp-route-id="@item.ProductId" class="btn btn-danger">Delete</a></td>
 									<td><a asp-area="Admin" asp-controller="Product" asp-action="UpdateProduct" asp-route-id="@item.ProductId" class="btn btn-warning">Update</a></td>
+									<td><a asp-area="Admin" asp-controller="ProductImage" asp-action="ProductImages" asp-route-id="@item.ProductId" class="btn btn-info">Product Images</a></td>
+									<td><a asp-area="Admin" asp-controller="ProductDetail" asp-action="GetByIdProductDetail" asp-route-id="@item.ProductId" class="btn btn-secondary">Product Description</a></td>
 								</tr>
 							}
 						</tbody>

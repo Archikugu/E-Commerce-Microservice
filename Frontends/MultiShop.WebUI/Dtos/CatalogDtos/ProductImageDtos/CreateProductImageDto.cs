@@ -1,4 +1,4 @@
-namespace MultiShop.Catalog.Dtos.ProductImageDtos;
+namespace MultiShop.WebUI.Dtos.CatalogDtos.ProductImageDtos;
 
 public class CreateProductImageDto
 {

@@ -28,6 +28,13 @@ public class ProductDetailsController : ControllerBase
         var values = await _ProductDetailService.GetByIdProductDetailAsync(id);
         return Ok(values);
     }
+
+    [HttpGet("GetProductDetailsByProductId/{productId}")]
+    public async Task<IActionResult> GetProductDetailsByProductId(string productId)
+    {
+        var values = await _ProductDetailService.GetProductDetailsByProductIdAsync(productId);
+        return Ok(values);
+    }
     [HttpPost]
     public async Task<IActionResult> CreateProductDetail(CreateProductDetailDto createProductDetailDto)
     {
@@ -35,7 +42,7 @@ public class ProductDetailsController : ControllerBase
         return Ok("Product Details Successfully Added");
     }
 
-    [HttpDelete]
+    [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProductDetail(string id)
     {
         await _ProductDetailService.DeleteProductDetailAsync(id);

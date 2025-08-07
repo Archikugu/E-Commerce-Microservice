@@ -1,0 +1,146 @@
+@using MultiShop.WebUI.Dtos.CatalogDtos.ProductImageDtos
+@model List<ResultProductImageDto>
+@{
+    ViewData["Title"] = "ProductImageGallery";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>Product Image Gallery</h4>
+                </div>
+
+                @if (Model != null && Model.Any())
+                {
+                    <div class="row">
+                        @foreach (var productImage in Model)
+                        {
+                            @if (productImage.Images != null && productImage.Images.Any())
+                            {
+                                @foreach (var image in productImage.Images)
+                                {
+                                    <div class="col-md-4 col-lg-3 mb-4">
+                                        <div class="card h-100 d-flex flex-column">
+                                            <div class="card-body p-0 flex-grow-1">
+                                                <img src="@image" alt="Product Image" class="img-fluid w-100" style="height: 200px; object-fit: cover; border-radius: 4px;" />
+                                            </div>
+                                            <div class="card-footer text-center mt-auto">
+                                                <button type="button" class="btn btn-primary btn-sm" onclick="showImageModal('@image')">
+                                                    <i class="fa fa-eye"></i> View Full Size
+                                                </button>
+                                                <button type="button" class="btn btn-info btn-sm" onclick="copyImageUrl('@image')">
+                                                    <i class="fa fa-copy"></i> Copy URL
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-info text-center">
+                        <h5>No Images Found</h5>
+                        <p>This product doesn't have any images yet.</p>
+                        <a asp-area="Admin" asp-controller="ProductImage" asp-action="CreateProductImage" class="btn btn-success">Add Images</a>
+                    </div>
+                }
+
+                <!-- Image Count Info -->
+                <div class="mt-4">
+                    <div class="alert alert-secondary">
+                        <strong>Product ID:</strong> @ViewBag.ProductId <br />
+                        <strong>Total Images:</strong> @(Model?.SelectMany(x => x.Images ?? new List<string>()).Count() ?? 0)
+                    </div>
+                </div>
+
+                <!-- Buttons at the bottom -->
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div>
+                        <a asp-area="Admin" asp-controller="ProductImage" asp-action="CreateProductImage" class="btn btn-success btn-sm">Add New Images</a>
+                    </div>
+                    <div>
+                        <a asp-area="Admin" asp-controller="ProductImage" asp-action="Index" class="btn btn-secondary btn-sm">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Modal for Full Size Image -->
+<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Product Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="Product Image" class="img-fluid" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showImageModal(imageUrl) {
+        document.getElementById('modalImage').src = imageUrl;
+        $('#imageModal').modal('show');
+    }
+    
+    function copyImageUrl(imageUrl) {
+        navigator.clipboard.writeText(imageUrl).then(function() {
+            // Success feedback
+            const originalText = event.target.innerHTML;
+            event.target.innerHTML = '<i class="fa fa-check"></i> Copied!';
+            event.target.classList.remove('btn-info');
+            event.target.classList.add('btn-success');
+            
+            setTimeout(function() {
+                event.target.innerHTML = originalText;
+                event.target.classList.remove('btn-success');
+                event.target.classList.add('btn-info');
+            }, 2000);
+        }, function(err) {
+            alert('Could not copy URL: ' + err);
+        });
+    }
+</script>
+
+<style>
+    .card {
+        transition: transform 0.2s;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+    }
+    
+    .card-body {
+        flex: 1;
+    }
+    
+    .card-footer {
+        margin-top: auto;
+    }
+    
+    .modal-body img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+    }
+</style>

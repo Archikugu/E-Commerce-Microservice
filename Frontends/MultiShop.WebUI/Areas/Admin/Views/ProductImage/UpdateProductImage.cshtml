@@ -1,0 +1,109 @@
+@using MultiShop.WebUI.Dtos.CatalogDtos.ProductImageDtos
+@model UpdateProductImageDto
+@{
+    ViewData["Title"] = "UpdateProductImage";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <h4>Update Product Images</h4>
+
+                <form asp-area="Admin" asp-controller="ProductImage" asp-action="UpdateProductImage" method="post">
+                    <input type="hidden" asp-for="ProductImageId" />
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label>Select Product</label>
+                        @Html.DropDownListFor(x => x.ProductId, (List<SelectListItem>)ViewBag.Products, "Select a Product", new { @style = "padding:0;", @class = "form-control" })
+                        <br />
+                        
+                        <label>Product Images (URLs)</label>
+                        <div id="imageContainer">
+                            @if (Model?.Images != null && Model.Images.Any())
+                            {
+                                @for (int i = 0; i < Model.Images.Count; i++)
+                                {
+                                    <div class="image-input-group mb-2">
+                                        <div class="input-group">
+                                            <input type="text" name="Images[@i]" value="@Model.Images[i]" class="form-control" placeholder="Enter image URL" />
+                                            <div class="input-group-append">
+                                                <button type="button" class="btn btn-danger remove-image" style="display: @(Model.Images.Count > 1 ? "block" : "none");">Remove</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="image-input-group mb-2">
+                                    <div class="input-group">
+                                        <input type="text" name="Images[0]" class="form-control" placeholder="Enter image URL" />
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-danger remove-image" style="display: none;">Remove</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        
+                        <button type="button" id="addImageBtn" class="btn btn-secondary mb-3">Add Another Image</button>
+                        <br />
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-warning">Update Product Images</button>
+                        <a asp-area="Admin" asp-controller="ProductImage" asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    let imageIndex = @(Model?.Images?.Count ?? 1);
+    
+    document.getElementById('addImageBtn').addEventListener('click', function() {
+        const container = document.getElementById('imageContainer');
+        const newDiv = document.createElement('div');
+        newDiv.className = 'image-input-group mb-2';
+        newDiv.innerHTML = `
+            <div class="input-group">
+                <input type="text" name="Images[${imageIndex}]" class="form-control" placeholder="Enter image URL" />
+                <div class="input-group-append">
+                    <button type="button" class="btn btn-danger remove-image">Remove</button>
+                </div>
+            </div>
+        `;
+        container.appendChild(newDiv);
+        imageIndex++;
+        updateRemoveButtons();
+    });
+    
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-image')) {
+            e.target.closest('.image-input-group').remove();
+            updateIndexes();
+            updateRemoveButtons();
+        }
+    });
+    
+    function updateIndexes() {
+        const inputs = document.querySelectorAll('#imageContainer input[type="text"]');
+        inputs.forEach((input, index) => {
+            input.name = `Images[${index}]`;
+        });
+        imageIndex = inputs.length;
+    }
+    
+    function updateRemoveButtons() {
+        const removeButtons = document.querySelectorAll('.remove-image');
+        removeButtons.forEach(button => {
+            button.style.display = removeButtons.length > 1 ? 'block' : 'none';
+        });
+    }
+</script>

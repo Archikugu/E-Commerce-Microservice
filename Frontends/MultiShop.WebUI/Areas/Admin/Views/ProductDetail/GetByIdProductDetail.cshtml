@@ -1,0 +1,43 @@
+@using MultiShop.WebUI.Dtos.CatalogDtos.ProductDetailDtos
+@model GetByIdProductDetailDto
+@{
+    ViewData["Title"] = "GetByIdProductDetail";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <h4>Product Detail Information</h4>
+                <div class="bs-example" data-example-id="bordered-table">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <th>Product Detail ID</th>
+                                <td>@Model.ProductDetailId</td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td>@Model.Description</td>
+                            </tr>
+                            <tr>
+                                <th>Info</th>
+                                <td>@Model.Info</td>
+                            </tr>
+                            <tr>
+                                <th>Product ID</th>
+                                <td>@Model.ProductId</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="form-group">
+                        <a asp-area="Admin" asp-controller="ProductDetail" asp-action="UpdateProductDetail" asp-route-id="@Model.ProductDetailId" class="btn btn-warning">Update</a>
+                        <a asp-area="Admin" asp-controller="ProductDetail" asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
