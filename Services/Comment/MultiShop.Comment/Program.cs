@@ -1,5 +1,8 @@
 
 using Scalar.AspNetCore;
+using Microsoft.EntityFrameworkCore;
+using MultiShop.Comment.Context;
+using MultiShop.Comment.Mapping;
 
 namespace MultiShop.Comment;
 
@@ -10,8 +13,37 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
+        builder.Services.AddDbContext<MultiShopCommentContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         builder.Services.AddControllers();
+        
+        // Add validation
+        builder.Services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        });
+
+        // Add AutoMapper
+        builder.Services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile<GeneralMapping>();
+        });
+
+        // Add logging
+        builder.Services.AddLogging();
+
+        // Add CORS
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowAll", policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyMethod()
+                      .AllowAnyHeader();
+            });
+        });
+
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
 
@@ -23,7 +55,7 @@ public class Program
             app.UseSwaggerUI(options =>
             {
                 // This is the endpoint for the Swagger UI
-                options.SwaggerEndpoint("/openapi/v1.json", "MultiShop Catalog API");
+                options.SwaggerEndpoint("/openapi/v1.json", "MultiShop Comment API");
             });
             app.MapOpenApi();
             app.MapScalarApiReference();
@@ -31,8 +63,10 @@ public class Program
 
         app.UseHttpsRedirection();
 
-        app.UseAuthorization();
+        // Use CORS
+        app.UseCors("AllowAll");
 
+        app.UseAuthorization();
 
         app.MapControllers();
 

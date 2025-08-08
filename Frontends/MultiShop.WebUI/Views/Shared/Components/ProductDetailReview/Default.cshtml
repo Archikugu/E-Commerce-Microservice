@@ -1,54 +1,179 @@
-﻿<!--Product Detail Review View Component-->
+﻿@using MultiShop.WebUI.Dtos.CommentDtos
+@model List<ResultCommentDto>
+
+<!--Product Detail Review View Component-->
 
 <div class="tab-pane fade" id="tab-pane-3">
 	<div class="row">
 		<div class="col-md-6">
-			<h4 class="mb-4">1 review for "Product Name"</h4>
-			<div class="media mb-4">
-				<img src="~/MultiShopTemplate/img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-				<div class="media-body">
-					<h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
-					<div class="text-primary mb-2">
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star"></i>
-						<i class="fas fa-star-half-alt"></i>
-						<i class="far fa-star"></i>
+			<h4 class="mb-4">@Model.Count review(s) for this product</h4>
+			
+			@if (Model.Any())
+			{
+				@foreach (var comment in Model)
+				{
+					<div class="media mb-4">
+						@if (!string.IsNullOrEmpty(comment.ImageUrl))
+						{
+							<img src="@comment.ImageUrl" alt="User Image" class="img-fluid mr-3 mt-1" style="width: 45px; height: 45px; object-fit: cover; border-radius: 50%;">
+						}
+						else
+						{
+							<img src="~/MultiShopTemplate/img/user.jpg" alt="Default User" class="img-fluid mr-3 mt-1" style="width: 45px; height: 45px; object-fit: cover; border-radius: 50%;">
+						}
+						<div class="media-body">
+							<h6>@comment.FullName<small> - <i>@comment.CreatedDate.ToString("dd MMM yyyy")</i></small></h6>
+							<div class="text-primary mb-2">
+								@for (int i = 1; i <= 5; i++)
+								{
+									if (i <= comment.Rating)
+									{
+										<i class="fas fa-star"></i>
+									}
+									else
+									{
+										<i class="far fa-star"></i>
+									}
+								}
+							</div>
+							<p>@comment.CommentDetail</p>
+						</div>
 					</div>
-					<p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
+				}
+			}
+			else
+			{
+				<div class="text-center py-4">
+					<p class="text-muted">No reviews yet. Be the first to review this product!</p>
 				</div>
-			</div>
+			}
 		</div>
 		<div class="col-md-6">
 			<h4 class="mb-4">Leave a review</h4>
 			<small>Your email address will not be published. Required fields are marked *</small>
-			<div class="d-flex my-3">
-				<p class="mb-0 mr-2">Your Rating * :</p>
-				<div class="text-primary">
-					<i class="far fa-star"></i>
-					<i class="far fa-star"></i>
-					<i class="far fa-star"></i>
-					<i class="far fa-star"></i>
-					<i class="far fa-star"></i>
+			
+			<form id="reviewForm" method="post" action="/api/Comments">
+				<input type="hidden" id="productId" name="ProductId" value="@ViewContext.RouteData.Values["id"]" />
+				
+				<div class="d-flex my-3">
+					<p class="mb-0 mr-2">Your Rating * :</p>
+					<div class="text-primary" id="ratingStars">
+						<i class="far fa-star" data-rating="1"></i>
+						<i class="far fa-star" data-rating="2"></i>
+						<i class="far fa-star" data-rating="3"></i>
+						<i class="far fa-star" data-rating="4"></i>
+						<i class="far fa-star" data-rating="5"></i>
+					</div>
+					<input type="hidden" id="rating" name="Rating" value="0" required />
 				</div>
-			</div>
-			<form>
+				
 				<div class="form-group">
-					<label for="message">Your Review *</label>
-					<textarea id="message" cols="30" rows="5" class="form-control"></textarea>
+					<label for="firstName">First Name *</label>
+					<input type="text" class="form-control" id="firstName" name="FirstName" required>
 				</div>
+				
 				<div class="form-group">
-					<label for="name">Your Name *</label>
-					<input type="text" class="form-control" id="name">
+					<label for="lastName">Last Name *</label>
+					<input type="text" class="form-control" id="lastName" name="LastName" required>
 				</div>
+				
 				<div class="form-group">
 					<label for="email">Your Email *</label>
-					<input type="email" class="form-control" id="email">
+					<input type="email" class="form-control" id="email" name="Email" required>
 				</div>
+				
+				<div class="form-group">
+					<label for="imageUrl">Profile Image URL (Optional)</label>
+					<input type="text" class="form-control" id="imageUrl" name="ImageUrl">
+				</div>
+				
+				<div class="form-group">
+					<label for="commentDetail">Your Review *</label>
+					<textarea id="commentDetail" name="CommentDetail" cols="30" rows="5" class="form-control" required></textarea>
+				</div>
+				
 				<div class="form-group mb-0">
-					<input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+					<button type="submit" class="btn btn-primary px-3">Leave Your Review</button>
 				</div>
 			</form>
 		</div>
 	</div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('#ratingStars i');
+    const ratingInput = document.getElementById('rating');
+    
+    // Star rating functionality
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = this.getAttribute('data-rating');
+            ratingInput.value = rating;
+            
+            // Update star display
+            stars.forEach((s, index) => {
+                if (index < rating) {
+                    s.classList.remove('far');
+                    s.classList.add('fas');
+                } else {
+                    s.classList.remove('fas');
+                    s.classList.add('far');
+                }
+            });
+        });
+        
+        // Hover effects
+        star.addEventListener('mouseenter', function() {
+            const rating = this.getAttribute('data-rating');
+            stars.forEach((s, index) => {
+                if (index < rating) {
+                    s.classList.remove('far');
+                    s.classList.add('fas');
+                }
+            });
+        });
+        
+        star.addEventListener('mouseleave', function() {
+            const currentRating = ratingInput.value;
+            stars.forEach((s, index) => {
+                if (index < currentRating) {
+                    s.classList.remove('far');
+                    s.classList.add('fas');
+                } else {
+                    s.classList.remove('fas');
+                    s.classList.add('far');
+                }
+            });
+        });
+    });
+    
+    // Form submission
+    document.getElementById('reviewForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData);
+        
+        fetch('https://localhost:7006/api/Comments', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('Review submitted successfully!');
+                location.reload();
+            } else {
+                alert('Error submitting review. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error submitting review. Please try again.');
+        });
+    });
+});
+</script>

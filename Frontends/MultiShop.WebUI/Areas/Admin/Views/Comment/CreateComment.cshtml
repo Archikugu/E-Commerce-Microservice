@@ -1,0 +1,74 @@
+@using MultiShop.WebUI.Dtos.CommentDtos
+@model CreateCommentDto
+@{
+	ViewData["Title"] = "CreateComment";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="chart-box">
+				<h4>Comment Creation Page</h4>
+				<br />
+				<div class="bs-example" data-example-id="bordered-table">
+
+					<form method="post">
+						<div class="form-group">
+							<label>First Name</label>
+							<input type="text" class="form-control" asp-for="FirstName" required />
+							<span asp-validation-for="FirstName" class="text-danger"></span>
+						</div>
+						<br />
+						<div class="form-group">
+							<label>Last Name</label>
+							<input type="text" class="form-control" asp-for="LastName" required />
+							<span asp-validation-for="LastName" class="text-danger"></span>
+						</div>
+						<br />
+						<div class="form-group">
+							<label>Email</label>
+							<input type="email" class="form-control" asp-for="Email" required />
+							<span asp-validation-for="Email" class="text-danger"></span>
+						</div>
+						<br />
+						<div class="form-group">
+							<label>Image URL (Optional)</label>
+							<input type="url" class="form-control" asp-for="ImageUrl" />
+							<span asp-validation-for="ImageUrl" class="text-danger"></span>
+						</div>
+						<br />
+						<div class="form-group">
+							<label>Product</label>
+							@Html.DropDownListFor(x => x.ProductId, (List<SelectListItem>)ViewBag.Products, new { @style = "padding:0;", @class = "form-control" })
+							<span asp-validation-for="ProductId" class="text-danger"></span>
+						</div>
+						<br />
+						<div class="form-group">
+							<label>Rating</label>
+							<select class="form-control" asp-for="Rating" required>
+								<option value="">Select Rating</option>
+								<option value="1">1 Star</option>
+								<option value="2">2 Stars</option>
+								<option value="3">3 Stars</option>
+								<option value="4">4 Stars</option>
+								<option value="5">5 Stars</option>
+							</select>
+							<span asp-validation-for="Rating" class="text-danger"></span>
+						</div>
+						<br />
+						<div class="form-group">
+							<label>Comment Detail</label>
+							<textarea class="form-control" asp-for="CommentDetail" rows="5" required></textarea>
+							<span asp-validation-for="CommentDetail" class="text-danger"></span>
+						</div>
+						<br />
+						<button class="btn btn-success">Add Comment</button>
+						<a asp-area="Admin" asp-controller="Comment" asp-action="Index" class="btn btn-secondary">Back to List</a>
+					</form>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

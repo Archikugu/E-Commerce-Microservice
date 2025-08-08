@@ -1,0 +1,82 @@
+@using MultiShop.WebUI.Dtos.CommentDtos
+@model List<ResultCommentDto>
+@{
+	ViewData["Title"] = "GetCommentsByProduct";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+	int count = 0;
+}
+
+<section class="content container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="chart-box">
+				<h4>Product Comments</h4>
+				<div class="bs-example" data-example-id="simple-table">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Comment ID</th>
+								<th>Full Name</th>
+								<th>Email</th>
+								<th>Comment Detail</th>
+								<th>Rating</th>
+								<th>Created Date</th>
+								<th>Status</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model)
+							{
+								count++;
+								<tr>
+									<th scope="row">@count</th>
+									<td>@item.UserCommentId</td>
+									<td>@item.FullName</td>
+									<td>@item.Email</td>
+									<td>@(item.CommentDetail?.Length > 50 ? item.CommentDetail.Substring(0, 50) + "..." : item.CommentDetail)</td>
+									<td>
+										@for (int i = 1; i <= 5; i++)
+										{
+											if (i <= item.Rating)
+											{
+												<span class="text-warning">★</span>
+											}
+											else
+											{
+												<span class="text-muted">☆</span>
+											}
+										}
+									</td>
+									<td>@item.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+									<td>
+										@if (item.Status)
+										{
+											<span class="badge badge-success">Active</span>
+										}
+										else
+										{
+											<span class="badge badge-danger">Inactive</span>
+										}
+									</td>
+									<td>
+										<a asp-area="Admin" asp-controller="Comment" asp-action="UpdateCommentStatus" asp-route-id="@item.UserCommentId" asp-route-status="@(!item.Status)" class="btn btn-sm @(item.Status ? "btn-warning" : "btn-success")">
+											@(item.Status ? "Deactivate" : "Activate")
+										</a>
+										<a asp-area="Admin" asp-controller="Comment" asp-action="UpdateComment" asp-route-id="@item.UserCommentId" class="btn btn-sm btn-info">Edit</a>
+										<a asp-area="Admin" asp-controller="Comment" asp-action="DeleteComment" asp-route-id="@item.UserCommentId" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</a>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+
+					<a asp-area="Admin" asp-controller="Comment" asp-action="Index" class="btn btn-secondary">
+						Back to All Comments
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
