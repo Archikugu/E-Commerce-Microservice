@@ -1,0 +1,87 @@
+@using MultiShop.WebUI.Dtos.CatalogDtos.ContactDtos
+@model List<ResultContactDto>
+
+@{
+    ViewData["Title"] = "Contact List";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    int count = 0;
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <h4>Contact List</h4>
+                <p>This table displays all contact messages received from users. You can view message details, mark messages as read, update contact information, or delete contacts as needed.</p>
+
+                <div class="bs-example" data-example-id="simple-table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Subject</th>
+                                <th>Phone</th>
+                                <th>Send Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var item in Model.OrderByDescending(x => x.SendDate))
+                                {
+                                    count++;
+                                    <tr class="@(item.IsRead ? "" : "table-warning")">
+                                        <th scope="row">@count</th>
+                                        <td>@item.Name</td>
+                                        <td>@item.Email</td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.Subject) && item.Subject.Length > 30)
+                                            {
+                                                @(item.Subject.Substring(0, 30) + "...")
+                                            }
+                                            else
+                                            {
+                                                @item.Subject
+                                            }
+                                        </td>
+                                        <td>@(string.IsNullOrEmpty(item.Phone) ? "N/A" : item.Phone)</td>
+                                        <td>@item.SendDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>
+                                            @if (item.IsRead)
+                                            {
+                                                <span class="badge badge-success">Read</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-warning">Unread</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a asp-area="Admin" asp-controller="Contact" asp-action="GetByIdContact" asp-route-id="@item.ContactId" class="btn btn-info btn-sm">View</a>
+                                            @if (!item.IsRead)
+                                            {
+                                                <a asp-area="Admin" asp-controller="Contact" asp-action="MarkAsRead" asp-route-id="@item.ContactId" class="btn btn-success btn-sm">Mark as Read</a>
+                                            }
+                                            <a asp-area="Admin" asp-controller="Contact" asp-action="UpdateContact" asp-route-id="@item.ContactId" class="btn btn-warning btn-sm">Update</a>
+                                            <a asp-area="Admin" asp-controller="Contact" asp-action="DeleteContact" asp-route-id="@item.ContactId" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this contact?')">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="8" class="text-center">No contacts found.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

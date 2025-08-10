@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MultiShop.WebUI.Dtos.CatalogDtos.ContactDtos;
 
 namespace MultiShop.WebUI.ViewComponents.ContactViewComponents
 {
@@ -6,7 +7,8 @@ namespace MultiShop.WebUI.ViewComponents.ContactViewComponents
     {
         public IViewComponentResult Invoke()
         {
-            return View();
+            var createContactDto = new CreateContactDto();
+            return View(createContactDto);
         }
     }
 }

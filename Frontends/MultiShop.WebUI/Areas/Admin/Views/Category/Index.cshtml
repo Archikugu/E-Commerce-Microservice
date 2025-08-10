@@ -43,7 +43,7 @@
 											<span class="text-muted">No Image</span>
 										}
 									</td>
-									<td><a href="#" class="btn btn-primary">View Products</a></td>
+									<td><a asp-area="Admin" asp-controller="Category" asp-action="ViewProducts" asp-route-id="@item.CategoryId" class="btn btn-primary">View Products</a></td>
 									<td><a asp-area="Admin" asp-controller="Category" asp-action="DeleteCategory" asp-route-id="@item.CategoryId" class="btn btn-danger">Delete</a></td>
 									<td><a asp-area="Admin" asp-controller="Category" asp-action="UpdateCategory" asp-route-id="@item.CategoryId" class="btn btn-warning">Update</a></td>
 								</tr>

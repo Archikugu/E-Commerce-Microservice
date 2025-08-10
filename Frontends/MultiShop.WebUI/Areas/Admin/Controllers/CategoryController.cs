@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MultiShop.WebUI.Dtos.CatalogDtos.CategoryDtos;
+using MultiShop.WebUI.Dtos.CatalogDtos.ProductDtos;
 using Newtonsoft.Json;
 
 namespace MultiShop.WebUI.Areas.Admin.Controllers;
@@ -95,5 +96,35 @@ public class CategoryController : Controller
             return RedirectToAction("Index", "Category", new { area = "Admin" });
         }
         return View();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ViewProducts(string id)
+    {
+        ViewBag.v1 = "Home";
+        ViewBag.v2 = "Categories";
+        ViewBag.v3 = "Products in Category";
+
+        var client = _httpClientFactory.CreateClient();
+        
+        // Önce category bilgisini al
+        var categoryResponse = await client.GetAsync($"https://localhost:7001/api/Categories/{id}");
+        if (categoryResponse.IsSuccessStatusCode)
+        {
+            var categoryJsonData = await categoryResponse.Content.ReadAsStringAsync();
+            var category = JsonConvert.DeserializeObject<GetByIdCategoryDto>(categoryJsonData);
+            ViewBag.CategoryName = category.CategoryName;
+        }
+
+        // Category'deki product'ları getir
+        var responseMessage = await client.GetAsync($"https://localhost:7001/api/Products/GetProductsWithCategoryByCategoryId/{id}");
+        if (responseMessage.IsSuccessStatusCode)
+        {
+            var jsonData = await responseMessage.Content.ReadAsStringAsync();
+            var values = JsonConvert.DeserializeObject<List<ResultProductsWithCategoryDto>>(jsonData);
+            return View(values);
+        }
+
+        return View(new List<ResultProductsWithCategoryDto>());
     }
 }

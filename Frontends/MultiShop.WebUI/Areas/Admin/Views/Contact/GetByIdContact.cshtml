@@ -1,0 +1,97 @@
+@model MultiShop.WebUI.Dtos.CatalogDtos.ContactDtos.ResultContactDto
+
+@{
+    ViewData["Title"] = "Contact Detail";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <h4>Contact Detail</h4>
+                <p>Detailed information about the contact message.</p>
+
+                <div class="bs-example" data-example-id="simple-table">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><strong>Name:</strong></label>
+                                <p class="form-control-static">@Model.Name</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><strong>Email:</strong></label>
+                                <p class="form-control-static">@Model.Email</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><strong>Phone:</strong></label>
+                                <p class="form-control-static">@(string.IsNullOrEmpty(Model.Phone) ? "N/A" : Model.Phone)</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><strong>Send Date:</strong></label>
+                                <p class="form-control-static">@Model.SendDate.ToString("dd/MM/yyyy HH:mm")</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label><strong>Subject:</strong></label>
+                                <p class="form-control-static">@Model.Subject</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label><strong>Message:</strong></label>
+                                <div class="form-control-static" style="background-color: #f8f9fa; padding: 15px; border-radius: 5px; min-height: 100px;">
+                                    @Model.Message
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label><strong>Status:</strong></label>
+                                <p class="form-control-static">
+                                    @if (Model.IsRead)
+                                    {
+                                        <span class="badge badge-success">Read</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-warning">Unread</span>
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <a asp-area="Admin" asp-controller="Contact" asp-action="Index" class="btn btn-secondary">Back to List</a>
+                        @if (!Model.IsRead)
+                        {
+                            <a asp-area="Admin" asp-controller="Contact" asp-action="MarkAsRead" asp-route-id="@Model.ContactId" class="btn btn-success">Mark as Read</a>
+                        }
+                        <a asp-area="Admin" asp-controller="Contact" asp-action="UpdateContact" asp-route-id="@Model.ContactId" class="btn btn-warning">Update</a>
+                        <a asp-area="Admin" asp-controller="Contact" asp-action="DeleteContact" asp-route-id="@Model.ContactId" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this contact?')">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

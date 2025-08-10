@@ -1,0 +1,85 @@
+@using MultiShop.WebUI.Dtos.CatalogDtos.ProductDtos
+@model List<ResultProductsWithCategoryDto>
+
+@{
+    ViewData["Title"] = "Products in Category";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    int count = 0;
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <h4>Products in Category: @ViewBag.CategoryName</h4>
+                <p>This table displays all products within the selected category.</p>
+
+                <div class="bs-example" data-example-id="simple-table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Image</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Delete</th>
+                                <th>Update</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                @foreach (var item in Model)
+                                {
+                                    count++;
+                                    <tr>
+                                        <th scope="row">@count</th>
+                                        <td>@item.ProductName</td>
+                                        <td>@item.Price.ToString("C")</td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                            {
+                                                <img src="@item.ImageUrl" alt="@item.ProductName" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;" />
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">No Image</span>
+                                            }
+                                        </td>
+                                        <td>@item.Category.CategoryName</td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.Description) && item.Description.Length > 50)
+                                            {
+                                                @(item.Description.Substring(0, 50) + "...")
+                                            }
+                                            else
+                                            {
+                                                @item.Description
+                                            }
+                                        </td>
+                                        <td><a asp-area="Admin" asp-controller="Product" asp-action="DeleteProduct" asp-route-id="@item.ProductId" class="btn btn-danger">Delete</a></td>
+                                        <td><a asp-area="Admin" asp-controller="Product" asp-action="UpdateProduct" asp-route-id="@item.ProductId" class="btn btn-warning">Update</a></td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="8" class="text-center">No products found in this category.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-secondary">
+                        Back to Categories
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
