@@ -1,0 +1,231 @@
+﻿@using MultiShop.WebUI.Dtos.IdentityDtos.LoginDtos
+@model CreateLoginDto
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>MultiShop Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- MATERIAL DESIGN ICONIC FONT -->
+    <link rel="stylesheet" href="~/RegisterTemplate/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+    
+    <!-- STYLE CSS -->
+    <link rel="stylesheet" href="~/RegisterTemplate/css/style.css">
+    
+    <!-- Custom CSS for Login -->
+    <style>
+        body {
+            font-family: "Muli-Regular";
+            color: #666;
+            font-size: 13px;
+            margin: 0;
+        }
+        
+        .login-wrapper {
+            min-height: 100vh;
+            background: url('/RegisterTemplate/images/bg-registration-form-2.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: flex;
+            align-items: center;
+        }
+        
+        .login-inner {
+            min-width: 850px;
+            margin: auto;
+            padding-top: 68px;
+            padding-bottom: 48px;
+            background: url('/RegisterTemplate/images/registration-form-2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .login-form {
+            width: 50%;
+            padding-left: 45px;
+        }
+        
+        .login-form h3 {
+            text-transform: uppercase;
+            font-size: 22px;
+            font-family: "Muli-Bold";
+            text-align: center;
+            margin-bottom: 32px;
+            color: #333;
+            letter-spacing: 2px;
+        }
+        
+        .login-form .form-wrapper {
+            margin-bottom: 17px;
+        }
+        
+        .login-form .form-wrapper label {
+            margin-bottom: 9px;
+            display: block;
+            color: #333;
+            font-family: "Muli-Bold";
+        }
+        
+        .login-form .form-control {
+            border: 1px solid #ccc;
+            display: block;
+            width: 100%;
+            height: 40px;
+            padding: 0 20px;
+            border-radius: 20px;
+            font-family: "Muli-Bold";
+            background: none;
+            color: #333;
+            font-size: 13px;
+        }
+        
+        .login-form .form-control:focus {
+            border: 1px solid #ae3c33;
+        }
+        
+        .login-btn {
+            border: none;
+            width: 152px;
+            height: 40px;
+            margin: auto;
+            margin-top: 29px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            background: #ae3c33;
+            font-size: 13px;
+            color: #fff;
+            text-transform: uppercase;
+            font-family: "Muli-SemiBold";
+            border-radius: 20px;
+            overflow: hidden;
+            -webkit-transform: perspective(1px) translateZ(0);
+            transform: perspective(1px) translateZ(0);
+            box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+            position: relative;
+            -webkit-transition-property: color;
+            transition-property: color;
+            -webkit-transition-duration: 0.5s;
+            transition-duration: 0.5s;
+        }
+        
+        .login-btn:before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #f11a09;
+            -webkit-transform: scaleX(0);
+            transform: scaleX(0);
+            -webkit-transform-origin: 0 50%;
+            transform-origin: 0 50%;
+            -webkit-transition-property: transform;
+            transition-property: transform;
+            -webkit-transition-duration: 0.5s;
+            transition-duration: 0.5s;
+            -webkit-transition-timing-function: ease-out;
+            transition-timing-function: ease-out;
+        }
+        
+        .login-btn:hover:before {
+            -webkit-transform: scaleX(1);
+            transform: scaleX(1);
+            -webkit-transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
+            transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
+        }
+        
+        .login-links {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .login-links a {
+            color: #ae3c33;
+            text-decoration: none;
+            margin: 0 10px;
+            font-family: "Muli-Regular";
+            font-size: 13px;
+        }
+        
+        .login-links a:hover {
+            color: #f11a09;
+        }
+        
+        .login-links p {
+            margin: 15px 0;
+            color: #666;
+        }
+        
+        /* Responsive design */
+        @@media (max-width: 991px) {
+            .login-inner {
+                min-width: 768px;
+            }
+        }
+        
+        @@media (max-width: 767px) {
+            .login-inner {
+                min-width: auto;
+                background: none;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+            
+            .login-form {
+                width: 100%;
+                padding-right: 15px;
+                padding-left: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-inner">
+            <form method="post" class="login-form">
+                <h3>MultiShop Login</h3>
+                
+                <div class="form-wrapper">
+                    <label asp-for="LoginIdentifier">Username or Email</label>
+                    <input asp-for="LoginIdentifier" type="text" class="form-control" placeholder="Enter username or email" required>
+                    <span asp-validation-for="LoginIdentifier" class="text-danger"></span>
+                </div>
+                
+                <div class="form-wrapper">
+                    <label asp-for="Password">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Enter password" required>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                
+                <button type="submit" class="login-btn">Login</button>
+                
+                <div class="login-links">
+                    <a href="#!">Forgot password?</a>
+                    <p>
+                        Don't have an account? <a href="/Register">Register here</a>
+                    </p>
+                    <a href="#!">Terms of use</a>
+                    <a href="#!">Privacy policy</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Validation Scripts -->
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>

@@ -7,14 +7,15 @@ using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace MultiShop.IdentityServer.Controllers;
 
-[Authorize(LocalApi.PolicyName)]
+//[Authorize(LocalApi.PolicyName)]
+[AllowAnonymous]
 [Route("api/[controller]")]
 [ApiController]
-public class RegisterController : ControllerBase
+public class RegistersController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
 
-    public RegisterController(UserManager<ApplicationUser> userManager)
+    public RegistersController(UserManager<ApplicationUser> userManager)
     {
         _userManager = userManager;
     }
