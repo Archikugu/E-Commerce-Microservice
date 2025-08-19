@@ -27,6 +27,22 @@ public static class Config
         {
             Scopes = { "BasketFullPermission" }
         },
+        new ApiResource("ResourceComment")
+        {
+            Scopes = { "CommentFullPermission" }
+        },
+        new ApiResource("ResourceImages")
+        {
+            Scopes = { "ImagesFullPermission" }
+        },
+        new ApiResource("ResourcePayment")
+        {
+            Scopes = { "PaymentFullPermission" }
+        },
+        new ApiResource("ResourceOcelot")
+        {
+            Scopes = { "OcelotFullPermission" }
+        },
         new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
     };
 
@@ -45,6 +61,10 @@ public static class Config
         new ApiScope("OrderFullPermission", "Full access to order operations"),
         new ApiScope("CargoFullPermission", "Full access to cargo operations"),
         new ApiScope("BasketFullPermission", "Full access to basket operations"),
+        new ApiScope("CommentFullPermission", "Full access to comment operations"),
+        new ApiScope("ImagesFullPermission", "Full access to images operations"),
+        new ApiScope("PaymentFullPermission", "Full access to payment operations"),
+        new ApiScope("OcelotFullPermission", "Full access to all services through Ocelot Gateway"),
         new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
     };
 
@@ -57,7 +77,7 @@ public static class Config
             ClientName = "Multi Shop Visitor User",
             AllowedGrantTypes = GrantTypes.ClientCredentials,
             ClientSecrets = { new Secret("multishopvisitorsecret".Sha256()) },
-            AllowedScopes = { "CatalogReadPermission", "DiscountFullPermission", "CatalogFullPermission" }
+            AllowedScopes = { "CatalogReadPermission", "DiscountFullPermission", "CatalogFullPermission", "OcelotFullPermission" }
         },
 
         // Manager
@@ -67,7 +87,7 @@ public static class Config
             ClientName = "Multi Shop Manager User",
             AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
             ClientSecrets = { new Secret("multishopmanagersecret".Sha256()) },
-            AllowedScopes = { "CatalogFullPermission", "BasketFullPermission" }
+            AllowedScopes = { "CatalogFullPermission", "BasketFullPermission", "OcelotFullPermission" }
         },
 
         // Admin
@@ -84,6 +104,10 @@ public static class Config
                 "OrderFullPermission",
                 "CargoFullPermission",
                 "BasketFullPermission",
+                "CommentFullPermission",
+                "ImagesFullPermission",
+                "PaymentFullPermission",
+                "OcelotFullPermission",
                 IdentityServerConstants.LocalApi.ScopeName,
                 IdentityServerConstants.StandardScopes.Email,
                 IdentityServerConstants.StandardScopes.OpenId,
