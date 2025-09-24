@@ -45,13 +45,17 @@
 									<td>
 										@if (item.Status)
 										{
-											<span class="badge badge-success">Active</span>
-											<a asp-area="Admin" asp-controller="FeatureSlider" asp-action="ChangeStatusFalse" asp-route-id="@item.FeatureSliderId" class="btn btn-danger btn-sm">Deactivate</a>
+											<span class="badge badge-success" style="margin-right:8px;">Active</span>
+											<a asp-area="Admin" asp-controller="FeatureSlider" asp-action="Toggle" asp-route-id="@item.FeatureSliderId" asp-route-status="@item.Status" class="btn btn-sm btn-danger">
+												Deactivate
+											</a>
 										}
 										else
 										{
-											<span class="badge badge-danger">Passive</span>
-											<a asp-area="Admin" asp-controller="FeatureSlider" asp-action="ChangeStatusTrue" asp-route-id="@item.FeatureSliderId" class="btn btn-success btn-sm">Activate</a>
+											<span class="badge badge-danger" style="margin-right:8px;">Passive</span>
+											<a asp-area="Admin" asp-controller="FeatureSlider" asp-action="Toggle" asp-route-id="@item.FeatureSliderId" asp-route-status="@item.Status" class="btn btn-sm btn-success">
+												Activate
+											</a>
 										}
 									</td>
 									<td><a asp-area="Admin" asp-controller="FeatureSlider" asp-action="DeleteFeatureSlider" asp-route-id="@item.FeatureSliderId" class="btn btn-danger">Delete</a></td>

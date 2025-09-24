@@ -1,6 +1,14 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using MultiShop.WebUI.Handlers;
 using MultiShop.WebUI.Services.Abstract;
+using MultiShop.WebUI.Services.CatalogServices.AboutServices;
+using MultiShop.WebUI.Services.CatalogServices.BrandServices;
+using MultiShop.WebUI.Services.CatalogServices.CategoryServices;
+using MultiShop.WebUI.Services.CatalogServices.FeatureSliderServices;
+using MultiShop.WebUI.Services.CatalogServices.OfferDiscountServices;
+using MultiShop.WebUI.Services.CatalogServices.ProductServices;
+using MultiShop.WebUI.Services.CatalogServices.SpecialOfferServices;
 using MultiShop.WebUI.Services.Concrete;
 using MultiShop.WebUI.Settings;
 
@@ -20,7 +28,7 @@ public class Program
             opt.Cookie.HttpOnly = true;
             opt.Cookie.SameSite = SameSiteMode.Strict;
             opt.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-            opt.Cookie.Name="MultiShopJwtCookie";
+            opt.Cookie.Name = "MultiShopJwtCookie";
         });
 
 
@@ -30,7 +38,7 @@ public class Program
             opt.LoginPath = "/Login/Index";
             opt.ExpireTimeSpan = TimeSpan.FromDays(5);
             opt.Cookie.Name = "MultiShopCookie";
-            opt.SlidingExpiration=true;
+            opt.SlidingExpiration = true;
         });
 
         builder.Services.AddHttpContextAccessor();
@@ -43,8 +51,63 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
 
+        // Add Memory Cache
+        builder.Services.AddMemoryCache();
 
-        builder.Services.Configure<ClientSettings>(builder.Configuration.GetSection("ClientSettings")); 
+        builder.Services.Configure<ClientSettings>(builder.Configuration.GetSection("ClientSettings"));
+        builder.Services.Configure<ServiceAPISettings>(builder.Configuration.GetSection("ServiceAPISettings"));
+
+        builder.Services.AddScoped<ResourceOwnerPasswordTokenHandler>();
+        builder.Services.AddScoped<ClientCrendentialTokenHandler>();
+
+        builder.Services.AddHttpClient<IClientCrendentialTokenService, ClientCrendentialTokenService>();
+
+        var values = builder.Configuration.GetSection("ServiceAPISettings").Get<ServiceAPISettings>();
+        builder.Services.AddHttpClient<IUserService, UserService>(opt =>
+        {
+            opt.BaseAddress = new Uri(values.IdentityServerUrl);
+        }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+
+        builder.Services.AddHttpClient<ICategoryService, CategoryService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        builder.Services.AddHttpClient<IProductService, ProductService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        builder.Services.AddHttpClient<ISpecialOfferService, SpecialOfferService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        builder.Services.AddHttpClient<IFeatureSliderService, FeatureSliderService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        builder.Services.AddHttpClient<Services.CatalogServices.FeatureServices.IFeatureService, Services.CatalogServices.FeatureServices.FeatureService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        builder.Services.AddHttpClient<IOfferDiscountService, OfferDiscountService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        builder.Services.AddHttpClient<IBrandService, BrandService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        builder.Services.AddHttpClient<IAboutService, AboutService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
 
         var app = builder.Build();
 
