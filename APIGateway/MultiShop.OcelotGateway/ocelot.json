@@ -23,7 +23,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 7002
+                    "Port": 7005
                 }
             ],
             "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
@@ -40,7 +40,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 7003
+                    "Port": 7004
                 }
             ],
             "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
@@ -57,7 +57,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 7004
+                    "Port": 7006
                 }
             ],
             "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
@@ -74,7 +74,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 7005
+                    "Port": 7002
                 }
             ],
             "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
@@ -91,7 +91,7 @@
             "DownstreamHostAndPorts": [
                 {
                     "Host": "localhost",
-                    "Port": 7006
+                    "Port": 7003
                 }
             ],
             "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],

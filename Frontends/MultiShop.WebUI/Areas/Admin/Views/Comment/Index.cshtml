@@ -6,6 +6,8 @@
 	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 	int count = 0;
 	var products = ViewBag.Products as List<ResultProductDto>;
+	var productDict = ViewBag.ProductDict as Dictionary<string, string>;
+	var productCategoryDict = ViewBag.ProductCategoryDict as Dictionary<string, string>;
 }
 
 <section class="content container-fluid">
@@ -26,6 +28,7 @@
 								<th>Created Date</th>
 								<th>Status</th>
 								<th>Product Name</th>
+								<th>Product Category</th>
 								<th>Actions</th>
 							</tr>
 						</thead>
@@ -56,14 +59,15 @@
 									<td>
 										@if (item.Status)
 										{
-											<span class="badge badge-success">Active</span>
+											<span class="text-success font-weight-bold">Active</span>
 										}
 										else
 										{
-											<span class="badge badge-danger">Inactive</span>
+											<span class="text-danger font-weight-bold">Inactive</span>
 										}
 									</td>
-									<td>@(products?.FirstOrDefault(p => p.ProductId == item.ProductId)?.ProductName ?? "N/A")</td>
+									<td>@(productDict != null && productDict.ContainsKey(item.ProductId) ? productDict[item.ProductId] : (products?.FirstOrDefault(p => p.ProductId == item.ProductId)?.ProductName ?? "N/A"))</td>
+									<td>@(productCategoryDict != null && productCategoryDict.ContainsKey(item.ProductId) ? productCategoryDict[item.ProductId] : "N/A")</td>
 									<td>
 										<a asp-area="Admin" asp-controller="Comment" asp-action="UpdateCommentStatus" asp-route-id="@item.UserCommentId" asp-route-status="@(!item.Status)" class="btn btn-sm @(item.Status ? "btn-warning" : "btn-success")">
 											@(item.Status ? "Deactivate" : "Activate")

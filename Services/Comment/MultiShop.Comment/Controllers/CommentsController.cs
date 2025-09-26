@@ -5,9 +5,11 @@ using MultiShop.Comment.Dtos;
 using MultiShop.Comment.Entities;
 using AutoMapper;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MultiShop.Comment.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class CommentsController : ControllerBase
@@ -99,7 +101,7 @@ public class CommentsController : ControllerBase
         }
 
         _mapper.Map(updateCommentDto, existingComment);
-        
+
         try
         {
             await _context.SaveChangesAsync();

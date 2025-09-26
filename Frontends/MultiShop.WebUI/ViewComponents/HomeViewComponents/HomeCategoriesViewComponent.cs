@@ -1,47 +1,32 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MultiShop.WebUI.Dtos.CatalogDtos.CategoryDtos;
-using MultiShop.WebUI.Dtos.CatalogDtos.ProductDtos;
-using Newtonsoft.Json;
+using MultiShop.WebUI.Services.CatalogServices.CategoryServices;
+using MultiShop.WebUI.Services.CatalogServices.ProductServices;
 
 namespace MultiShop.WebUI.ViewComponents.HomeViewComponents;
 
 public class HomeCategoriesViewComponent : ViewComponent
 {
-    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ICategoryService _categoryService;
+    private readonly IProductService _productService;
 
-    public HomeCategoriesViewComponent(IHttpClientFactory httpClientFactory)
+    public HomeCategoriesViewComponent(ICategoryService categoryService, IProductService productService)
     {
-        _httpClientFactory = httpClientFactory;
+        _categoryService = categoryService;
+        _productService = productService;
     }
 
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        var client = _httpClientFactory.CreateClient();
-        //Catalog Url 7001
-        var responseMessage = await client.GetAsync("https://localhost:7001/api/Categories");
-        if (responseMessage.IsSuccessStatusCode)
+        var categories = await _categoryService.GetAllCategoryAsync();
+
+        // Her kategori için ürün sayısını getir (Ocelot + token üzerinden)
+        foreach (var category in categories)
         {
-            var jsonData = await responseMessage.Content.ReadAsStringAsync();
-            var categories = JsonConvert.DeserializeObject<List<ResultCategoryDto>>(jsonData);
-            
-            // Her category için ürün sayısını al
-            foreach (var category in categories)
-            {
-                var productResponse = await client.GetAsync($"https://localhost:7001/api/Products/GetProductsWithCategoryByCategoryId/{category.CategoryId}");
-                if (productResponse.IsSuccessStatusCode)
-                {
-                    var productJsonData = await productResponse.Content.ReadAsStringAsync();
-                    var products = JsonConvert.DeserializeObject<List<ResultProductsWithCategoryDto>>(productJsonData);
-                    category.ProductCount = products?.Count ?? 0;
-                }
-                else
-                {
-                    category.ProductCount = 0;
-                }
-            }
-            
-            return View(categories);
+            var products = await _productService.GetProductsWithCategoryByCategoryIdAsync(category.CategoryId);
+            category.ProductCount = products?.Count ?? 0;
         }
-        return View();
+
+        return View(categories);
     }
 }

@@ -1,36 +1,31 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MultiShop.WebUI.Dtos.CatalogDtos.FeatureSliderDtos;
+using MultiShop.WebUI.Services.CatalogServices.FeatureSliderServices;
 using Newtonsoft.Json;
 
 namespace MultiShop.WebUI.ViewComponents.HomeViewComponents
 {
     public class HomeCarouselViewComponent : ViewComponent
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IFeatureSliderService _featureSliderService;
 
-        public HomeCarouselViewComponent(IHttpClientFactory httpClientFactory)
+        public HomeCarouselViewComponent(IFeatureSliderService featureSliderService)
         {
-            _httpClientFactory = httpClientFactory;
+            _featureSliderService = featureSliderService;
         }
-        public async Task<IViewComponentResult> InvokeAsync()
+
+        public async Task<IViewComponentResult> InvokeAsync(int maxCount = 5)
         {
-            var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("https://localhost:7001/api/FeatureSliders");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultFeatureSliderDto>>(jsonData);
-                
-                // Sadece aktif olan slider'ları filtrele
-                var activeValues = values.Where(x => x.Status).ToList();
-                
-                // Maksimum 5 slider göster
-                var limitedValues = activeValues.Take(5).ToList();
-                ViewBag.SliderCount = limitedValues.Count;
-                
-                return View(limitedValues);
-            }
-            return View();
+            var values = await _featureSliderService.GetAllAsync();
+
+            var limitedValues = values
+                .Where(x => x.Status)
+                .Take(maxCount)
+                .ToList();
+
+            ViewBag.SliderCount = limitedValues.Count;
+
+            return View(limitedValues);
         }
     }
 }

@@ -1,8 +1,7 @@
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MultiShop.WebUI.Dtos.CatalogDtos.ContactDtos;
-using Newtonsoft.Json;
+using MultiShop.WebUI.Services.CatalogServices.ContactServices;
 
 namespace MultiShop.WebUI.Areas.Admin.Controllers;
 
@@ -10,11 +9,11 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers;
 [AllowAnonymous]
 public class ContactController : Controller
 {
-    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IContactService _contactService;
 
-    public ContactController(IHttpClientFactory httpClientFactory)
+    public ContactController(IContactService contactService)
     {
-        _httpClientFactory = httpClientFactory;
+        _contactService = contactService;
     }
 
     [HttpGet]
@@ -24,16 +23,8 @@ public class ContactController : Controller
         ViewBag.v2 = "Contacts";
         ViewBag.v3 = "Contact List";
 
-        var client = _httpClientFactory.CreateClient();
-        var responseMessage = await client.GetAsync("https://localhost:7001/api/Contacts");
-        if (responseMessage.IsSuccessStatusCode)
-        {
-            var jsonData = await responseMessage.Content.ReadAsStringAsync();
-            var values = JsonConvert.DeserializeObject<List<ResultContactDto>>(jsonData);
-            return View(values);
-        }
-
-        return View();
+        var values = await _contactService.GetAllAsync();
+        return View(values);
     }
 
     [HttpGet]
@@ -43,84 +34,58 @@ public class ContactController : Controller
         ViewBag.v2 = "Contacts";
         ViewBag.v3 = "Contact Detail";
 
-        var client = _httpClientFactory.CreateClient();
-        var responseMessage = await client.GetAsync($"https://localhost:7001/api/Contacts/{id}");
-        if (responseMessage.IsSuccessStatusCode)
-        {
-            var jsonData = await responseMessage.Content.ReadAsStringAsync();
-            var values = JsonConvert.DeserializeObject<ResultContactDto>(jsonData);
-            return View(values);
-        }
-
-        return View();
+        var value = await _contactService.GetByIdAsync(id);
+        return View(value);
     }
 
     [HttpGet]
     public async Task<IActionResult> UpdateContact(string id)
     {
-        var client = _httpClientFactory.CreateClient();
-        var responseMessage = await client.GetAsync($"https://localhost:7001/api/Contacts/{id}");
-        if (responseMessage.IsSuccessStatusCode)
+        var value = await _contactService.GetByIdAsync(id);
+        var model = new UpdateContactDto
         {
-            var jsonData = await responseMessage.Content.ReadAsStringAsync();
-            var values = JsonConvert.DeserializeObject<UpdateContactDto>(jsonData);
-            return View(values);
-        }
-        return View();
+            ContactId = value.ContactId,
+            Name = value.Name,
+            Phone = value.Phone,
+            Email = value.Email,
+            Subject = value.Subject,
+            Message = value.Message,
+            IsRead = value.IsRead,
+            SendDate = value.SendDate
+        };
+        return View(model);
     }
 
     [HttpPost]
     public async Task<IActionResult> UpdateContact(UpdateContactDto updateContactDto)
     {
-        var client = _httpClientFactory.CreateClient();
-        var jsonData = JsonConvert.SerializeObject(updateContactDto);
-        StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-        var responseMessage = await client.PutAsync("https://localhost:7001/api/Contacts", stringContent);
-        if (responseMessage.IsSuccessStatusCode)
-        {
-            return RedirectToAction("Index", "Contact", new { area = "Admin" });
-        }
-        return View();
+        await _contactService.UpdateAsync(updateContactDto);
+        return RedirectToAction("Index", "Contact", new { area = "Admin" });
     }
 
     [HttpGet]
     public async Task<IActionResult> DeleteContact(string id)
     {
-        var client = _httpClientFactory.CreateClient();
-        var responseMessage = await client.DeleteAsync($"https://localhost:7001/api/Contacts/{id}");
-        if (responseMessage.IsSuccessStatusCode)
-        {
-            return RedirectToAction("Index", "Contact", new { area = "Admin" });
-        }
-        return View();
+        await _contactService.DeleteAsync(id);
+        return RedirectToAction("Index", "Contact", new { area = "Admin" });
     }
 
     [HttpGet]
     public async Task<IActionResult> MarkAsRead(string id)
     {
-        var client = _httpClientFactory.CreateClient();
-        
-        // Önce contact'ı getir
-        var getResponse = await client.GetAsync($"https://localhost:7001/api/Contacts/{id}");
-        if (getResponse.IsSuccessStatusCode)
+        var value = await _contactService.GetByIdAsync(id);
+        var update = new UpdateContactDto
         {
-            var jsonData = await getResponse.Content.ReadAsStringAsync();
-            var contact = JsonConvert.DeserializeObject<UpdateContactDto>(jsonData);
-            
-            // IsRead'i true yap
-            contact.IsRead = true;
-            
-            // Güncelle
-            var updateJsonData = JsonConvert.SerializeObject(contact);
-            StringContent stringContent = new StringContent(updateJsonData, Encoding.UTF8, "application/json");
-            var updateResponse = await client.PutAsync("https://localhost:7001/api/Contacts", stringContent);
-            
-            if (updateResponse.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index", "Contact", new { area = "Admin" });
-            }
-        }
-        
+            ContactId = value.ContactId,
+            Name = value.Name,
+            Phone = value.Phone,
+            Email = value.Email,
+            Subject = value.Subject,
+            Message = value.Message,
+            IsRead = true,
+            SendDate = value.SendDate
+        };
+        await _contactService.UpdateAsync(update);
         return RedirectToAction("Index", "Contact", new { area = "Admin" });
     }
 }

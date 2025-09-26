@@ -1,8 +1,9 @@
 
-using Scalar.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using MultiShop.Comment.Context;
 using MultiShop.Comment.Mapping;
+using Scalar.AspNetCore;
 
 namespace MultiShop.Comment;
 
@@ -12,12 +13,19 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+        {
+            opt.Authority = builder.Configuration["IdentityServerUrl"];
+            opt.Audience = "ResourceComment";
+            opt.RequireHttpsMetadata = true;
+        });
+
         // Add services to the container.
         builder.Services.AddDbContext<MultiShopCommentContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
         builder.Services.AddControllers();
-        
+
         // Add validation
         builder.Services.AddControllers().AddJsonOptions(options =>
         {
@@ -65,6 +73,8 @@ public class Program
 
         // Use CORS
         app.UseCors("AllowAll");
+
+        app.UseAuthentication();
 
         app.UseAuthorization();
 

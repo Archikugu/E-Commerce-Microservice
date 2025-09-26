@@ -5,10 +5,14 @@ using MultiShop.WebUI.Services.Abstract;
 using MultiShop.WebUI.Services.CatalogServices.AboutServices;
 using MultiShop.WebUI.Services.CatalogServices.BrandServices;
 using MultiShop.WebUI.Services.CatalogServices.CategoryServices;
+using MultiShop.WebUI.Services.CatalogServices.ContactServices;
 using MultiShop.WebUI.Services.CatalogServices.FeatureSliderServices;
 using MultiShop.WebUI.Services.CatalogServices.OfferDiscountServices;
+using MultiShop.WebUI.Services.CatalogServices.ProductDetailServices;
+using MultiShop.WebUI.Services.CatalogServices.ProductImageServices;
 using MultiShop.WebUI.Services.CatalogServices.ProductServices;
 using MultiShop.WebUI.Services.CatalogServices.SpecialOfferServices;
+using MultiShop.WebUI.Services.CommentServices;
 using MultiShop.WebUI.Services.Concrete;
 using MultiShop.WebUI.Settings;
 
@@ -104,6 +108,26 @@ public class Program
         }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
 
         builder.Services.AddHttpClient<IAboutService, AboutService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        builder.Services.AddHttpClient<IProductImageService, ProductImageService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        builder.Services.AddHttpClient<IProductDetailService, ProductDetailService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        builder.Services.AddHttpClient<ICommentService, CommentService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Comment.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        builder.Services.AddHttpClient<IContactService, ContactService>(opt =>
         {
             opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
         }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();

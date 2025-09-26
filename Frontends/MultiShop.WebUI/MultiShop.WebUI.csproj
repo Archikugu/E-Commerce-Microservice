@@ -9,6 +9,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Services\CatalogServices\ContactServices\" />
     <Folder Include="Services\CatalogServices\SpecialOfferServices\" />
   </ItemGroup>
 

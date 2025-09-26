@@ -52,8 +52,10 @@
 			<h4 class="mb-4">Leave a review</h4>
 			<small>Your email address will not be published. Required fields are marked *</small>
 			
-			<form id="reviewForm" method="post" action="/api/Comments">
+			<form asp-controller="Comments" asp-action="Create" method="post">
+				@Html.AntiForgeryToken()
 				<input type="hidden" id="productId" name="ProductId" value="@ViewContext.RouteData.Values["id"]" />
+				<input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
 				
 				<div class="d-flex my-3">
 					<p class="mb-0 mr-2">Your Rating * :</p>
@@ -101,17 +103,16 @@
 </div>
 
 <script>
+// Yıldız değerlendirme etkileşimi (form normal POST yapacak)
 document.addEventListener('DOMContentLoaded', function() {
     const stars = document.querySelectorAll('#ratingStars i');
     const ratingInput = document.getElementById('rating');
-    
-    // Star rating functionality
+
     stars.forEach(star => {
         star.addEventListener('click', function() {
             const rating = this.getAttribute('data-rating');
             ratingInput.value = rating;
-            
-            // Update star display
+
             stars.forEach((s, index) => {
                 if (index < rating) {
                     s.classList.remove('far');
@@ -122,8 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
-        
-        // Hover effects
+
         star.addEventListener('mouseenter', function() {
             const rating = this.getAttribute('data-rating');
             stars.forEach((s, index) => {
@@ -133,7 +133,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
-        
+
         star.addEventListener('mouseleave', function() {
             const currentRating = ratingInput.value;
             stars.forEach((s, index) => {
@@ -145,34 +145,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     s.classList.add('far');
                 }
             });
-        });
-    });
-    
-    // Form submission
-    document.getElementById('reviewForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData);
-        
-        fetch('https://localhost:7006/api/Comments', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => {
-            if (response.ok) {
-                alert('Review submitted successfully!');
-                location.reload();
-            } else {
-                alert('Error submitting review. Please try again.');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error submitting review. Please try again.');
         });
     });
 });

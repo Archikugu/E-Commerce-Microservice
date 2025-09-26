@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MultiShop.WebUI.Dtos.CatalogDtos.ContactDtos;
-using Newtonsoft.Json;
-using System.Text;
+using MultiShop.WebUI.Services.CatalogServices.ContactServices;
 
 namespace MultiShop.WebUI.Controllers
 {
     public class ContactController : Controller
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IContactService _contactService;
 
-        public ContactController(IHttpClientFactory httpClientFactory)
+        public ContactController(IContactService contactService)
         {
-            _httpClientFactory = httpClientFactory;
+            _contactService = contactService;
         }
 
         public IActionResult Index()
@@ -20,21 +19,12 @@ namespace MultiShop.WebUI.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(CreateContactDto createContactDto)
         {
-            var client = _httpClientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(createContactDto);
-            StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PostAsync("https://localhost:7001/api/Contacts", stringContent);
-            
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                TempData["SuccessMessage"] = "Your message has been sent successfully!";
-                return RedirectToAction("Index");
-            }
-            
-            TempData["ErrorMessage"] = "An error occurred while sending your message!";
-            return View();
+            await _contactService.CreateAsync(createContactDto);
+            TempData["SuccessMessage"] = "Your message has been sent successfully!";
+            return RedirectToAction("Index");
         }
     }
 }

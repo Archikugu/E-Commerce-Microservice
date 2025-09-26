@@ -43,14 +43,13 @@ public class ClientCrendentialTokenService : IClientCrendentialTokenService
             throw new Exception($"Discovery document error: {discoveryEndpoint.Error}");
         }
 
-        // ClientCredentials grant'ı olan Visitor client'ı kullan
         var clientCredentialsTokenRequest = new ClientCredentialsTokenRequest
         {
             ClientId = _clientSettings.MultiShopVisitorClient.ClientId,
             ClientSecret = _clientSettings.MultiShopVisitorClient.ClientSecret,
             Address = discoveryEndpoint.TokenEndpoint,
-            // Hem Ocelot (aud=ResourceOcelot) hem de Catalog yetkisi için iki scope iste
-            Scope = "CatalogFullPermission OcelotFullPermission"
+            // Catalog + Comment + Ocelot scopes
+            Scope = "CatalogFullPermission CommentFullPermission OcelotFullPermission"
         };
 
         var newToken = await _httpClient.RequestClientCredentialsTokenAsync(clientCredentialsTokenRequest);
@@ -59,7 +58,7 @@ public class ClientCrendentialTokenService : IClientCrendentialTokenService
             throw new Exception($"Token request error: {newToken.Error} {newToken.ErrorDescription}");
         }
 
-        var safeExpiresIn = newToken.ExpiresIn > 60 ? newToken.ExpiresIn - 30 : 60;
+        var safeExpiresIn = newToken.ExpiresIn > 60 ? newToken.ExpiresIn - 30 : 60; // en az 60 sn cache'le
         _memoryCache.Set("multishoptoken", newToken.AccessToken, TimeSpan.FromSeconds(safeExpiresIn));
         return newToken.AccessToken;
     }
