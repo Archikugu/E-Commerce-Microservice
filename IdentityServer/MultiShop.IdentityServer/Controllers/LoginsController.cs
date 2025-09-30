@@ -45,8 +45,11 @@ public class LoginsController : ControllerBase
             GetCheckAppUserViewModel model = new GetCheckAppUserViewModel();
             model.UserName = user.UserName;
             model.Id = user.Id;
-            var token = JwtTokenGenerator.GenerateToken(model);
-            return Ok(token);
+            model.Email = user.Email;
+            model.FirstName = user.FirstName;
+            model.LastName = user.LastName;
+            var tokenResponse = JwtTokenGenerator.GenerateToken(model);
+            return Ok(tokenResponse.Token); // Sadece token string'ini döndür
         }
         else
         {

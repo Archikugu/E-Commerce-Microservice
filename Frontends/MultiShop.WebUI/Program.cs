@@ -14,6 +14,7 @@ using MultiShop.WebUI.Services.CatalogServices.ProductServices;
 using MultiShop.WebUI.Services.CatalogServices.SpecialOfferServices;
 using MultiShop.WebUI.Services.CommentServices;
 using MultiShop.WebUI.Services.Concrete;
+using MultiShop.WebUI.Services.BasketServices;
 using MultiShop.WebUI.Settings;
 
 namespace MultiShop.WebUI;
@@ -57,6 +58,18 @@ public class Program
 
         // Add Memory Cache
         builder.Services.AddMemoryCache();
+
+        // Add Distributed Cache for Session
+        builder.Services.AddDistributedMemoryCache();
+
+        // Add Session
+        builder.Services.AddSession(options =>
+        {
+            options.Cookie.Name = "MultiShop.Session";
+            options.IdleTimeout = TimeSpan.FromHours(12);
+            options.Cookie.HttpOnly = true;
+            options.Cookie.IsEssential = true;
+        });
 
         builder.Services.Configure<ClientSettings>(builder.Configuration.GetSection("ClientSettings"));
         builder.Services.Configure<ServiceAPISettings>(builder.Configuration.GetSection("ServiceAPISettings"));
@@ -132,6 +145,11 @@ public class Program
             opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
         }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
 
+        builder.Services.AddHttpClient<IBasketService, BasketService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Basket.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+
 
         var app = builder.Build();
 
@@ -146,6 +164,9 @@ public class Program
         app.UseHttpsRedirection();
         app.UseStaticFiles();
         app.UseRouting();
+
+        // Enable Session
+        app.UseSession();
 
         app.UseAuthentication();
         app.UseAuthorization();

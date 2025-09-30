@@ -8,5 +8,5 @@ public class UserDetailViewModel
     public string Email { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
-    public string FullName => $"{FirstName} {LastName.ToUpper()}";
+    public string FullName => $"{FirstName} {LastName?.ToUpper() ?? ""}".Trim();
 }

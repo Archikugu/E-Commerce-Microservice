@@ -84,8 +84,8 @@
                         <div class="profile-avatar">
                             <i class="fas fa-user"></i>
                         </div>
-                        <h3>@Model?.FullName ?? "Kullanıcı"</h3>
-                        <p class="mb-0">@Model?.Email ?? "email@example.com"</p>
+                        <h3>@Model?.FullName</h3>
+                        <p class="mb-0">@Model?.Email</p>
                     </div>
                     
                     <div class="profile-info">
@@ -95,7 +95,7 @@
                             </div>
                             <div class="info-content">
                                 <div class="info-label">Kullanıcı ID</div>
-                                <div class="info-value">@Model?.Id ?? "Belirtilmemiş"</div>
+                                <div class="info-value">@Model?.Id</div>
                             </div>
                         </div>
                         
@@ -105,7 +105,7 @@
                             </div>
                             <div class="info-content">
                                 <div class="info-label">Kullanıcı Adı</div>
-                                <div class="info-value">@Model?.UserName ?? "Belirtilmemiş"</div>
+                                <div class="info-value">@Model?.UserName</div>
                             </div>
                         </div>
                         
@@ -115,7 +115,7 @@
                             </div>
                             <div class="info-content">
                                 <div class="info-label">E-posta</div>
-                                <div class="info-value">@Model?.Email ?? "Belirtilmemiş"</div>
+                                <div class="info-value">@Model?.Email</div>
                             </div>
                         </div>
                         
@@ -125,7 +125,7 @@
                             </div>
                             <div class="info-content">
                                 <div class="info-label">Ad</div>
-                                <div class="info-value">@Model?.FirstName ?? "Belirtilmemiş"</div>
+                                <div class="info-value">@Model?.FirstName</div>
                             </div>
                         </div>
                         
@@ -135,7 +135,7 @@
                             </div>
                             <div class="info-content">
                                 <div class="info-label">Soyad</div>
-                                <div class="info-value">@Model?.LastName ?? "Belirtilmemiş"</div>
+                                <div class="info-value">@Model?.LastName</div>
                             </div>
                         </div>
                     </div>

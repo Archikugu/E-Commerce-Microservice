@@ -156,6 +156,27 @@
 				transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
 			}
 			
+			.login-links {
+				text-align: center;
+				margin-top: 20px;
+			}
+			
+			.login-links a {
+				color: #ae3c33;
+				text-decoration: none;
+				font-family: "Muli-Regular";
+				font-size: 13px;
+			}
+			
+			.login-links a:hover {
+				color: #f11a09;
+			}
+			
+			.login-links p {
+				margin: 15px 0;
+				color: #666;
+			}
+			
 			/* Responsive design */
 			@@media (max-width: 991px) {
 				.inner {
@@ -229,6 +250,12 @@
 						</label>
 					</div>
 					<button type="submit">Register Now</button>
+					
+					<div class="login-links">
+						<p>
+							Already have an account? <a href="/Login">Sign in here</a>
+						</p>
+					</div>
 				</form>
 			</div>
 		</div>

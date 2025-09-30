@@ -21,11 +21,12 @@ public class BasketsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetMyBasketDetail()
     {
-        //var values = await _basketService.GetBasket(_loginService.GetUserId);
-        var user = User.Claims;
-
         var userId = _loginService.GetUserId;
         var basket = await _basketService.GetBasket(userId);
+        if (basket == null)
+        {
+            return NotFound();
+        }
         return Ok(basket);
     }
 

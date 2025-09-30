@@ -48,8 +48,8 @@ public class ClientCrendentialTokenService : IClientCrendentialTokenService
             ClientId = _clientSettings.MultiShopVisitorClient.ClientId,
             ClientSecret = _clientSettings.MultiShopVisitorClient.ClientSecret,
             Address = discoveryEndpoint.TokenEndpoint,
-            // Catalog + Comment + Ocelot scopes
-            Scope = "CatalogFullPermission CommentFullPermission OcelotFullPermission"
+            // Catalog + Comment + Basket + Ocelot scopes
+            Scope = "CatalogFullPermission CommentFullPermission BasketFullPermission OcelotFullPermission"
         };
 
         var newToken = await _httpClient.RequestClientCredentialsTokenAsync(clientCredentialsTokenRequest);

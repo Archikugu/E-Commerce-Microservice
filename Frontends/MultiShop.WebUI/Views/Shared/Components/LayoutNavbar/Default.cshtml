@@ -43,8 +43,10 @@
 						<div class="nav-item dropdown">
 							<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
 							<div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-								<a href="/ShoppingCart" class="dropdown-item">Shopping Cart</a>
+								<a href="/Basket" class="dropdown-item">Shopping Cart</a>
 								<a href="/Checkout" class="dropdown-item">Checkout</a>
+								<a href="/Register" class="dropdown-item">Sign Up</a>
+								<a href="/Login" class="dropdown-item">Sign In</a>
 							</div>
 						</div>
 					</div>
@@ -53,10 +55,37 @@
 							<i class="fas fa-heart text-primary"></i>
 							<span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
 						</a>
-						<a href="/ShoppingCart" class="btn px-0 ml-3">
+						<a href="/Basket" class="btn px-0 ml-3">
 							<i class="fas fa-shopping-cart text-primary"></i>
 							<span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
 						</a>
+						@{
+							var firstName = User?.FindFirst("given_name")?.Value ?? User?.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value ?? string.Empty;
+							var lastName = User?.FindFirst("family_name")?.Value ?? User?.FindFirst(System.Security.Claims.ClaimTypes.Surname)?.Value ?? string.Empty;
+							var fallbackName = User?.FindFirst("name")?.Value ?? User?.Identity?.Name ?? string.Empty;
+							var composed = ($"{firstName} {lastName}").Trim();
+							var displayName = string.IsNullOrWhiteSpace(composed) ? fallbackName : composed;
+							if (string.IsNullOrWhiteSpace(displayName)) { displayName = "Account"; }
+						}
+						<div class="nav-item dropdown d-inline-block ml-3">
+							<a href="#" class="btn px-0 nav-link dropdown-toggle" data-toggle="dropdown">
+								<i class="fas fa-user text-primary"></i>
+								<span class="text-light ml-2">@displayName</span>
+							</a>
+							<div class="dropdown-menu dropdown-menu-right bg-primary rounded-0 border-0 m-0">
+								@if (User?.Identity?.IsAuthenticated ?? false)
+								{
+									<a class="dropdown-item text-dark" href="/User">Profile</a>
+									<a class="dropdown-item text-dark" href="/User/ChangePassword">Change Password</a>
+									<a class="dropdown-item text-dark" href="/Login/Logout">Logout</a>
+								}
+								else
+								{
+									<a class="dropdown-item text-dark" href="/Login">Sign In</a>
+									<a class="dropdown-item text-dark" href="/Register">Sign Up</a>
+								}
+							</div>
+						</div>
 					</div>
 				</div>
 			</nav>

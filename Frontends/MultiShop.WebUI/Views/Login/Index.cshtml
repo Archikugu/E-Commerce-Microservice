@@ -198,6 +198,13 @@
             <form method="post" class="login-form">
                 <h3>MultiShop Login</h3>
                 
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger" style="color: #d32f2f; background-color: #ffebee; border: 1px solid #ffcdd2; padding: 10px; border-radius: 4px; margin-bottom: 20px;">
+                        @TempData["ErrorMessage"]
+                    </div>
+                }
+                
                 <div class="form-wrapper">
                     <label asp-for="LoginIdentifier">Username or Email</label>
                     <input asp-for="LoginIdentifier" type="text" class="form-control" placeholder="Enter username or email" required>

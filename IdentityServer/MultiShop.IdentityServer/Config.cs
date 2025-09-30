@@ -77,7 +77,7 @@ public static class Config
             ClientName = "Multi Shop Visitor User",
             AllowedGrantTypes = GrantTypes.ClientCredentials,
             ClientSecrets = { new Secret("multishopvisitorsecret".Sha256()) },
-            AllowedScopes = { "CatalogReadPermission", "DiscountFullPermission","CommentFullPermission", "ImagesFullPermission","CatalogFullPermission", "OcelotFullPermission",
+            AllowedScopes = { "CatalogReadPermission", "DiscountFullPermission","CommentFullPermission", "ImagesFullPermission","CatalogFullPermission", "OcelotFullPermission","BasketFullPermission",
                 IdentityServerConstants.LocalApi.ScopeName, }
         },
 
@@ -92,7 +92,9 @@ public static class Config
             IdentityServerConstants.LocalApi.ScopeName,
                 IdentityServerConstants.StandardScopes.Email,
                 IdentityServerConstants.StandardScopes.OpenId,
-                IdentityServerConstants.StandardScopes.Profile}
+                IdentityServerConstants.StandardScopes.Profile,
+                IdentityServerConstants.StandardScopes.OfflineAccess },
+            AllowOfflineAccess = true
         },
 
         // Admin
@@ -116,8 +118,10 @@ public static class Config
                 IdentityServerConstants.LocalApi.ScopeName,
                 IdentityServerConstants.StandardScopes.Email,
                 IdentityServerConstants.StandardScopes.OpenId,
-                IdentityServerConstants.StandardScopes.Profile
+                IdentityServerConstants.StandardScopes.Profile,
+                IdentityServerConstants.StandardScopes.OfflineAccess
             },
+            AllowOfflineAccess = true,
             AccessTokenLifetime = 600
         }
     };
