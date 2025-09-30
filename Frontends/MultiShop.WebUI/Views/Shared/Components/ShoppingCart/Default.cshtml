@@ -20,25 +20,25 @@
 					<td class="align-middle"><img src="@item.ImageUrl" alt="" style="width: 50px;"> @item.ProductName</td>
 					<td class="align-middle">$ @item.Price</td>
 					<td class="align-middle">
-						<div class="input-group quantity mx-auto" style="width: 100px;">
-							<div class="input-group-btn">
-								<button class="btn btn-sm btn-primary btn-minus">
-									<i class="fa fa-minus"></i>
-								</button>
-							</div>
-                            <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" value="@item.Quantity">
-							<div class="input-group-btn">
-								<button class="btn btn-sm btn-primary btn-plus">
-									<i class="fa fa-plus"></i>
-								</button>
-							</div>
+					<div class="input-group quantity mx-auto" style="width: 100px;" data-product-id="@item.ProductId" data-price="@item.Price">
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-sm btn-primary btn-minus">
+								<i class="fa fa-minus"></i>
+							</button>
 						</div>
+						<input type="text" class="form-control form-control-sm bg-secondary border-0 text-center qty-input" value="@item.Quantity">
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-sm btn-primary btn-plus">
+								<i class="fa fa-plus"></i>
+							</button>
+						</div>
+					</div>
 					</td>
                     <td class="align-middle">$ @(item.Price * item.Quantity)</td>
 					<td class="align-middle">
 						<form asp-controller="Basket" asp-action="RemoveBasketItem" method="post" class="d-inline">
 							<input type="hidden" name="productId" value="@item.ProductId" />
-							<button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
+						<button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button>
 						</form>
 					</td>
 				</tr>
@@ -46,3 +46,53 @@
 		</tbody>
 	</table>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const rows = document.querySelectorAll('.input-group.quantity');
+    rows.forEach(group => {
+        const minus = group.querySelector('.btn-minus');
+        const plus = group.querySelector('.btn-plus');
+        const input = group.querySelector('.qty-input');
+        const productId = group.getAttribute('data-product-id');
+        const price = parseFloat(group.getAttribute('data-price')) || 0;
+
+        function updateServer(newQty) {
+            fetch('/Basket/UpdateQuantity', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `productId=${encodeURIComponent(productId)}&quantity=${encodeURIComponent(newQty)}`
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (!data || !data.ok) return;
+                // Satır toplamını güncelle
+                const totalCell = group.closest('tr').querySelectorAll('td')[3];
+                totalCell.textContent = `$ ${ (price * data.quantity).toFixed(2) }`;
+                // Cart summary tarafını da güncelle (varsa)
+                const subtotalEl = document.querySelector('[data-subtotal]');
+                const discountEl = document.querySelector('[data-discount]');
+                const totalEl = document.querySelector('[data-total]');
+                if (subtotalEl) subtotalEl.textContent = `$${ (data.subtotal).toFixed(2) }`;
+                if (discountEl) discountEl.textContent = (data.discountRate > 0) ? `%${data.discountRate}` : '-';
+                if (totalEl) totalEl.textContent = `$${ (data.total).toFixed(2) }`;
+            })
+            .catch(() => {});
+        }
+
+        function syncAfterThemeUpdates() {
+            // Temanın main.js'i input değerini güncelledikten sonra oku
+            setTimeout(() => {
+                let q = parseInt(input.value || '1');
+                q = isNaN(q) ? 1 : q;
+                if (q < 1) q = 1;
+                updateServer(q);
+            }, 0);
+        }
+
+        minus.addEventListener('click', () => { syncAfterThemeUpdates(); });
+        plus.addEventListener('click', () => { syncAfterThemeUpdates(); });
+        input.addEventListener('change', () => { syncAfterThemeUpdates(); });
+    });
+});
+</script>

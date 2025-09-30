@@ -12,6 +12,7 @@ using MultiShop.WebUI.Services.CatalogServices.ProductDetailServices;
 using MultiShop.WebUI.Services.CatalogServices.ProductImageServices;
 using MultiShop.WebUI.Services.CatalogServices.ProductServices;
 using MultiShop.WebUI.Services.CatalogServices.SpecialOfferServices;
+using MultiShop.WebUI.Services.DiscountServices.DiscountCouponServices;
 using MultiShop.WebUI.Services.CommentServices;
 using MultiShop.WebUI.Services.Concrete;
 using MultiShop.WebUI.Services.BasketServices;
@@ -148,6 +149,12 @@ public class Program
         builder.Services.AddHttpClient<IBasketService, BasketService>(opt =>
         {
             opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Basket.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+
+        // Discount service (Ocelot + token)
+        builder.Services.AddHttpClient<IDiscountCouponService, DiscountCouponService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Discount.Path.TrimStart('/')}");
         }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
 

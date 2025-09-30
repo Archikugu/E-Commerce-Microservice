@@ -11,6 +11,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Services\CatalogServices\ContactServices\" />
     <Folder Include="Services\CatalogServices\SpecialOfferServices\" />
+    <Folder Include="Services\DiscountServices\" />
   </ItemGroup>
 
   <ItemGroup>
