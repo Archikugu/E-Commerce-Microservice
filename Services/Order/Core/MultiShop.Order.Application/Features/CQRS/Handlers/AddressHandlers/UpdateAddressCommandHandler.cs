@@ -16,10 +16,18 @@ public class UpdateAddressCommandHandler
     public async Task Handle(UpdateAddressCommand command)
     {
         var values = await _addressRepository.GetByIdAsync(command.AddressId);
-        values.Detail = command.Detail;
-        values.District = command.District;
-        values.City = command.City;
         values.UserId = command.UserId;
+        values.FirstName = command.FirstName;
+        values.LastName = command.LastName;
+        values.Email = command.Email;
+        values.PhoneNumber = command.PhoneNumber;
+        values.Country = command.Country;
+        values.Description = command.Description;
+        values.ZipCode = command.ZipCode;
+        values.City = command.City;
+        values.District = command.District;
+        values.AddressLine1 = command.AddressLine1;
+        values.AddressLine2 = command.AddressLine2;
         await _addressRepository.UpdateAsync(values);
     }
 }

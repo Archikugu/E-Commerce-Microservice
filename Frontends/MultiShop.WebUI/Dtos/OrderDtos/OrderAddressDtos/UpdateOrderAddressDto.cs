@@ -1,6 +1,6 @@
-﻿namespace MultiShop.Order.Application.Features.CQRS.Commands.AddressCommands;
+namespace MultiShop.WebUI.Dtos.OrderDtos.OrderAddressDtos;
 
-public class UpdateAddressCommand
+public class UpdateOrderAddressDto
 {
     public int AddressId { get; set; }
     public string UserId { get; set; }
@@ -16,3 +16,5 @@ public class UpdateAddressCommand
     public string AddressLine1 { get; set; }
     public string AddressLine2 { get; set; }
 }
+
+

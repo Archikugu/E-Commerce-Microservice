@@ -6,7 +6,7 @@ using MultiShop.WebUI.Dtos.BasketDtos;
 
 namespace MultiShop.WebUI.Controllers;
 
-[AllowAnonymous]
+[Authorize]
 public class DiscountController : Controller
 {
     private readonly IDiscountCouponService _discountService;

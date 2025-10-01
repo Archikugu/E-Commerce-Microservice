@@ -1,0 +1,139 @@
+﻿
+@{
+    ViewData["Title"] = "Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    /* Keep placeholder casing as typed while input text is uppercased */
+    #cardHolder::placeholder { text-transform: none !important; }
+    /* Optional vendor prefixes for wider support */
+    #cardHolder::-webkit-input-placeholder { text-transform: none !important; }
+    #cardHolder:-ms-input-placeholder { text-transform: none !important; }
+</style>
+
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12 mb-4">
+            <div class="p-30" style="perspective:1000px; display:flex; justify-content:center;">
+                <div id="card" style="position:relative; width:420px; height:220px; transform-style:preserve-3d; transition: transform .6s;">
+                    <div id="cardFront" style="position:absolute; inset:0; background: linear-gradient(135deg,#1e3c72,#2a5298); border-radius: 16px; color: #fff; backface-visibility:hidden;">
+                        <div style="position:absolute; top:16px; right:20px; width:60px; height:40px; background:rgba(255,255,255,0.15); border-radius:8px;"></div>
+                        <div style="position:absolute; top:16px; left:20px; font-weight:600;">MULTISHOP</div>
+                        <div style="position:absolute; bottom:64px; left:20px; font-size:1.25rem; letter-spacing:2px;" id="previewCardNumber">•••• •••• •••• ••••</div>
+                        <div style="position:absolute; bottom:30px; left:20px; display:flex; gap:24px;">
+                            <div id="previewHolder">CARD HOLDER</div>
+                            <div id="previewExpiry">MM/YY</div>
+                        </div>
+                        <div style="position:absolute; bottom:12px; right:20px; font-size:0.8rem; opacity:0.85;">VISA</div>
+                    </div>
+                    <div id="cardBack" style="position:absolute; inset:0; background: linear-gradient(135deg,#2a5298,#1e3c72); border-radius: 16px; color: #fff; transform: rotateY(180deg); backface-visibility:hidden;">
+                        <div style="position:absolute; top:20px; left:0; right:0; height:36px; background:#111;"></div>
+                        <div style="position:absolute; top:78px; left:20px; right:20px; height:32px; background:#fff; border-radius:6px; display:flex; align-items:center; justify-content:flex-end; padding:0 12px; color:#111;">
+                            <span id="previewCvc" style="font-weight:700; letter-spacing:1px;">•••</span>
+                        </div>
+                        <div style="position:absolute; bottom:12px; right:20px; font-size:0.8rem; opacity:0.85;">VISA</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mb-4">
+            <div class="p-30" style="max-width: 420px; margin: 0 auto; background: linear-gradient(180deg,#eef3ff,#e9effb); border-radius: 16px; border: 1px solid rgba(0,0,0,0.05);">
+                <h5 class="mb-3">Payment Details</h5>
+                <form id="paymentForm">
+                    <div class="form-group mb-3">
+                        <label>Card Holder Name</label>
+                        <input type="text" class="form-control" id="cardHolder" placeholder="Please enter cardholder name" style="border-radius: 10px; text-transform: uppercase;">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Card Number</label>
+                        <input type="text" class="form-control" id="cardNumber" maxlength="19" placeholder="Please enter card number" style="border-radius: 10px;">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label>Expiry Month</label>
+                            <select class="form-control" id="expiryMonth" style="border-radius: 10px;">
+                                <option value="">MM</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>Expiry Year</label>
+                            <input type="text" class="form-control" id="expiryYear" maxlength="2" placeholder="YY" style="border-radius: 10px;">
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label>CVC</label>
+                            <input type="text" class="form-control" id="cvc" maxlength="4" placeholder="CVC" style="border-radius: 10px;">
+                        </div>
+                    </div>
+                    <button type="button" id="btnPay" class="btn btn-primary btn-block mt-3" style="border-radius: 10px;">Pay Now</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    const numberInput = document.getElementById('cardNumber');
+    const holderInput = document.getElementById('cardHolder');
+    const mmInput = document.getElementById('expiryMonth');
+    const yyInput = document.getElementById('expiryYear');
+    const cvcInput = document.getElementById('cvc');
+
+    const numberPreview = document.getElementById('previewCardNumber');
+    const holderPreview = document.getElementById('previewHolder');
+    const expiryPreview = document.getElementById('previewExpiry');
+    const cvcPreview = document.getElementById('previewCvc');
+    const cardEl = document.getElementById('card');
+
+    const formatNumber = (val) => val.replace(/\D/g, '').slice(0,16).replace(/(.{4})/g, '$1 ').trim();
+
+    numberInput.addEventListener('input', function() {
+        const formatted = formatNumber(this.value);
+        this.value = formatted;
+        numberPreview.textContent = formatted || '•••• •••• •••• ••••';
+    });
+
+    holderInput.addEventListener('input', function() {
+        holderPreview.textContent = (this.value || '').toString().trim().toUpperCase() || 'CARD HOLDER';
+    });
+
+    function updateExpiry() {
+        const mm = (mmInput.value || '').toString().slice(0,2);
+        const yy = (yyInput.value || '').replace(/\D/g,'').slice(0,2);
+        yyInput.value = yy;
+        const txt = (mm && yy) ? `${mm}/${yy}` : 'MM/YY';
+        expiryPreview.textContent = txt;
+    }
+    mmInput.addEventListener('change', updateExpiry);
+    yyInput.addEventListener('input', updateExpiry);
+
+    function flipToBack() {
+        cardEl.style.transform = 'rotateY(180deg)';
+    }
+    function flipToFront() {
+        cardEl.style.transform = 'rotateY(0)';
+    }
+
+    cvcInput.addEventListener('focus', flipToBack);
+    cvcInput.addEventListener('blur', flipToFront);
+    cvcInput.addEventListener('input', function() {
+        const val = (this.value || '').replace(/\D/g,'').slice(0,4);
+        this.value = val;
+        cvcPreview.textContent = val || '•••';
+    });
+})();
+</script>
+

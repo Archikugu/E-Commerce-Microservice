@@ -190,7 +190,7 @@ public class IdentityService : IIdentityService
             UserName = signInDto.UserName,
             Password = signInDto.Password,
             Address = discoveryEndPoint.TokenEndpoint,
-            Scope = "openid profile email BasketFullPermission DiscountFullPermission OcelotFullPermission offline_access"
+            Scope = "openid profile email BasketFullPermission DiscountFullPermission OrderFullPermission OcelotFullPermission offline_access"
         };
 
         var token = await _httpClient.RequestPasswordTokenAsync(passwordTokenRequest);
@@ -229,6 +229,23 @@ public class IdentityService : IIdentityService
             AddIfMissing("given_name");
             AddIfMissing("family_name");
             AddIfMissing("name");
+        }
+
+        // Ensure subject (sub) and NameIdentifier mapping exists
+        string? subjectClaim = mergedClaims.FirstOrDefault(c => c.Type == "sub")?.Value;
+        if (string.IsNullOrWhiteSpace(subjectClaim))
+        {
+            try
+            {
+                var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+                var jwt = handler.ReadJwtToken(token.AccessToken);
+                subjectClaim = jwt?.Claims?.FirstOrDefault(c => c.Type == "sub")?.Value;
+            }
+            catch { }
+        }
+        if (!string.IsNullOrWhiteSpace(subjectClaim) && mergedClaims.All(c => c.Type != ClaimTypes.NameIdentifier))
+        {
+            mergedClaims.Add(new Claim(ClaimTypes.NameIdentifier, subjectClaim));
         }
 
         ClaimsIdentity claimsIdentity = new ClaimsIdentity(mergedClaims, CookieAuthenticationDefaults.AuthenticationScheme, "name", "role");

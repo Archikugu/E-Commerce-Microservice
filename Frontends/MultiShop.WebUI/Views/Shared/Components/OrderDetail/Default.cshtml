@@ -1,0 +1,55 @@
+﻿@model MultiShop.WebUI.Dtos.OrderDtos.OrderAddressDtos.CreateOrderAddressDto
+<div class="col-lg-8">
+    <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Billing Address</span></h5>
+    <div class="bg-light p-30 mb-5">
+        <form id="checkoutForm" asp-action="Index" asp-controller="Order" method="post">
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <label>First Name</label>
+                    <input class="form-control" asp-for="FirstName" type="text" placeholder="Please enter first name">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>Last Name</label>
+                    <input class="form-control" asp-for="LastName" type="text" placeholder="Please enter last name">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>E-mail</label>
+                    <input class="form-control" asp-for="Email" type="email" placeholder="Please enter email">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>Mobile No</label>
+                    <input class="form-control" asp-for="PhoneNumber" type="text" placeholder="Please enter mobile number">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>Address Line 1</label>
+                    <input class="form-control" asp-for="AddressLine1" type="text" placeholder="Please enter address line 1">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>Address Line 2</label>
+                    <input class="form-control" asp-for="AddressLine2" type="text" placeholder="Please enter address line 2">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>Country</label>
+                    <input class="form-control" asp-for="Country" type="text" placeholder="Please enter country">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>City</label>
+                    <input class="form-control" asp-for="City" type="text" placeholder="Please enter city">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>District</label>
+                    <input class="form-control" asp-for="District" type="text" placeholder="Please enter district">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>ZIP Code</label>
+                    <input class="form-control" asp-for="ZipCode" type="text" placeholder="Please enter ZIP code">
+                </div>
+                <div class="col-md-12 form-group">
+                    <label>Description</label>
+                    <textarea class="form-control" asp-for="Description" rows="3" placeholder="Please enter address description"></textarea>
+                </div>
+            </div>
+            @Html.AntiForgeryToken()
+        </form>
+    </div>
+</div>
