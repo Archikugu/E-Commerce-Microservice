@@ -135,6 +135,23 @@
                 "AuthenticationProviderKey": "OcelotAuthenticationScheme",
                 "AllowedScopes": ["ImagesFullPermission"]
             }
+        },
+        {
+            "DownstreamPathTemplate": "/api/{everything}",
+            "DownstreamScheme": "https",
+            "DownstreamHostAndPorts": [
+                {
+                    "Host": "localhost",
+                    "Port": 7009
+                }
+            ],
+            "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+            "UpstreamPathTemplate": "/services/message/{everything}",
+            "UpstreamScheme": "https",
+            "AuthenticationOptions": {
+                "AuthenticationProviderKey": "OcelotAuthenticationScheme",
+                "AllowedScopes": ["MessageFullPermission"]
+            }
         }
     ],
     "GlobalConfiguration": {

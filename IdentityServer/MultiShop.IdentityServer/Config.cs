@@ -39,6 +39,10 @@ public static class Config
         {
             Scopes = { "PaymentFullPermission" }
         },
+        new ApiResource("ResourceMessage")
+        {
+            Scopes = { "MessageFullPermission" }
+        },
         new ApiResource("ResourceOcelot")
         {
             Scopes = { "OcelotFullPermission" }
@@ -64,6 +68,7 @@ public static class Config
         new ApiScope("CommentFullPermission", "Full access to comment operations"),
         new ApiScope("ImagesFullPermission", "Full access to images operations"),
         new ApiScope("PaymentFullPermission", "Full access to payment operations"),
+        new ApiScope("MessageFullPermission", "Full access to message operations"),
         new ApiScope("OcelotFullPermission", "Full access to all services through Ocelot Gateway"),
         new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
     };
@@ -89,7 +94,7 @@ public static class Config
             AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
             ClientSecrets = { new Secret("multishopmanagersecret".Sha256()) },
             AllowedScopes = { "CatalogFullPermission", "BasketFullPermission", 
-                "DiscountFullPermission", "OrderFullPermission",
+                "DiscountFullPermission", "OrderFullPermission", "MessageFullPermission",
                 "CommentFullPermission","ImagesFullPermission",
                 "PaymentFullPermission","OcelotFullPermission",
             IdentityServerConstants.LocalApi.ScopeName,
@@ -117,6 +122,7 @@ public static class Config
                 "CommentFullPermission",
                 "ImagesFullPermission",
                 "PaymentFullPermission",
+                "MessageFullPermission",
                 "OcelotFullPermission",
                 IdentityServerConstants.LocalApi.ScopeName,
                 IdentityServerConstants.StandardScopes.Email,

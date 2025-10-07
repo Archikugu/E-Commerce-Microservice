@@ -12,6 +12,7 @@ public class ServiceAPISettings
     public ServiceAPI Order { get; set; }
     public ServiceAPI Payment { get; set; }
     public ServiceAPI Images { get; set; }
+    public ServiceAPI Message { get; set; }
 }
 
 public class ServiceAPI
