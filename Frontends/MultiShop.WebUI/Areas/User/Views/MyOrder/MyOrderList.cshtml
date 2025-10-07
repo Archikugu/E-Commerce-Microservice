@@ -1,0 +1,53 @@
+﻿@using MultiShop.WebUI.Dtos.OrderDtos.OrderOrderingDtos
+@model List<ResultOrderingByUserIdDto>
+@{
+	ViewData["Title"] = "MyOrderList";
+	Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+	int count = 0;
+	string tableRowColor = "";
+
+}
+
+<h1>My Orders</h1>
+
+<div class="row">
+	<div class="col-lg-6 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">Order History</h4>
+				<p class="card-description">Your recent orders listed below</p>
+				<div class="table-responsive">
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Order ID</th>
+								<th>Total Price</th>
+								<th>Order Date</th>
+								<th>Order Detail</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model)
+							{
+								count++;
+
+								if (count % 2 == 0) { tableRowColor = "table-info"; }
+
+								else { tableRowColor = "table-dark"; }
+
+								<tr class="@tableRowColor">
+									<td>@count</td>
+									<td>@item.TotalPrice.ToString("C")</td>
+									<td>@item.OrderDate.ToString("dd MMM yyyy")</td>
+									<td><a href="#" class="btn btn-warning">Order Detail</a></td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+

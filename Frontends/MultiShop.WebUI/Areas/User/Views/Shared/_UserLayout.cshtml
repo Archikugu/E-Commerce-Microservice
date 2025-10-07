@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+
+@await Component.InvokeAsync("UserLayoutHead")
+
+<body>
+	<div class="container-scroller d-flex">
+		@await Component.InvokeAsync("UserLayoutSidebar")
+		<!-- partial -->
+		<div class="container-fluid page-body-wrapper">
+			@await Component.InvokeAsync("UserLayoutHeaderNavbar")
+			<!-- partial -->
+			<div class="main-panel">
+				<div class="content-wrapper">
+					@RenderBody()
+					<!-- partial:./partials/_footer.html -->
+					@await Component.InvokeAsync("UserLayoutFooter")
+					<!-- partial -->
+				</div>
+				<!-- content-wrapper ends -->
+			</div>
+			<!-- main-panel ends -->
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	<!-- container-scroller -->
+	@await Html.PartialAsync("_UserLayoutScriptsPartial")
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>

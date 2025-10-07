@@ -17,6 +17,7 @@ using MultiShop.WebUI.Services.CommentServices;
 using MultiShop.WebUI.Services.Concrete;
 using MultiShop.WebUI.Services.BasketServices;
 using MultiShop.WebUI.Services.OrderServices.OrderAddressServices;
+using MultiShop.WebUI.Services.OrderServices.OrderOrderingServices;
 using MultiShop.WebUI.Settings;
 
 namespace MultiShop.WebUI;
@@ -160,6 +161,12 @@ public class Program
 
         // Order Address service (Ocelot + token)
         builder.Services.AddHttpClient<IOrderAddressService, OrderAddressService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Order.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+
+        // Order Ordering service (Ocelot + token)
+        builder.Services.AddHttpClient<IOrderOrderingService, OrderOrderingService>(opt =>
         {
             opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Order.Path.TrimStart('/')}");
         }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
