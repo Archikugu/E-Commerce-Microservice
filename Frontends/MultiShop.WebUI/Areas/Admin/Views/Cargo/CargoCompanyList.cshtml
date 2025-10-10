@@ -1,0 +1,49 @@
+﻿@using MultiShop.WebUI.Dtos.CargoDtos.CargoCompanyDtos
+@model List<ResultCargoCompanyDto>
+
+@{
+    ViewData["Title"] = "Cargo Company List";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    int count = 0;
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <h4>Cargo Company List</h4>
+                <p>This table lists all cargo companies. You can update or remove them, or add a new one.</p>
+
+                <div class="bs-example" data-example-id="simple-table">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Company Name</th>
+                                <th>Delete</th>
+                                <th>Update</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                count++;
+                                <tr>
+                                    <th scope="row">@count</th>
+                                    <td>@item.CargoCompanyName</td>
+                                    <td><a asp-area="Admin" asp-controller="Cargo" asp-action="DeleteCargoCompany" asp-route-id="@item.CargoCompanyId" class="btn btn-danger">Delete</a></td>
+                                    <td><a asp-area="Admin" asp-controller="Cargo" asp-action="UpdateCargoCompany" asp-route-id="@item.CargoCompanyId" class="btn btn-warning">Update</a></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <a asp-area="Admin" asp-controller="Cargo" asp-action="CreateCargoCompany" class="btn btn-success">
+                        Add New Cargo Company
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</section>

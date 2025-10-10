@@ -38,6 +38,11 @@ public class CargoCustomerManager : ICargoCustomerService
         return _cargoCustomerDal.GetById(id);
     }
 
+    public CargoCustomer TGetCargoCustomerById(string userCustomerId)
+    {
+        return _cargoCustomerDal.GetCargoCustomerById(userCustomerId);
+    }
+
     public void TUpdate(CargoCustomer entity)
     {
         _cargoCustomerDal.Update(entity);

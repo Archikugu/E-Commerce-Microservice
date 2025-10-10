@@ -1,0 +1,65 @@
+﻿@using MultiShop.WebUI.Dtos.IdentityDtos.UserDtos
+@model List<ResultUserDto>
+@{
+	ViewData["Title"] = "User List";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+	<div class="col-lg-12 grid-margin stretch-card">
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">Users</h4>
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th>Id</th>
+								<th>Full Name</th>
+								<th>User Name</th>
+								<th>Email</th>
+								<th>Email Confirmed</th>
+								<th>Phone</th>
+								<th>2FA</th>
+								<th>Lockout</th>
+								<th>Access Failed</th>
+								<th>Address Detail</th>
+							</tr>
+						</thead>
+						<tbody>
+							@if (Model != null && Model.Any())
+							{
+								var i = 0;
+								foreach (var u in Model)
+								{
+									i++;
+									<tr>
+										<td>@i</td>
+										<td>@u.Id</td>
+										<td>@u.FullName</td>
+										<td>@u.UserName</td>
+										<td>@u.Email</td>
+										<td>@(u.EmailConfirmed ? "Yes" : "No")</td>
+										<td>@u.PhoneNumber</td>
+										<td>@(u.TwoFactorEnabled ? "On" : "Off")</td>
+										<td>@(u.LockoutEnabled ? (u.LockoutEnd?.ToString("dd MMM yyyy HH:mm") ?? "Enabled") : "Disabled")</td>
+										<td>@u.AccessFailedCount</td>
+                                        <td><a asp-area="Admin" asp-controller="User" asp-action="UserAddressInfo" asp-route-id="@u.Id" class="btn btn-info">Address Detail</a></td>
+									</tr>
+								}
+							}
+							else
+							{
+								<tr>
+									<td colspan="10">No users found.</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

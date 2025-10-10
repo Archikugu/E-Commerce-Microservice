@@ -1,0 +1,30 @@
+@using MultiShop.WebUI.Dtos.CargoDtos.CargoCompanyDtos
+@model CreateCargoCompanyDto
+
+@{
+    ViewData["Title"] = "Create Cargo Company";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <h4>Create Cargo Company</h4>
+                <br />
+                <div class="bs-example" data-example-id="bordered-table">
+                    <form asp-area="Admin" asp-controller="Cargo" asp-action="CreateCargoCompany" method="post">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <label>Company Name</label>
+                        <input type="text" class="form-control" asp-for="CargoCompanyName" />
+                        <br />
+                        <button class="btn btn-success">Add Cargo Company</button>
+                        <a asp-area="Admin" asp-controller="Cargo" asp-action="CargoCompanyList" class="btn btn-secondary">Back to List</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

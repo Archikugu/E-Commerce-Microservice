@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -32,5 +33,33 @@ public class UsersController : ControllerBase
             Email = user.Email,
             UserName= user.UserName
         });
+    }
+
+    [HttpGet("GetAllUsers")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var users = await _userManager.Users
+            .Select(u => new
+            {
+                u.Id,
+                u.FullName,
+                u.Email,
+                u.NormalizedEmail,
+                u.EmailConfirmed,
+                u.UserName,
+                u.NormalizedUserName,
+                u.PhoneNumber,
+                u.PhoneNumberConfirmed,
+                u.TwoFactorEnabled,
+                u.LockoutEnd,
+                u.LockoutEnabled,
+                u.AccessFailedCount,
+                u.SecurityStamp,
+                u.ConcurrencyStamp
+            })
+            .ToListAsync();
+
+        return Ok(users);
     }
 }

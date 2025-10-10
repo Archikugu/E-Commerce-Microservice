@@ -13,6 +13,7 @@
     <Folder Include="Areas\User\Models\" />
     <Folder Include="Controllers\" />
     <Folder Include="Data\" />
+    <Folder Include="Dtos\CargoDtos\CargoCompanyDtos\" />
     <Folder Include="Models\" />
     <Folder Include="Services\CatalogServices\ContactServices\" />
     <Folder Include="Services\CatalogServices\SpecialOfferServices\" />

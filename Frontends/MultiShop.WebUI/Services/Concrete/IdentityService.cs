@@ -190,7 +190,7 @@ public class IdentityService : IIdentityService
             UserName = signInDto.UserName,
             Password = signInDto.Password,
             Address = discoveryEndPoint.TokenEndpoint,
-            Scope = "openid profile email BasketFullPermission DiscountFullPermission OrderFullPermission MessageFullPermission OcelotFullPermission offline_access"
+            Scope = "openid profile email BasketFullPermission DiscountFullPermission OrderFullPermission MessageFullPermission CargoFullPermission OcelotFullPermission  offline_access"
         };
 
         var token = await _httpClient.RequestPasswordTokenAsync(passwordTokenRequest);

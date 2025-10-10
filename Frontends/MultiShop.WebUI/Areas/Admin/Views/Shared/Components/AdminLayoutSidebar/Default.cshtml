@@ -13,40 +13,55 @@
             <li class="header dark-bg">Menu</li>
             <li> <a asp-area="" asp-controller="Home" asp-action="Index"> <i class="fa fa-home"></i> <span>Home Page</span></a> </li>
             <li> <a asp-area="Admin" asp-controller="Home" asp-action="Index"> <i class="fa fa-dashboard"></i> <span>Dashboard</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="Category" asp-action="Index"> <i class="fa fa-tags"></i> <span>Categories</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="Brand" asp-action="Index"> <i class="fa fa-building"></i> <span>Brands</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="Product" asp-action="Index"> <i class="fa fa-cube"></i> <span>Products</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="ProductImage" asp-action="Index"> <i class="fa fa-image"></i> <span>Product Images</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="ProductDetail" asp-action="Index"> <i class="fa fa-info-circle"></i> <span>Product Details</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="Comment" asp-action="Index"> <i class="fa fa-comments"></i> <span>Comments</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="Contact" asp-action="Index"> <i class="fa fa-envelope"></i> <span>Contacts</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="Feature" asp-action="Index"> <i class="fa fa-star"></i> <span>Features</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="FeatureSlider" asp-action="Index"> <i class="fa fa-sliders"></i> <span>Feature Sliders</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="SpecialOffer" asp-action="Index"> <i class="fa fa-gift"></i> <span>Special Offers</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="OfferDiscount" asp-action="Index"> <i class="fa fa-cut"></i> <span>Offer Discounts</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="Discount" asp-action="Index"> <i class="fa fa-ticket"></i> <span>Discounts</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="About" asp-action="Index"> <i class="fa fa-info-circle"></i> <span>About</span></a> </li>
-
+            <li class="header dark-bg">Catalog</li>
             <li class="treeview">
-                <a href="#"> <i class="fa fa-align-left"></i> <span>Multilevel</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <a href="#"> <i class="fa fa-archive"></i> <span>Catalog</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
                 <ul class="treeview-menu" style="display: none;">
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Level One</a></li>
-                    <li class="treeview">
-                        <a href="#"><i class="fa fa-angle-right"></i> Level One <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
-                        <ul class="treeview-menu" style="display: none;">
-                            <li><a href="#"><i class="fa fa-angle-right"></i> Level Two</a></li>
-                            <li class="treeview">
-                                <a href="#"><i class="fa fa-angle-right"></i> Level Two <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
-                                <ul class="treeview-menu" style="display: none;">
-                                    <li><a href="#"><i class="fa fa-angle-right"></i> Level Three</a></li>
-                                    <li><a href="#"><i class="fa fa-angle-right"></i> Level Three</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Level One</a></li>
+                    <li><a asp-area="Admin" asp-controller="Category" asp-action="Index"><i class="fa fa-angle-right"></i> Categories</a></li>
+                    <li><a asp-area="Admin" asp-controller="Brand" asp-action="Index"><i class="fa fa-angle-right"></i> Brands</a></li>
+                    <li><a asp-area="Admin" asp-controller="Product" asp-action="Index"><i class="fa fa-angle-right"></i> Products</a></li>
+                    <li><a asp-area="Admin" asp-controller="ProductImage" asp-action="Index"><i class="fa fa-angle-right"></i> Product Images</a></li>
+                    <li><a asp-area="Admin" asp-controller="ProductDetail" asp-action="Index"><i class="fa fa-angle-right"></i> Product Details</a></li>
+                    <li><a asp-area="Admin" asp-controller="Feature" asp-action="Index"><i class="fa fa-angle-right"></i> Features</a></li>
+                    <li><a asp-area="Admin" asp-controller="FeatureSlider" asp-action="Index"><i class="fa fa-angle-right"></i> Feature Sliders</a></li>
+                    <li><a asp-area="Admin" asp-controller="SpecialOffer" asp-action="Index"><i class="fa fa-angle-right"></i> Special Offers</a></li>
+                    <li><a asp-area="Admin" asp-controller="OfferDiscount" asp-action="Index"><i class="fa fa-angle-right"></i> Offer Discounts</a></li>
+                    <li><a asp-area="Admin" asp-controller="Discount" asp-action="Index"><i class="fa fa-angle-right"></i> Discounts</a></li>
+                    <li><a asp-area="Admin" asp-controller="Comment" asp-action="Index"><i class="fa fa-angle-right"></i> Comments</a></li>
+                    <li><a asp-area="Admin" asp-controller="Contact" asp-action="Index"><i class="fa fa-angle-right"></i> Contacts</a></li>
+                    <li><a asp-area="Admin" asp-controller="About" asp-action="Index"><i class="fa fa-angle-right"></i> About</a></li>
                 </ul>
             </li>
+
+            <li class="header dark-bg">Users & Orders</li>
+            <li class="treeview">
+                <a href="#"> <i class="fa fa-users"></i> <span>Users & Orders</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <ul class="treeview-menu" style="display: none;">
+                    <li><a asp-area="Admin" asp-controller="User" asp-action="UserList"><i class="fa fa-angle-right"></i> User List</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Order List</a></li>
+                </ul>
+            </li>
+
+            <li class="header dark-bg">Store</li>
+            <li class="treeview">
+                <a href="#"> <i class="fa fa-shopping-bag"></i> <span>Store</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <ul class="treeview-menu" style="display: none;">
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Cash Register</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Statistics</a></li>
+                    <li><a asp-area="Admin" asp-controller="Cargo" asp-action="CargoCompanyList"><i class="fa fa-angle-right"></i> Cargo Companies</a></li>
+                </ul>
+            </li>
+
+            <li class="header dark-bg">Communication & Settings</li>
+            <li class="treeview">
+                <a href="#"> <i class="fa fa-cogs"></i> <span>Communication & Settings</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <ul class="treeview-menu" style="display: none;">
+                    <li><a asp-area="User" asp-controller="Message" asp-action="Inbox"><i class="fa fa-angle-right"></i> Messages</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Settings</a></li>
+                </ul>
+            </li>
+            <li> <a asp-area="" asp-controller="Login" asp-action="Logout"> <i class="fa fa-sign-out"></i> <span>Sign Out</span></a> </li>
+
         </ul>
         <!-- sidebar-menu -->
     </section>

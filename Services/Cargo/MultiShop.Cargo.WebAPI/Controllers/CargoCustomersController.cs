@@ -32,6 +32,25 @@ public class CargoCustomersController : ControllerBase
         return Ok(values);
     }
 
+    [HttpGet("ByUser/{userCustomerId}")]
+    public IActionResult GetByUserCustomerId(string userCustomerId)
+    {
+        if (string.IsNullOrWhiteSpace(userCustomerId))
+        {
+            return BadRequest("userCustomerId is required");
+        }
+        var list = _cargoCustomerService.TGetAll();
+        var normalized = userCustomerId.Trim();
+        var item = list.FirstOrDefault(x =>
+            !string.IsNullOrWhiteSpace(x.UserCustomerId) &&
+            string.Equals(x.UserCustomerId.Trim(), normalized, StringComparison.OrdinalIgnoreCase));
+        if (item == null)
+        {
+            return NotFound();
+        }
+        return Ok(item);
+    }
+
     [HttpPost]
     public IActionResult CreateCargoCustomer(CreateCargoCustomerDto createCargoCustomerDto)
     {
@@ -44,6 +63,7 @@ public class CargoCustomersController : ControllerBase
             FirstName = createCargoCustomerDto.FirstName,
             LastName = createCargoCustomerDto.LastName,
             PhoneNumber = createCargoCustomerDto.PhoneNumber,
+            UserCustomerId = createCargoCustomerDto.UserCustomerId
         };
 
         _cargoCustomerService.TAdd(createCargoCustomer);
@@ -72,10 +92,17 @@ public class CargoCustomersController : ControllerBase
             FirstName = updateCargoCustomerDto.FirstName,
             LastName = updateCargoCustomerDto.LastName,
             PhoneNumber = updateCargoCustomerDto.PhoneNumber,
+            UserCustomerId = updateCargoCustomerDto.UserCustomerId
         };
 
         _cargoCustomerService.TUpdate(updateCargoCustomer);
         return Ok("Cargo customer update successfully");
     }
 
+    [HttpGet("GetCargoCustomerByUserId/{userCustomerId}")]
+    public IActionResult GetCargoCustomerByUserId(string userCustomerId)
+    {
+        var values = _cargoCustomerService.TGetCargoCustomerById(userCustomerId);
+        return Ok(values);
+    }
 }

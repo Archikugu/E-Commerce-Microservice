@@ -1,0 +1,37 @@
+@using MultiShop.WebUI.Dtos.CargoDtos.CargoCompanyDtos
+@model UpdateCargoCompanyDto
+
+@{
+    ViewData["Title"] = "Update Cargo Company";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <h4>Update Cargo Company</h4>
+                <p>Update the cargo company information below.</p>
+
+                <form asp-area="Admin" asp-controller="Cargo" asp-action="UpdateCargoCompany" method="post">
+                    <input type="hidden" asp-for="CargoCompanyId" />
+
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="CargoCompanyName">Company Name</label>
+                        <input asp-for="CargoCompanyName" class="form-control" placeholder="Enter company name" />
+                        <span asp-validation-for="CargoCompanyName" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-warning">Update Cargo Company</button>
+                        <a asp-area="Admin" asp-controller="Cargo" asp-action="CargoCompanyList" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+

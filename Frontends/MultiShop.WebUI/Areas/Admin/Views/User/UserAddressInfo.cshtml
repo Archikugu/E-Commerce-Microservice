@@ -1,0 +1,118 @@
+﻿@using MultiShop.WebUI.Dtos.CargoDtos.CargoCustomerDtos
+@model GetCargoCustomerByIdDto
+@{
+    ViewData["Title"] = "UserAddressInfo";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <h4>Cargo Customer Profile</h4>
+                <style>
+                    .info-table th { background-color: #f7f9fc; color: #555; width: 40%; }
+                    .info-table td { color: #222; }
+                    .info-table { border-color: #e9edf2; }
+                    .profile-panel {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: #fff;
+                        border-radius: 10px;
+                        box-shadow: 0 8px 18px rgba(0,0,0,.08);
+                    }
+                    .profile-panel .panel-body { padding: 18px; }
+                    .profile-badge { background: rgba(255,255,255,.15); border-radius: 20px; padding: 4px 10px; margin-right: 6px; display: inline-block; }
+                </style>
+                <div class="bs-example" data-example-id="bordered-table">
+                    @if (Model == null || (Model.CargoCustomerId == 0 && string.IsNullOrWhiteSpace(Model.UserCustomerId)))
+                    {
+                        <div class="alert alert-warning" role="alert">
+                            No cargo customer record found for this user.
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-hover info-table">
+                                        <tbody>
+                                            <tr>
+                                                <th style="width: 40%">Cargo Customer Id</th>
+                                                <td>@(Model?.CargoCustomerId.ToString() ?? "-")</td>
+                                            </tr>
+                                            <tr>
+                                                <th>User Customer Id</th>
+                                                <td>@(Model?.UserCustomerId ?? "-")</td>
+                                            </tr>
+                                            <tr>
+                                                <th>First Name</th>
+                                                <td>@(Model?.FirstName ?? "-")</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Last Name</th>
+                                                <td>@(Model?.LastName ?? "-")</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="profile-panel mb-3">
+                                    <div class="panel-body">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="me-3" style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;">
+                                                <i class="fa fa-user"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight:600;line-height:1.2;">
+                                                    @(((Model?.FirstName ?? "") + " " + (Model?.LastName ?? "")).Trim())
+                                                </div>
+                                                <div style="opacity:.9;">
+                                                    @(Model?.Email ?? "-")
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-2">
+                                            <span class="profile-badge"><i class="fa fa-phone"></i> @(Model?.PhoneNumber ?? "-")</span>
+                                            <span class="profile-badge"><i class="fa fa-location-dot"></i> @(((Model?.District ?? "-") + ", " + (Model?.City ?? "-")).Trim(',',' '))</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-hover info-table">
+                                        <tbody>
+                                            <tr>
+                                                <th style="width: 40%">Email</th>
+                                                <td>@(Model?.Email ?? "-")</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Phone Number</th>
+                                                <td>@(Model?.PhoneNumber ?? "-")</td>
+                                            </tr>
+                                            <tr>
+                                                <th>City</th>
+                                                <td>@(Model?.City ?? "-")</td>
+                                            </tr>
+                                            <tr>
+                                                <th>District</th>
+                                                <td>@(Model?.District ?? "-")</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Address</th>
+                                                <td>@(Model?.Address ?? "-")</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="mt-2">
+                        <a asp-area="Admin" asp-controller="User" asp-action="UserList" class="btn btn-secondary">Back to Users</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

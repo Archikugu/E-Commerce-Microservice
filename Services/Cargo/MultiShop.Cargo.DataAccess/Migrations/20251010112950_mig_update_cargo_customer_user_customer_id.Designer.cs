@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MultiShop.Cargo.DataAccess.Concrete.EntityFramework.Contexts;
 
@@ -11,9 +12,11 @@ using MultiShop.Cargo.DataAccess.Concrete.EntityFramework.Contexts;
 namespace MultiShop.Cargo.DataAccess.Migrations
 {
     [DbContext(typeof(MultiShopCargoContext))]
-    partial class MultiShopCargoContextModelSnapshot : ModelSnapshot
+    [Migration("20251010112950_mig_update_cargo_customer_user_customer_id")]
+    partial class mig_update_cargo_customer_user_customer_id
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
