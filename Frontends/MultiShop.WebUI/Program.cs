@@ -23,6 +23,11 @@ using MultiShop.WebUI.Services.UserIdentityServices;
 using MultiShop.WebUI.Services.CargoServices.CargoCompanyServices;
 using MultiShop.WebUI.Services.CargoServices.CargoCustomerServices;
 using MultiShop.WebUI.Settings;
+using MultiShop.WebUI.Services.StatisticsServices.CatalogStatistic;
+using MultiShop.WebUI.Services.StatisticsServices.CommentStatisticServices;
+using MultiShop.WebUI.Services.StatisticsServices.DiscountStatisticServices;
+using MultiShop.WebUI.Services.StatisticsServices.UserStatistic;
+using MultiShop.WebUI.Services.CatalogServices.FeatureServices;
 
 namespace MultiShop.WebUI;
 
@@ -112,7 +117,7 @@ public class Program
             opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
         }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
 
-        builder.Services.AddHttpClient<Services.CatalogServices.FeatureServices.IFeatureService, Services.CatalogServices.FeatureServices.FeatureService>(opt =>
+        builder.Services.AddHttpClient<IFeatureService, FeatureService>(opt =>
         {
             opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
         }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
@@ -198,6 +203,30 @@ public class Program
         {
             opt.BaseAddress = new Uri(values.IdentityServerUrl.TrimEnd('/'));
         }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+
+        // User Statistics service (IdentityServer + local_api scope token)
+        builder.Services.AddHttpClient<IUserStatisticsService, UserStatisticsService>(opt =>
+        {
+            opt.BaseAddress = new Uri(values.IdentityServerUrl.TrimEnd('/'));
+        }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+
+        // Catalog Statistics service (Ocelot + client credentials)
+        builder.Services.AddHttpClient<ICatalogStatisticsService, CatalogStatisticsService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Catalog.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        // Comment Statistics service (Ocelot + client credentials)
+        builder.Services.AddHttpClient<ICommentStatisticsService, CommentStatisticsService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Comment.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+        // Discount Statistics service (Ocelot + client credentials)
+        builder.Services.AddHttpClient<IDiscountStatisticsService, DiscountStatisticsService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Discount.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
 
         var app = builder.Build();
 

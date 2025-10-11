@@ -11,6 +11,7 @@ public interface IMessageService
     Task UpdateAsync(UpdateMessageDto dto);
     Task DeleteAsync(int id);
     Task MarkAsReadAsync(int id);
+    Task<List<ResultMessageDto>> GetLatestAsync(int take);
 }
 
 

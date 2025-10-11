@@ -153,6 +153,30 @@ public class CommentsController : ControllerBase
         return NoContent();
     }
 
+    // GET: api/Comments/active-count
+    [HttpGet("active-count")]
+    public async Task<ActionResult<int>> GetActiveCommentCount()
+    {
+        var count = await _context.UserComments.CountAsync(c => c.Status);
+        return Ok(count);
+    }
+
+    // GET: api/Comments/passive-count
+    [HttpGet("passive-count")]
+    public async Task<ActionResult<int>> GetPassiveCommentCount()
+    {
+        var count = await _context.UserComments.CountAsync(c => !c.Status);
+        return Ok(count);
+    }
+
+    // GET: api/Comments/total-count
+    [HttpGet("total-count")]
+    public async Task<ActionResult<int>> GetTotalCommentCount()
+    {
+        var count = await _context.UserComments.CountAsync();
+        return Ok(count);
+    }
+
     private bool CommentExists(int id)
     {
         return _context.UserComments.Any(e => e.UserCommentId == id);

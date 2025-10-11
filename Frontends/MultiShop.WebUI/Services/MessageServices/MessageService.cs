@@ -54,6 +54,13 @@ public class MessageService : IMessageService
         var res = await _httpClient.PostAsync($"messages/{id}/read", null);
         res.EnsureSuccessStatusCode();
     }
+
+    public async Task<List<ResultMessageDto>> GetLatestAsync(int take)
+    {
+        var res = await _httpClient.GetAsync($"messages/latest/{take}");
+        if (!res.IsSuccessStatusCode) return new List<ResultMessageDto>();
+        return await res.Content.ReadFromJsonAsync<List<ResultMessageDto>>() ?? new List<ResultMessageDto>();
+    }
 }
 
 

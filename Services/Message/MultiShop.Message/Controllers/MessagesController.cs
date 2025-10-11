@@ -74,6 +74,35 @@ public class MessagesController : ControllerBase
         await _messageService.MarkAsReadAsync(id);
         return NoContent();
     }
+
+    [HttpGet("total-count")]
+    public async Task<IActionResult> GetTotalCount()
+    {
+        var count = await _messageService.GetTotalMessageCountAsync();
+        return Ok(count);
+    }
+
+    [HttpGet("read-count")]
+    public async Task<IActionResult> GetReadCount()
+    {
+        var count = await _messageService.GetReadMessageCountAsync();
+        return Ok(count);
+    }
+
+    [HttpGet("unread-count")]
+    public async Task<IActionResult> GetUnreadCount()
+    {
+        var count = await _messageService.GetUnreadMessageCountAsync();
+        return Ok(count);
+    }
+
+    [HttpGet("latest/{take:int}")]
+    public async Task<IActionResult> GetLatest(int take = 3)
+    {
+        if (take <= 0) take = 3;
+        var list = await _messageService.GetLatestAsync(take);
+        return Ok(list);
+    }
 }
 
 

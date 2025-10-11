@@ -87,4 +87,50 @@ public class DiscountService : IDiscountService
             await connection.ExecuteAsync(query, parameters);
         }
     }
+
+    public async Task<int> GetTotalDiscountCouponCountAsync()
+    {
+        const string query = "Select COUNT(1) From Coupons";
+        using (var connection = _context.CreateConnection())
+        {
+            var count = await connection.ExecuteScalarAsync<int>(query);
+            return count;
+        }
+    }
+
+    public async Task<int> GetActiveDiscountCouponCountAsync()
+    {
+        const string query = "Select COUNT(1) From Coupons Where IsActive = 1";
+        using (var connection = _context.CreateConnection())
+        {
+            return await connection.ExecuteScalarAsync<int>(query);
+        }
+    }
+
+    public async Task<int> GetInactiveDiscountCouponCountAsync()
+    {
+        const string query = "Select COUNT(1) From Coupons Where IsActive = 0";
+        using (var connection = _context.CreateConnection())
+        {
+            return await connection.ExecuteScalarAsync<int>(query);
+        }
+    }
+
+    public async Task<int> GetExpiredDiscountCouponCountAsync()
+    {
+        const string query = "Select COUNT(1) From Coupons Where ValidDate < GETUTCDATE()";
+        using (var connection = _context.CreateConnection())
+        {
+            return await connection.ExecuteScalarAsync<int>(query);
+        }
+    }
+
+    public async Task<int> GetNonExpiredDiscountCouponCountAsync()
+    {
+        const string query = "Select COUNT(1) From Coupons Where ValidDate >= GETUTCDATE()";
+        using (var connection = _context.CreateConnection())
+        {
+            return await connection.ExecuteScalarAsync<int>(query);
+        }
+    }
 }

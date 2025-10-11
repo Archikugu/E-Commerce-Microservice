@@ -59,4 +59,39 @@ public class DiscountsController : ControllerBase
         await _discountService.UpdateDiscountCouponAsync(updateDiscountCouponDto);
         return Ok("Discount Coupon Successfully Updated");
     }
+
+    [HttpGet("total-count")]
+    public async Task<IActionResult> GetTotalDiscountCouponCount()
+    {
+        var count = await _discountService.GetTotalDiscountCouponCountAsync();
+        return Ok(count);
+    }
+
+    [HttpGet("active-count")]
+    public async Task<IActionResult> GetActiveDiscountCouponCount()
+    {
+        var count = await _discountService.GetActiveDiscountCouponCountAsync();
+        return Ok(count);
+    }
+
+    [HttpGet("inactive-count")]
+    public async Task<IActionResult> GetInactiveDiscountCouponCount()
+    {
+        var count = await _discountService.GetInactiveDiscountCouponCountAsync();
+        return Ok(count);
+    }
+
+    [HttpGet("expired-count")]
+    public async Task<IActionResult> GetExpiredDiscountCouponCount()
+    {
+        var count = await _discountService.GetExpiredDiscountCouponCountAsync();
+        return Ok(count);
+    }
+
+    [HttpGet("non-expired-count")]
+    public async Task<IActionResult> GetNonExpiredDiscountCouponCount()
+    {
+        var count = await _discountService.GetNonExpiredDiscountCouponCountAsync();
+        return Ok(count);
+    }
 }

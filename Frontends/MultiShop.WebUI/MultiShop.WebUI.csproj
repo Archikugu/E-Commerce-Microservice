@@ -18,6 +18,7 @@
     <Folder Include="Services\CatalogServices\ContactServices\" />
     <Folder Include="Services\CatalogServices\SpecialOfferServices\" />
     <Folder Include="Services\DiscountServices\" />
+    <Folder Include="Services\StatisticsServices\CommentStatisticServices\" />
     <Folder Include="Views\Shared\" />
     <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\images\" />

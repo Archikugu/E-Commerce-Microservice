@@ -8,6 +8,7 @@ namespace MultiShop.WebUI.Services.Concrete;
 
 public class ClientCrendentialTokenService : IClientCrendentialTokenService
 {
+    private const string TokenCacheKey = "multishoptoken_v2";
     private readonly ServiceAPISettings _serviceAPISettings;
     private readonly HttpClient _httpClient;
     private readonly IMemoryCache _memoryCache;
@@ -23,7 +24,7 @@ public class ClientCrendentialTokenService : IClientCrendentialTokenService
 
     public async Task<string> GetToken()
     {
-        var currentToken = _memoryCache.Get<string>("multishoptoken");
+        var currentToken = _memoryCache.Get<string>(TokenCacheKey);
         if (currentToken != null)
         {
             return currentToken;
@@ -48,8 +49,8 @@ public class ClientCrendentialTokenService : IClientCrendentialTokenService
             ClientId = _clientSettings.MultiShopVisitorClient.ClientId,
             ClientSecret = _clientSettings.MultiShopVisitorClient.ClientSecret,
             Address = discoveryEndpoint.TokenEndpoint,
-            // Catalog + Comment + Basket + Ocelot scopes
-            Scope = "CatalogFullPermission CommentFullPermission BasketFullPermission OcelotFullPermission"
+            // Catalog + Comment + Basket + Discount + Ocelot scopes
+            Scope = "CatalogFullPermission CommentFullPermission BasketFullPermission DiscountFullPermission OcelotFullPermission"
         };
 
         var newToken = await _httpClient.RequestClientCredentialsTokenAsync(clientCredentialsTokenRequest);
@@ -59,7 +60,7 @@ public class ClientCrendentialTokenService : IClientCrendentialTokenService
         }
 
         var safeExpiresIn = newToken.ExpiresIn > 60 ? newToken.ExpiresIn - 30 : 60; // en az 60 sn cache'le
-        _memoryCache.Set("multishoptoken", newToken.AccessToken, TimeSpan.FromSeconds(safeExpiresIn));
+        _memoryCache.Set(TokenCacheKey, newToken.AccessToken, TimeSpan.FromSeconds(safeExpiresIn));
         return newToken.AccessToken;
     }
 }

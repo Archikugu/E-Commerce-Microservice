@@ -74,6 +74,30 @@ public class MessageService : IMessageService
             await _multiShopMessageDbContext.SaveChangesAsync();
         }
     }
+
+    public async Task<int> GetTotalMessageCountAsync()
+    {
+        return await _multiShopMessageDbContext.Messages.CountAsync();
+    }
+
+    public async Task<int> GetReadMessageCountAsync()
+    {
+        return await _multiShopMessageDbContext.Messages.CountAsync(m => m.IsRead);
+    }
+
+    public async Task<int> GetUnreadMessageCountAsync()
+    {
+        return await _multiShopMessageDbContext.Messages.CountAsync(m => !m.IsRead);
+    }
+
+    public async Task<List<ResultMessageDto>> GetLatestAsync(int take)
+    {
+        var list = await _multiShopMessageDbContext.Messages.AsNoTracking()
+            .OrderByDescending(x => x.MessageDate)
+            .Take(take)
+            .ToListAsync();
+        return list.Select(m => _mapper.Map<ResultMessageDto>(m)).ToList();
+    }
 }
 
 

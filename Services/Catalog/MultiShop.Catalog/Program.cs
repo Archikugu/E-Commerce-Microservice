@@ -12,6 +12,7 @@ using MultiShop.Catalog.Services.ProductDetailServices;
 using MultiShop.Catalog.Services.ProductImageServices;
 using MultiShop.Catalog.Services.ProductServices;
 using MultiShop.Catalog.Services.SpecialOfferServices;
+using MultiShop.Catalog.Services.StatisticServices;
 using MultiShop.Catalog.Settings;
 using Scalar.AspNetCore;
 using System.Reflection;
@@ -43,6 +44,7 @@ builder.Services.AddScoped<IFeatureSliderService, FeatureSliderService>();
 builder.Services.AddScoped<ISpecialOfferService, SpecialOfferService>();
 builder.Services.AddScoped<IFeatureService, FeatureService>();
 builder.Services.AddScoped<IOfferDiscountService, OfferDiscountService>();
+builder.Services.AddScoped<IStatisticService, StatisticService>();
 
 builder.Services.AddAutoMapper(cfg => cfg.AddMaps(Assembly.GetExecutingAssembly()));
 

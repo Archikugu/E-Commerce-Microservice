@@ -11,6 +11,10 @@ public interface IMessageService
     Task<List<ResultInboxMessageDto>> GetInboxAsync(string receiverId);
     Task<List<ResultSendboxMessageDto>> GetSendboxAsync(string senderId);
     Task MarkAsReadAsync(int messageId);
+    Task<int> GetTotalMessageCountAsync();
+    Task<int> GetReadMessageCountAsync();
+    Task<int> GetUnreadMessageCountAsync();
+    Task<List<ResultMessageDto>> GetLatestAsync(int take);
 }
 
 
