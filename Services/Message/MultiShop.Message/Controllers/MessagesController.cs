@@ -103,6 +103,13 @@ public class MessagesController : ControllerBase
         var list = await _messageService.GetLatestAsync(take);
         return Ok(list);
     }
+
+    [HttpGet("total-count-reciver-id/{id}")]
+    public async Task<IActionResult> GetTotalMessageCountReciverIdAsync(string id)
+    {
+        var count = await _messageService.GetTotalMessageCountReciverIdAsync(id);
+        return Ok(count);
+    }
 }
 
 

@@ -73,6 +73,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Images", "Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Payment", "Services\Payment\MultiShop.Payment\MultiShop.Payment.csproj", "{61895343-B6B8-5ECF-3721-AF7BE948494B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Realtime", "Realtime", "{DF808D3E-5FFB-41C8-8200-B4C69204A51F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.SignalR", "Services\Realtime\MultiShop.SignalR\MultiShop.SignalR.csproj", "{B8B2D0CD-B9BC-4744-94FA-2FC97391F08A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -155,6 +159,10 @@ Global
 		{61895343-B6B8-5ECF-3721-AF7BE948494B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61895343-B6B8-5ECF-3721-AF7BE948494B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61895343-B6B8-5ECF-3721-AF7BE948494B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8B2D0CD-B9BC-4744-94FA-2FC97391F08A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8B2D0CD-B9BC-4744-94FA-2FC97391F08A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8B2D0CD-B9BC-4744-94FA-2FC97391F08A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8B2D0CD-B9BC-4744-94FA-2FC97391F08A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -191,6 +199,8 @@ Global
 		{33350F17-C721-4F68-951B-5DE5ACA561D3} = {CD26FE35-8898-42AC-B955-37B3AA50F977}
 		{40607005-E4F3-82CE-A1DD-77767D618A14} = {7631159C-2BC4-47DC-85DD-533C2D93A641}
 		{61895343-B6B8-5ECF-3721-AF7BE948494B} = {1038BD24-E2CA-4B11-A503-A6ADB334D513}
+		{DF808D3E-5FFB-41C8-8200-B4C69204A51F} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{B8B2D0CD-B9BC-4744-94FA-2FC97391F08A} = {DF808D3E-5FFB-41C8-8200-B4C69204A51F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0CDCAFE4-C792-4DC1-8B44-45090DCCE65D}

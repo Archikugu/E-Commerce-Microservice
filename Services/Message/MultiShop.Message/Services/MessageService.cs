@@ -98,6 +98,12 @@ public class MessageService : IMessageService
             .ToListAsync();
         return list.Select(m => _mapper.Map<ResultMessageDto>(m)).ToList();
     }
+
+    public async Task<int> GetTotalMessageCountReciverIdAsync(string id)
+    {
+        var values =await _multiShopMessageDbContext.Messages.Where(x => x.ReceiverId == id).CountAsync();
+        return values;
+    }
 }
 
 

@@ -83,6 +83,8 @@ public class Program
             options.Cookie.IsEssential = true;
         });
 
+        builder.Services.AddSignalR();
+
         builder.Services.Configure<ClientSettings>(builder.Configuration.GetSection("ClientSettings"));
         builder.Services.Configure<ServiceAPISettings>(builder.Configuration.GetSection("ServiceAPISettings"));
 
@@ -227,6 +229,8 @@ public class Program
         {
             opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Discount.Path.TrimStart('/')}");
         }).AddHttpMessageHandler<ClientCrendentialTokenHandler>();
+
+
 
         var app = builder.Build();
 

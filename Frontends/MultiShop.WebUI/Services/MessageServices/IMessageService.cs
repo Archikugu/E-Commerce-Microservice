@@ -12,6 +12,8 @@ public interface IMessageService
     Task DeleteAsync(int id);
     Task MarkAsReadAsync(int id);
     Task<List<ResultMessageDto>> GetLatestAsync(int take);
+    Task<int> GetTotalMessageCountReciverIdAsync(string id);
+
 }
 
 

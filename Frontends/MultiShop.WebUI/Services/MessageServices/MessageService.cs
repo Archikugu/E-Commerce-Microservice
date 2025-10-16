@@ -1,5 +1,6 @@
 using MultiShop.WebUI.Dtos.MessageDtos;
 using MultiShop.WebUI.Settings;
+using NuGet.Protocol.Plugins;
 
 namespace MultiShop.WebUI.Services.MessageServices;
 
@@ -60,6 +61,17 @@ public class MessageService : IMessageService
         var res = await _httpClient.GetAsync($"messages/latest/{take}");
         if (!res.IsSuccessStatusCode) return new List<ResultMessageDto>();
         return await res.Content.ReadFromJsonAsync<List<ResultMessageDto>>() ?? new List<ResultMessageDto>();
+    }
+
+    public async Task<int> GetTotalMessageCountReciverIdAsync(string id)
+    {
+        var res = await _httpClient.GetAsync($"messages/total-count-reciver-id/{id}");
+        if (!res.IsSuccessStatusCode)
+        {
+            return 0;
+        }
+        var count = await res.Content.ReadFromJsonAsync<int>();
+        return count;
     }
 }
 
