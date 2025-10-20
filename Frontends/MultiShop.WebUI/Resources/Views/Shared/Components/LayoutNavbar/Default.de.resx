@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Categories" xml:space="preserve"><value>Kategorien</value></data>
+  <data name="Home" xml:space="preserve"><value>Startseite</value></data>
+  <data name="Products" xml:space="preserve"><value>Produkte</value></data>
+  <data name="Product Detail" xml:space="preserve"><value>Produktdetails</value></data>
+  <data name="Deal of the Day" xml:space="preserve"><value>Angebot des Tages</value></data>
+  <data name="Contact" xml:space="preserve"><value>Kontakt</value></data>
+  <data name="Pages" xml:space="preserve"><value>Seiten</value></data>
+  <data name="Shopping Cart" xml:space="preserve"><value>Einkaufswagen</value></data>
+  <data name="Checkout" xml:space="preserve"><value>Kasse</value></data>
+  <data name="Account" xml:space="preserve"><value>Konto</value></data>
+  <data name="Profile" xml:space="preserve"><value>Profil</value></data>
+  <data name="Change Password" xml:space="preserve"><value>Passwort ändern</value></data>
+  <data name="Logout" xml:space="preserve"><value>Abmelden</value></data>
+  <data name="Sign In" xml:space="preserve"><value>Anmelden</value></data>
+  <data name="Sign Up" xml:space="preserve"><value>Registrieren</value></data>
+  <data name="No Categories Found" xml:space="preserve"><value>Keine Kategorien gefunden</value></data>
+</root>
+

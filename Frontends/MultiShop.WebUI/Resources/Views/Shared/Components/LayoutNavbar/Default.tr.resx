@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Categories" xml:space="preserve"><value>Kategoriler</value></data>
+  <data name="Home" xml:space="preserve"><value>Ana Sayfa</value></data>
+  <data name="Products" xml:space="preserve"><value>Ürünler</value></data>
+  <data name="Product Detail" xml:space="preserve"><value>Ürün Detayı</value></data>
+  <data name="Deal of the Day" xml:space="preserve"><value>Günün Fırsatı</value></data>
+  <data name="Contact" xml:space="preserve"><value>İletişim</value></data>
+  <data name="Pages" xml:space="preserve"><value>Sayfalar</value></data>
+  <data name="Shopping Cart" xml:space="preserve"><value>Sepet</value></data>
+  <data name="Checkout" xml:space="preserve"><value>Ödeme</value></data>
+  <data name="Account" xml:space="preserve"><value>Hesap</value></data>
+  <data name="Profile" xml:space="preserve"><value>Profil</value></data>
+  <data name="Change Password" xml:space="preserve"><value>Şifre Değiştir</value></data>
+  <data name="Logout" xml:space="preserve"><value>Çıkış Yap</value></data>
+  <data name="Sign In" xml:space="preserve"><value>Giriş Yap</value></data>
+  <data name="Sign Up" xml:space="preserve"><value>Kayıt Ol</value></data>
+  <data name="No Categories Found" xml:space="preserve"><value>Kategori bulunamadı</value></data>
+</root>
+

@@ -1,33 +1,35 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Localization;
 using MultiShop.WebUI.Handlers;
 using MultiShop.WebUI.Services.Abstract;
+using MultiShop.WebUI.Services.BasketServices;
+using MultiShop.WebUI.Services.CargoServices.CargoCompanyServices;
+using MultiShop.WebUI.Services.CargoServices.CargoCustomerServices;
 using MultiShop.WebUI.Services.CatalogServices.AboutServices;
 using MultiShop.WebUI.Services.CatalogServices.BrandServices;
 using MultiShop.WebUI.Services.CatalogServices.CategoryServices;
 using MultiShop.WebUI.Services.CatalogServices.ContactServices;
+using MultiShop.WebUI.Services.CatalogServices.FeatureServices;
 using MultiShop.WebUI.Services.CatalogServices.FeatureSliderServices;
 using MultiShop.WebUI.Services.CatalogServices.OfferDiscountServices;
 using MultiShop.WebUI.Services.CatalogServices.ProductDetailServices;
 using MultiShop.WebUI.Services.CatalogServices.ProductImageServices;
 using MultiShop.WebUI.Services.CatalogServices.ProductServices;
 using MultiShop.WebUI.Services.CatalogServices.SpecialOfferServices;
-using MultiShop.WebUI.Services.DiscountServices.DiscountCouponServices;
 using MultiShop.WebUI.Services.CommentServices;
 using MultiShop.WebUI.Services.Concrete;
-using MultiShop.WebUI.Services.BasketServices;
+using MultiShop.WebUI.Services.DiscountServices.DiscountCouponServices;
+using MultiShop.WebUI.Services.MessageServices;
 using MultiShop.WebUI.Services.OrderServices.OrderAddressServices;
 using MultiShop.WebUI.Services.OrderServices.OrderOrderingServices;
-using MultiShop.WebUI.Services.MessageServices;
-using MultiShop.WebUI.Services.UserIdentityServices;
-using MultiShop.WebUI.Services.CargoServices.CargoCompanyServices;
-using MultiShop.WebUI.Services.CargoServices.CargoCustomerServices;
-using MultiShop.WebUI.Settings;
 using MultiShop.WebUI.Services.StatisticsServices.CatalogStatistic;
 using MultiShop.WebUI.Services.StatisticsServices.CommentStatisticServices;
 using MultiShop.WebUI.Services.StatisticsServices.DiscountStatisticServices;
 using MultiShop.WebUI.Services.StatisticsServices.UserStatistic;
-using MultiShop.WebUI.Services.CatalogServices.FeatureServices;
+using MultiShop.WebUI.Services.UserIdentityServices;
+using MultiShop.WebUI.Settings;
 
 namespace MultiShop.WebUI;
 
@@ -232,6 +234,11 @@ public class Program
 
 
 
+        builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+        builder.Services.AddMvc()
+            .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+            .AddDataAnnotationsLocalization();
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -251,6 +258,13 @@ public class Program
 
         app.UseAuthentication();
         app.UseAuthorization();
+
+        var supportedCultures = new[] { "en-US", "tr-TR" ,"de-DE","fr-FR"};
+        var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
+            .AddSupportedCultures(supportedCultures)
+            .AddSupportedUICultures(supportedCultures);
+
+        app.UseRequestLocalization(localizationOptions);
 
         app.MapStaticAssets();
 

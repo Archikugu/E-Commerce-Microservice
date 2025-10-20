@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Get In Touch" xml:space="preserve"><value>Contactez-nous</value></data>
+  <data name="Footer Intro" xml:space="preserve"><value>Chez MultiShop, nous nous engageons à répondre au mieux aux besoins de nos clients. Nous sommes à votre service avec des produits de qualité et une livraison rapide.</value></data>
+  <data name="Istanbul, Turkey" xml:space="preserve"><value>Istanbul, Turquie</value></data>
+  <data name="Quick Shop" xml:space="preserve"><value>Achat rapide</value></data>
+  <data name="Home" xml:space="preserve"><value>Accueil</value></data>
+  <data name="Our Shop" xml:space="preserve"><value>Notre boutique</value></data>
+  <data name="Shop Detail" xml:space="preserve"><value>Détail de la boutique</value></data>
+  <data name="Shopping Cart" xml:space="preserve"><value>Panier</value></data>
+  <data name="Checkout" xml:space="preserve"><value>Paiement</value></data>
+  <data name="Contact Us" xml:space="preserve"><value>Contactez-nous</value></data>
+  <data name="My Account" xml:space="preserve"><value>Mon compte</value></data>
+  <data name="Newsletter" xml:space="preserve"><value>Newsletter</value></data>
+  <data name="Newsletter Intro" xml:space="preserve"><value>Abonnez-vous à notre newsletter pour rester informé des offres et nouveautés.</value></data>
+  <data name="Your Email Address" xml:space="preserve"><value>Votre adresse e-mail</value></data>
+  <data name="Sign Up" xml:space="preserve"><value>S’inscrire</value></data>
+  <data name="Follow Us" xml:space="preserve"><value>Suivez-nous</value></data>
+  <data name="All Rights Reserved." xml:space="preserve"><value>Tous droits réservés.</value></data>
+</root>
+

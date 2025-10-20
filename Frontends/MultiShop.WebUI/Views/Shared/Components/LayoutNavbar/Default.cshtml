@@ -1,11 +1,13 @@
-﻿@model List<MultiShop.WebUI.Dtos.CatalogDtos.CategoryDtos.ResultCategoryDto>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer
+@model List<MultiShop.WebUI.Dtos.CatalogDtos.CategoryDtos.ResultCategoryDto>
 
 <!-- Navbar Start -->
 <div class="container-fluid bg-dark mb-30">
 	<div class="row px-xl-5">
 		<div class="col-lg-3 d-none d-lg-block">
 			<a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse" href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
-				<h6 class="text-dark m-0"><i class="fa fa-bars mr-2"></i>Categories</h6>
+				<h6 class="text-dark m-0"><i class="fa fa-bars mr-2"></i>@localizer["Categories"]</h6>
 				<i class="fa fa-angle-down text-dark"></i>
 			</a>
 			<nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999;">
@@ -19,7 +21,7 @@
 					}
 					else
 					{
-						<a href="#" class="nav-item nav-link">No Categories Found</a>
+						<a href="#" class="nav-item nav-link">@localizer["No Categories Found"]</a>
 					}
 				</div>
 			</nav>
@@ -35,18 +37,16 @@
 				</button>
 				<div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
 					<div class="navbar-nav mr-auto py-0">
-						<a href="/Home/Index/" class="nav-item nav-link">Home</a>
-						<a href="/ProductList" class="nav-item nav-link">Products</a>
-						<a href="" class="nav-item nav-link">Product Detail</a>
-						<a href="" class="nav-item nav-link">Deal of the Day</a>
-						<a href="/Contact" class="nav-item nav-link">Contact</a>
+						<a href="/Home/Index/" class="nav-item nav-link">@localizer["Home"]</a>
+						<a href="/ProductList" class="nav-item nav-link">@localizer["Products"]</a>
+						<a href="" class="nav-item nav-link">@localizer["Product Detail"]</a>
+						<a href="" class="nav-item nav-link">@localizer["Deal of the Day"]</a>
+						<a href="/Contact" class="nav-item nav-link">@localizer["Contact"]</a>
 						<div class="nav-item dropdown">
-							<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
+							<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@localizer["Pages"] <i class="fa fa-angle-down mt-1"></i></a>
 							<div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
-								<a href="/Basket" class="dropdown-item">Shopping Cart</a>
-								<a href="/Checkout" class="dropdown-item">Checkout</a>
-								<a href="/Register" class="dropdown-item">Sign Up</a>
-								<a href="/Login" class="dropdown-item">Sign In</a>
+								<a href="/Basket" class="dropdown-item">@localizer["Shopping Cart"]</a>
+								<a href="/Checkout" class="dropdown-item">@localizer["Checkout"]</a>
 							</div>
 						</div>
 					</div>
@@ -65,27 +65,64 @@
 							var fallbackName = User?.FindFirst("name")?.Value ?? User?.Identity?.Name ?? string.Empty;
 							var composed = ($"{firstName} {lastName}").Trim();
 							var displayName = string.IsNullOrWhiteSpace(composed) ? fallbackName : composed;
-							if (string.IsNullOrWhiteSpace(displayName)) { displayName = "Account"; }
+							if (string.IsNullOrWhiteSpace(displayName)) { displayName = localizer["Account"].Value; }
 						}
-						<div class="nav-item dropdown d-inline-block ml-3">
-							<a href="#" class="btn px-0 nav-link dropdown-toggle" data-toggle="dropdown">
-								<i class="fas fa-user text-primary"></i>
-								<span class="text-light ml-2">@displayName</span>
-							</a>
+					<div class="nav-item dropdown d-inline-block ml-3">
+						@{
+							var uiLang = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+							var flagEmoji = "🏳️";
+							switch (uiLang)
+							{
+								case "tr": flagEmoji = "🇹🇷"; break;
+								case "de": flagEmoji = "🇩🇪"; break;
+								case "fr": flagEmoji = "🇫🇷"; break;
+								case "en": flagEmoji = "🇺🇸"; break; // or 🇬🇧 as preferred
+							}
+						}
+						<a href="#" class="btn px-0 nav-link dropdown-toggle" data-toggle="dropdown">
+							<i class="fas fa-user text-primary"></i>
+							<span class="text-light ml-2">@displayName</span>
+						</a>
 							<div class="dropdown-menu dropdown-menu-right bg-primary rounded-0 border-0 m-0">
 								@if (User?.Identity?.IsAuthenticated ?? false)
 								{
-									<a class="dropdown-item text-dark" href="/User">Profile</a>
-									<a class="dropdown-item text-dark" href="/User/ChangePassword">Change Password</a>
-									<a class="dropdown-item text-dark" href="/Login/Logout">Logout</a>
+									<a class="dropdown-item text-dark" href="/User">@localizer["Profile"]</a>
+									<a class="dropdown-item text-dark" href="/User/ChangePassword">@localizer["Change Password"]</a>
+									<a class="dropdown-item text-dark" href="/Login/Logout">@localizer["Logout"]</a>
 								}
 								else
 								{
-									<a class="dropdown-item text-dark" href="/Login">Sign In</a>
-									<a class="dropdown-item text-dark" href="/Register">Sign Up</a>
+									<a class="dropdown-item text-dark" href="/Login">@localizer["Sign In"]</a>
+									<a class="dropdown-item text-dark" href="/Register">@localizer["Sign Up"]</a>
 								}
 							</div>
 						</div>
+					<div class="nav-item dropdown d-inline-block ml-3">
+						@{
+							var region = System.Globalization.CultureInfo.CurrentUICulture.Name;
+							var code = region.Contains('-') ? region.Split('-')[1] : System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpperInvariant();
+							var flagCode = code.ToLowerInvariant();
+							if (flagCode == "en") { flagCode = "us"; code = "US"; }
+						}
+						<a href="#" class="btn px-0 nav-link dropdown-toggle" data-toggle="dropdown">
+							<img src="@($"https://flagcdn.com/24x18/{flagCode}.png")" alt="@code flag" style="width:24px;height:18px;border-radius:2px;object-fit:cover;" />
+							<span class="text-light ml-2" style="font-weight:600;">@code</span>
+						</a>
+						<div class="dropdown-menu dropdown-menu-right bg-primary rounded-0 border-0 m-0">
+							<a class="dropdown-item text-dark d-flex align-items-center" href="/?culture=en-US&ui-culture=en-US">
+								<img src="https://flagcdn.com/24x18/us.png" alt="US flag" style="width:24px;height:18px;border-radius:2px;object-fit:cover;margin-right:8px;" /> EN (US)
+							</a>
+							<a class="dropdown-item text-dark d-flex align-items-center" href="/?culture=tr-TR&ui-culture=tr-TR">
+								<img src="https://flagcdn.com/24x18/tr.png" alt="TR flag" style="width:24px;height:18px;border-radius:2px;object-fit:cover;margin-right:8px;" /> TR
+							</a>
+							<a class="dropdown-item text-dark d-flex align-items-center" href="/?culture=de-DE&ui-culture=de-DE">
+								<img src="https://flagcdn.com/24x18/de.png" alt="DE flag" style="width:24px;height:18px;border-radius:2px;object-fit:cover;margin-right:8px;" /> DE
+							</a>
+							<a class="dropdown-item text-dark d-flex align-items-center" href="/?culture=fr-FR&ui-culture=fr-FR">
+								<img src="https://flagcdn.com/24x18/fr.png" alt="FR flag" style="width:24px;height:18px;border-radius:2px;object-fit:cover;margin-right:8px;" /> FR
+							</a>
+						</div>
+					</div>
 					</div>
 				</div>
 			</nav>

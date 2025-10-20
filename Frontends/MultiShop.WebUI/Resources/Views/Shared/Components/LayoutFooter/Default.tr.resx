@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+
+  <data name="Get In Touch" xml:space="preserve"><value>İletişime Geçin</value></data>
+  <data name="Footer Intro" xml:space="preserve"><value>MultiShop olarak, müşterilerimizin ihtiyaçlarını en iyi şekilde karşılamaya kararlıyız. Kaliteli ürünler ve hızlı teslimat garantisiyle hizmetinizdeyiz.</value></data>
+  <data name="Istanbul, Turkey" xml:space="preserve"><value>İstanbul, Türkiye</value></data>
+  <data name="Quick Shop" xml:space="preserve"><value>Hızlı Alışveriş</value></data>
+  <data name="Home" xml:space="preserve"><value>Ana Sayfa</value></data>
+  <data name="Our Shop" xml:space="preserve"><value>Mağazamız</value></data>
+  <data name="Shop Detail" xml:space="preserve"><value>Mağaza Detayı</value></data>
+  <data name="Shopping Cart" xml:space="preserve"><value>Alışveriş Sepeti</value></data>
+  <data name="Checkout" xml:space="preserve"><value>Ödeme</value></data>
+  <data name="Contact Us" xml:space="preserve"><value>Bize Ulaşın</value></data>
+  <data name="My Account" xml:space="preserve"><value>Hesabım</value></data>
+  <data name="Newsletter" xml:space="preserve"><value>Bülten</value></data>
+  <data name="Newsletter Intro" xml:space="preserve"><value>Güncel kampanya ve haberlerden haberdar olmak için bültenimize abone olun.</value></data>
+  <data name="Your Email Address" xml:space="preserve"><value>E-posta Adresiniz</value></data>
+  <data name="Sign Up" xml:space="preserve"><value>Kaydol</value></data>
+  <data name="Follow Us" xml:space="preserve"><value>Bizi Takip Edin</value></data>
+  <data name="All Rights Reserved." xml:space="preserve"><value>Tüm Hakları Saklıdır.</value></data>
+</root>
+

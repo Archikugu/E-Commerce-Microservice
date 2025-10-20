@@ -1,4 +1,6 @@
 ﻿@using MultiShop.WebUI.Dtos.CatalogDtos.AboutDtos
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer localizer
 @model List<ResultAboutDto>
 
 <!-- Footer Start -->
@@ -16,51 +18,51 @@
 					<p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>@item.Phone</p>
 				}
 			}
-			else
-			{
-				<h5 class="text-secondary text-uppercase mb-4">Get In Touch</h5>
-				<p class="mb-4">At MultiShop, we are committed to meeting our customers' needs in the best possible way. We are at your service with quality products and fast delivery guarantee.</p>
-				<p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>Istanbul, Turkey</p>
-				<p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@multishop.com</p>
-				<p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+90 212 555 0123</p>
-			}
+            else
+            {
+                <h5 class="text-secondary text-uppercase mb-4">@localizer["Get In Touch"]</h5>
+                <p class="mb-4">@localizer["Footer Intro"]</p>
+                <p class="mb-2"><i class="fa fa-map-marker-alt text-primary mr-3"></i>@localizer["Istanbul, Turkey"]</p>
+                <p class="mb-2"><i class="fa fa-envelope text-primary mr-3"></i>info@multishop.com</p>
+                <p class="mb-0"><i class="fa fa-phone-alt text-primary mr-3"></i>+90 212 555 0123</p>
+            }
 		</div>
 		<div class="col-lg-8 col-md-12">
 			<div class="row">
 				<div class="col-md-4 mb-5">
-					<h5 class="text-secondary text-uppercase mb-4">Quick Shop</h5>
+                    <h5 class="text-secondary text-uppercase mb-4">@localizer["Quick Shop"]</h5>
 					<div class="d-flex flex-column justify-content-start">
-						<a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-						<a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-						<a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-						<a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
-						<a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-						<a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>@localizer["Home"]</a>
+                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>@localizer["Our Shop"]</a>
+                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>@localizer["Shop Detail"]</a>
+                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>@localizer["Shopping Cart"]</a>
+                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>@localizer["Checkout"]</a>
+                        <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>@localizer["Contact Us"]</a>
 					</div>
 				</div>
 				<div class="col-md-4 mb-5">
-					<h5 class="text-secondary text-uppercase mb-4">My Account</h5>
+                    <h5 class="text-secondary text-uppercase mb-4">@localizer["My Account"]</h5>
 					<div class="d-flex flex-column justify-content-start">
-						<a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
-						<a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Our Shop</a>
-						<a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shop Detail</a>
-						<a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Shopping Cart</a>
-						<a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-						<a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>@localizer["Home"]</a>
+                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>@localizer["Our Shop"]</a>
+                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>@localizer["Shop Detail"]</a>
+                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>@localizer["Shopping Cart"]</a>
+                        <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>@localizer["Checkout"]</a>
+                        <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>@localizer["Contact Us"]</a>
 					</div>
 				</div>
 				<div class="col-md-4 mb-5">
-					<h5 class="text-secondary text-uppercase mb-4">Newsletter</h5>
-					<p>Duo stet tempor ipsum sit amet magna ipsum tempor est</p>
+                    <h5 class="text-secondary text-uppercase mb-4">@localizer["Newsletter"]</h5>
+                    <p>@localizer["Newsletter Intro"]</p>
 					<form action="">
 						<div class="input-group">
-							<input type="text" class="form-control" placeholder="Your Email Address">
+                            <input type="text" class="form-control" placeholder="@localizer["Your Email Address"]">
 							<div class="input-group-append">
-								<button class="btn btn-primary">Sign Up</button>
+                                <button class="btn btn-primary">@localizer["Sign Up"]</button>
 							</div>
 						</div>
 					</form>
-					<h6 class="text-secondary text-uppercase mt-4 mb-3">Follow Us</h6>
+                    <h6 class="text-secondary text-uppercase mt-4 mb-3">@localizer["Follow Us"]</h6>
 					<div class="d-flex">
 						<a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-twitter"></i></a>
 						<a class="btn btn-primary btn-square mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
@@ -74,7 +76,7 @@
 	<div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
 		<div class="col-md-6 px-xl-0">
 			<p class="mb-md-0 text-center text-md-left text-secondary">
-				&copy; <a class="text-primary" href="#">MultiShop</a>. All Rights Reserved. @DateTime.Now.Year
+                &copy; <a class="text-primary" href="#">MultiShop</a>. @localizer["All Rights Reserved."] @DateTime.Now.Year
 			</p>
 		</div>
 		<div class="col-md-6 px-xl-0 text-center text-md-right">
