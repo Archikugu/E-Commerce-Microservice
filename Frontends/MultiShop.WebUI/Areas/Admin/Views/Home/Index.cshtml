@@ -1,491 +1,448 @@
 @{
-    ViewData["Title"] = "MultiShop Admin ";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+	ViewData["Title"] = "MultiShop Admin ";
+	Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="container-fluid">
-    <div class="row">
+	<div class="row" style="margin-bottom:12px;">
+		<div class="col-lg-12">
+			<h2 style="margin:0;font-weight:700;">Dashboard</h2>
+			<p class="text-muted" style="margin:4px 0 0 0;">Overview & Insights</p>
+		</div>
+	</div>
+	<div class="row">
         <div class="col-lg-3 col-xs-6">
-            <div class="media-box">
-                <div class="media-icon pull-left"><i class="icon-bargraph"></i> </div>
-                <div class="media-info">
-                    <h5>Category Count</h5>
-                    <h3>@ViewBag.CategoryCount</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="media-box bg-sea">
-                <div class="media-icon pull-left"><i class="icon-wallet"></i> </div>
-                <div class="media-info">
-                    <h5>Average Product Price</h5>
-                    <h3>@ViewBag.AverageProductPrice</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="media-box bg-blue">
-                <div class="media-icon pull-left"><i class="icon-basket"></i> </div>
-                <div class="media-info">
-                    <h5>Product Count</h5>
-                    <h3>@ViewBag.ProductCount</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="media-box bg-green">
-                <div class="media-icon pull-left"><i class="icon-layers"></i> </div>
-                <div class="media-info">
-                    <h5>Brand Count</h5>
-                    <h3>@ViewBag.BrandCount</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="media-box bg-purple">
-                <div class="media-icon pull-left"><i class="icon-users"></i> </div>
-                <div class="media-info">
-                    <h5>User Count</h5>
-                    <h3>@ViewBag.UserCount</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="media-box bg-success">
-                <div class="media-icon pull-left"><i class="icon-bubble"></i> </div>
-                <div class="media-info">
-                    <h5>Active Comments</h5>
-                    <h3>@ViewBag.ActiveCommentCount</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="media-box bg-warning">
-                <div class="media-icon pull-left"><i class="icon-bubbles"></i> </div>
-                <div class="media-info">
-                    <h5>Passive Comments</h5>
-                    <h3>@ViewBag.PassiveCommentCount</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="media-box bg-danger">
-                <div class="media-icon pull-left"><i class="icon-bubble"></i> </div>
-                <div class="media-info">
-                    <h5>Total Comments</h5>
-                    <h3>@ViewBag.TotalCommentCount</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-7">
-            <div class="chart-box">
-                <h4>Cheapest & Most Expensive Products</h4>
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-hover">
-                        <thead class="bg-info">
-                            <tr>
-                                <th>Type</th>
-                                <th>Product</th>
-                                <th class="text-right">Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (ViewBag.CheapestProduct != null)
-                            {
-                                <tr class="table-success">
-                                    <td>Cheapest</td>
-                                    <td>@ViewBag.CheapestProduct.ProductName</td>
-                                    <td class="text-right">@(((decimal)ViewBag.CheapestProduct.Price).ToString("C"))</td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr class="table-success">
-                                    <td>Cheapest</td>
-                                    <td colspan="2" class="text-muted">No product</td>
-                                </tr>
-                            }
+            <div class="media-box" style="background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-tags"></i> </div>
+				<div class="media-info">
+					<h5>Category Count</h5>
+					<h3>@ViewBag.CategoryCount</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box bg-sea" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-credit-card"></i> </div>
+				<div class="media-info">
+					<h5>Average Product Price</h5>
+					<h3>@ViewBag.AverageProductPrice</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box bg-blue" style="background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-cubes"></i> </div>
+				<div class="media-info">
+					<h5>Product Count</h5>
+					<h3>@ViewBag.ProductCount</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box bg-green" style="background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-briefcase"></i> </div>
+				<div class="media-info">
+					<h5>Brand Count</h5>
+					<h3>@ViewBag.BrandCount</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box bg-purple" style="background:linear-gradient(135deg,#7e22ce,#a855f7);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-users"></i> </div>
+				<div class="media-info">
+					<h5>User Count</h5>
+					<h3>@ViewBag.UserCount</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box bg-success" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-comments"></i> </div>
+				<div class="media-info">
+					<h5>Active Comments</h5>
+					<h3>@ViewBag.ActiveCommentCount</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box bg-warning" style="background:linear-gradient(135deg,#eab308,#f59e0b);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-comments-o"></i> </div>
+				<div class="media-info">
+					<h5>Passive Comments</h5>
+					<h3>@ViewBag.PassiveCommentCount</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box bg-danger" style="background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-comment"></i> </div>
+				<div class="media-info">
+					<h5>Total Comments</h5>
+					<h3>@ViewBag.TotalCommentCount</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box bg-indigo" style="background:linear-gradient(135deg,#4338ca,#6366f1);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-ticket"></i> </div>
+				<div class="media-info">
+					<h5>Total Coupons</h5>
+					<h3>@ViewBag.TotalCoupons</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box bg-success" style="background:linear-gradient(135deg,#0f766e,#14b8a6);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-check-circle"></i> </div>
+				<div class="media-info">
+					<h5>Active Coupons</h5>
+					<h3>@ViewBag.ActiveCoupons</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box bg-warning" style="background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-ban"></i> </div>
+				<div class="media-info">
+					<h5>Inactive Coupons</h5>
+					<h3>@ViewBag.InactiveCoupons</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box bg-danger" style="background:linear-gradient(135deg,#b91c1c,#ef4444);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-times-circle"></i> </div>
+				<div class="media-info">
+					<h5>Expired Coupons</h5>
+					<h3>@ViewBag.ExpiredCoupons</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box bg-teal" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-check"></i> </div>
+				<div class="media-info">
+					<h5>Valid Coupons</h5>
+					<h3>@ViewBag.ValidCoupons</h3>
+				</div>
+			</div>
+		</div>
+	</div>
 
-                            @if (ViewBag.MostExpensiveProduct != null)
-                            {
-                                <tr class="table-danger">
-                                    <td>Most Expensive</td>
-                                    <td>@ViewBag.MostExpensiveProduct.ProductName</td>
-                                    <td class="text-right">@(((decimal)ViewBag.MostExpensiveProduct.Price).ToString("C"))</td>
-                                </tr>
-                            }
-                            else
-                            {
-                                <tr class="table-danger">
-                                    <td>Most Expensive</td>
-                                    <td colspan="2" class="text-muted">No product</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-5">
-            <div class="chart-box">
-                <h4>Sales Overview</h4>
-                <div class="chart">
-                    <div id="container1"></div>
-                    <!--for values check "Sales Overview" chart on char-function.js-->
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-5">
-            <div class="chart-box">
-                <h4>Recent Messages</h4>
-                <div class="message-widget">
-                    @{ var msgs = ViewBag.RecentMessages as System.Collections.Generic.List<MultiShop.WebUI.Dtos.MessageDtos.ResultMessageDto> ?? new System.Collections.Generic.List<MultiShop.WebUI.Dtos.MessageDtos.ResultMessageDto>(); }
-                    @if (msgs.Count > 0)
-                    {
-                        foreach (var m in msgs)
-                        {
-                            var iconClass = m.IsRead ? "fa fa-check-circle text-success" : "fa fa-times-circle text-danger";
-                            <a href="#">
-                                <div class="user-img pull-left"> <i class="@iconClass" style="font-size:28px; margin:8px 12px 0 0;"></i> </div>
-                                <div class="mail-contnet">
-                                    <h5>@(string.IsNullOrWhiteSpace(m.Subject) ? "(No Subject)" : m.Subject)</h5>
-                                    <span class="mail-desc">@m.MessageDetail</span> <span class="time">@m.MessageDate.ToString("HH:mm")</span>
-                                </div>
-                            </a>
-                        }
-                    }
-                    else
-                    {
-                        <div class="text-muted">No messages</div>
-                    }
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-7">
-            <div class="chart-box">
-                <h4>Recent Orders</h4>
-                <div class="table-block">
-                    <div class="info-block">
-                        <p>Total paid invoices 5340, unpaid 130. <span class="pull-right"><a href="app/invoice.html">Invoice Summary <i class="fa fa-long-arrow-right"></i></a></span> </p>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-responsive">
-                            <thead>
-                                <tr>
-                                    <th>SKU</th>
-                                    <th>Invoice#</th>
-                                    <th>Customer Name</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="text-truncate">OV-101777</td>
-                                    <td class="text-truncate"><a href="#">VIO-0035421</a></td>
-                                    <td class="text-truncate">Florence Douglas</td>
-                                    <td class="text-truncate"><span class="lable-tag tag-success">Paid</span></td>
-                                    <td class="text-truncate">$ 653.00</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-truncate">OV-101775</td>
-                                    <td class="text-truncate"><a href="#">VIO-0028954</a></td>
-                                    <td class="text-truncate">Dr. Douglas</td>
-                                    <td class="text-truncate"><span class="lable-tag tag-unpaid">Overdue</span></td>
-                                    <td class="text-truncate">$ 421.00</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-truncate">OV-101687</td>
-                                    <td class="text-truncate"><a href="#">VIO-0025864</a></td>
-                                    <td class="text-truncate">Andrew Florence</td>
-                                    <td class="text-truncate"><span class="lable-tag tag-success">Paid</span></td>
-                                    <td class="text-truncate">$ 632.00</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-truncate">OV-101657</td>
-                                    <td class="text-truncate"><a href="#">VIO-0085815</a></td>
-                                    <td class="text-truncate">Florence Sr.</td>
-                                    <td class="text-truncate"><span class="lable-tag tag-success">Paid</span></td>
-                                    <td class="text-truncate">$ 285.00</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-truncate">OV-101625</td>
-                                    <td class="text-truncate"><a href="#">VIO-0053812</a></td>
-                                    <td class="text-truncate">Florence Douglas</td>
-                                    <td class="text-truncate"><span class="lable-tag tag-warning">Overdue</span></td>
-                                    <td class="text-truncate">$ 538.00</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row m-top-2">
-        <div class="col-lg-3 col-xs-6">
-            <div class="media-box bg-indigo">
-                <div class="media-icon pull-left"><i class="icon-wallet"></i> </div>
-                <div class="media-info">
-                    <h5>Total Coupons</h5>
-                    <h3>@ViewBag.TotalCoupons</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="media-box bg-success">
-                <div class="media-icon pull-left"><i class="icon-like"></i> </div>
-                <div class="media-info">
-                    <h5>Active Coupons</h5>
-                    <h3>@ViewBag.ActiveCoupons</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="media-box bg-warning">
-                <div class="media-icon pull-left"><i class="icon-dislike"></i> </div>
-                <div class="media-info">
-                    <h5>Inactive Coupons</h5>
-                    <h3>@ViewBag.InactiveCoupons</h3>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-xs-6">
-            <div class="media-box bg-danger">
-                <div class="media-icon pull-left"><i class="icon-close"></i> </div>
-                <div class="media-info">
-                    <h5>Expired Coupons</h5>
-                    <h3>@ViewBag.ExpiredCoupons</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row m-top-1">
-        <div class="col-lg-3 col-xs-6">
-            <div class="media-box bg-teal">
-                <div class="media-icon pull-left"><i class="icon-check"></i> </div>
-                <div class="media-info">
-                    <h5>Valid Coupons</h5>
-                    <h3>@ViewBag.ValidCoupons</h3>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="chart-box">
+	<div class="row">
+		<div class="col-lg-7">
+			<div class="chart-box" style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:16px;">
+				<h4>Cheapest & Most Expensive Products</h4>
+				<div class="table-responsive">
+					<table class="table table-striped table-bordered table-hover">
+						<thead class="bg-info">
+							<tr>
+								<th>Type</th>
+								<th>Product</th>
+								<th class="text-right">Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							@if (ViewBag.CheapestProduct != null)
+							{
+								<tr class="table-success">
+									<td>Cheapest</td>
+									<td>@ViewBag.CheapestProduct.ProductName</td>
+									<td class="text-right">@(((decimal)ViewBag.CheapestProduct.Price).ToString("C"))</td>
+								</tr>
+							}
+							else
+							{
+								<tr class="table-success">
+									<td>Cheapest</td>
+									<td colspan="2" class="text-muted">No product</td>
+								</tr>
+							}
 
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs" role="tablist">
-                    <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Activity</a></li>
-                    <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
-                    <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Settings</a></li>
-                </ul>
+							@if (ViewBag.MostExpensiveProduct != null)
+							{
+								<tr class="table-danger">
+									<td>Most Expensive</td>
+									<td>@ViewBag.MostExpensiveProduct.ProductName</td>
+									<td class="text-right">@(((decimal)ViewBag.MostExpensiveProduct.Price).ToString("C"))</td>
+								</tr>
+							}
+							else
+							{
+								<tr class="table-danger">
+									<td>Most Expensive</td>
+									<td colspan="2" class="text-muted">No product</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-5">
+			<div class="chart-box" style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:16px;">
+				<h4>Sales Overview</h4>
+				<div class="chart">
+					<div id="container1"></div>
+					<!--for values check "Sales Overview" chart on char-function.js-->
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-5">
+			<div class="chart-box" style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:16px;">
+				<h4>Recent Messages</h4>
+				<div class="message-widget">
+					@{
+						var msgs = ViewBag.RecentMessages as System.Collections.Generic.List<MultiShop.WebUI.Dtos.MessageDtos.ResultMessageDto> ?? new System.Collections.Generic.List<MultiShop.WebUI.Dtos.MessageDtos.ResultMessageDto>();
+					}
+					@if (msgs.Count > 0)
+					{
+						foreach (var m in msgs)
+						{
+							var iconClass = m.IsRead ? "fa fa-check-circle text-success" : "fa fa-times-circle text-danger";
+							<a href="#">
+								<div class="user-img pull-left"> <i class="@iconClass" style="font-size:28px; margin:8px 12px 0 0;"></i> </div>
+								<div class="mail-contnet">
+									<h5>@(string.IsNullOrWhiteSpace(m.Subject) ? "(No Subject)" : m.Subject)</h5>
+									<span class="mail-desc">@m.MessageDetail</span> <span class="time">@m.MessageDate.ToString("HH:mm")</span>
+								</div>
+							</a>
+						}
+					}
+					else
+					{
+						<div class="text-muted">No messages</div>
+					}
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-7">
+			<div class="chart-box" style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:16px;">
+				<h4>Recent Orders</h4>
+				<div class="table-block">
+					<div class="info-block">
+						<p>Total paid invoices 5340, unpaid 130. <span class="pull-right"><a href="app/invoice.html">Invoice Summary <i class="fa fa-long-arrow-right"></i></a></span> </p>
+					</div>
+					<div class="table-responsive">
+						<table class="table table-responsive">
+							<thead>
+								<tr>
+									<th>SKU</th>
+									<th>Invoice#</th>
+									<th>Customer Name</th>
+									<th>Status</th>
+									<th>Amount</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="text-truncate">OV-101777</td>
+									<td class="text-truncate"><a href="#">VIO-0035421</a></td>
+									<td class="text-truncate">Florence Douglas</td>
+									<td class="text-truncate"><span class="lable-tag tag-success">Paid</span></td>
+									<td class="text-truncate">$ 653.00</td>
+								</tr>
+								<tr>
+									<td class="text-truncate">OV-101775</td>
+									<td class="text-truncate"><a href="#">VIO-0028954</a></td>
+									<td class="text-truncate">Dr. Douglas</td>
+									<td class="text-truncate"><span class="lable-tag tag-unpaid">Overdue</span></td>
+									<td class="text-truncate">$ 421.00</td>
+								</tr>
+								<tr>
+									<td class="text-truncate">OV-101687</td>
+									<td class="text-truncate"><a href="#">VIO-0025864</a></td>
+									<td class="text-truncate">Andrew Florence</td>
+									<td class="text-truncate"><span class="lable-tag tag-success">Paid</span></td>
+									<td class="text-truncate">$ 632.00</td>
+								</tr>
+								<tr>
+									<td class="text-truncate">OV-101657</td>
+									<td class="text-truncate"><a href="#">VIO-0085815</a></td>
+									<td class="text-truncate">Florence Sr.</td>
+									<td class="text-truncate"><span class="lable-tag tag-success">Paid</span></td>
+									<td class="text-truncate">$ 285.00</td>
+								</tr>
+								<tr>
+									<td class="text-truncate">OV-101625</td>
+									<td class="text-truncate"><a href="#">VIO-0053812</a></td>
+									<td class="text-truncate">Florence Douglas</td>
+									<td class="text-truncate"><span class="lable-tag tag-warning">Overdue</span></td>
+									<td class="text-truncate">$ 538.00</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="home">
-                        <div class="message-widget">
-                            <div>
-                                <div class="user-img pull-left"> <img src="dist/img/img3.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-                                <div class="mail-contnet">
-                                    <h5>Florence Douglas</h5>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-                                    <span class="time m-bot-2">10:30 AM</span>
-                                    <div class="row">
-                                        <div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img5.jpg" alt="user" class="img-responsive img-rounded"></div>
-                                        <div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img6.jpg" alt="user" class="img-responsive img-rounded"></div>
-                                        <div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img7.jpg" alt="user" class="img-responsive img-rounded"></div>
-                                        <div class="m-top-2"><a href="#" class="pull-left">2 comment</a> <a href="#" class="pull-left"><i class="fa fa-heart text-success"></i> 5 Love</a> </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-                                <div class="mail-contnet">
-                                    <h5>Florence Douglas</h5>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-                                    <span class="time m-bot-2">10:30 AM</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="profile">
-                        <div class="message-widget">
-                            <div>
-                                <div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-                                <div class="mail-contnet">
-                                    <h5>Florence Douglas</h5>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-                                    <span class="time m-bot-2">10:30 AM</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="user-img pull-left"> <img src="dist/img/img3.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-                                <div class="mail-contnet">
-                                    <h5>Florence Douglas</h5>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-                                    <span class="time m-bot-2">10:30 AM</span>
-                                    <div class="row">
-                                        <div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img5.jpg" alt="user" class="img-responsive img-rounded"></div>
-                                        <div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img6.jpg" alt="user" class="img-responsive img-rounded"></div>
-                                        <div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img7.jpg" alt="user" class="img-responsive img-rounded"></div>
-                                        <div class="m-top-2"><a href="#" class="pull-left">2 comment</a> <a href="#" class="pull-left"><i class="fa fa-heart text-success"></i> 5 Love</a> </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="messages">
-                        <div class="message-widget">
-                            <div>
-                                <div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-                                <div class="mail-contnet">
-                                    <h5>Florence Douglas</h5>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-                                    <span class="time m-bot-2">10:30 AM</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-                                <div class="mail-contnet">
-                                    <h5>Florence Douglas</h5>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-                                    <span class="time m-bot-2">10:30 AM</span>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-                                <div class="mail-contnet">
-                                    <h5>Florence Douglas</h5>
-                                    <p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-                                    <span class="time m-bot-2">10:30 AM</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="row">
-                <div class="col-lg-6 col-xs-6">
-                    <div class="twitter-box m-bot-3">
-                        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                            <!-- Wrapper for slides -->
-                            <div class="carousel-inner text-center" role="listbox">
-                                <div class="item active">
-                                    <div> <i class="fa fa-twitter"></i> </div>
-                                    <p>Puns, humor, and quotes are great content on <span class="text-danger">#Twitter</span>. Find some related to your business.
-                                    <p class="text-italic pt-1">- John Doe</p>
-                                    </p>
-                                </div>
-                                <div class="item">
-                                    <div> <i class="fa fa-twitter"></i> </div>
-                                    <p>Puns, humor, and quotes are great content on <span class="text-danger">#Twitter</span>. Find some related to your business.
-                                    <p class="text-italic pt-1">- John Doe</p>
-                                    </p>
-                                </div>
-                                <div class="item">
-                                    <div> <i class="fa fa-twitter"></i> </div>
-                                    <p>Puns, humor, and quotes are great content on <span class="text-danger">#Twitter</span>. Find some related to your business.
-                                    <p class="text-italic pt-1">- John Doe</p>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-xs-6">
-                    <div class="facebook-box m-bot-3">
-                        <div id="carousel-example-generic1" class="carousel slide" data-ride="carousel">
-                            <!-- Wrapper for slides -->
-                            <div class="carousel-inner text-center" role="listbox">
-                                <div class="item active">
-                                    <div> <i class="fa fa-facebook"></i> </div>
-                                    <p>
-                                        Puns, humor, and quotes are great content on
-                                        Find some related to your business.
-                                    <p class="text-italic pt-1">- John Doe</p>
-                                    </p>
-                                </div>
-                                <div class="item">
-                                    <div> <i class="fa fa-facebook"></i> </div>
-                                    <p>
-                                        Puns, humor, and quotes are great content on
-                                        Find some related to your business.
-                                    <p class="text-italic pt-1">- John Doe</p>
-                                    </p>
-                                </div>
-                                <div class="item">
-                                    <div> <i class="fa fa-facebook"></i> </div>
-                                    <p>
-                                        Puns, humor, and quotes are great content on
-                                        Find some related to your business.
-                                    <p class="text-italic pt-1">- John Doe</p>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-12">
-                    <div>
-                        <img src="dist/img/img8.jpg" class="img-responsive" alt="User Image">
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <p class="text-bold text-uppercase">Today</p>
-                                    <div class="row-fluid">
-                                        <div class="col-md-3">
-                                            <div class="wi wi-day-snow font-25 text-warning"></div>
-                                        </div>
-                                        <div class="col-md-9">
-                                            <div class="weather-cent text-warning text-bold font-30"><span>25</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-7">
-                                    <div class="row">
-                                        <div class="col-md-2 col-xs-4">
-                                            <p class="text-uppercase ">Mon</p>
-                                            <div class="wi wi-day-snow font-18 text-indigo"></div>
-                                            <div class="wi-small weather-cent"><span>17</span></div>
-                                        </div>
-                                        <div class="col-md-2 col-xs-4">
-                                            <p class="text-uppercase">Tue</p>
-                                            <div class="wi wi-day-cloudy-windy font-18 text-lime"></div>
-                                            <div class="wi-small weather-cent"><span>22</span></div>
-                                        </div>
-                                        <div class="col-md-2 col-xs-4">
-                                            <p class="text-uppercase">Wed</p>
-                                            <div class="wi wi-day-lightning font-18 text-amber"></div>
-                                            <div class="wi-small weather-cent"><span>17</span></div>
-                                        </div>
-                                        <div class="col-md-2 col-xs-4">
-                                            <p class="text-uppercase">Thur</p>
-                                            <div class="wi wi-night-rain-mix font-18 text-blue"></div>
-                                            <div class="wi-small weather-cent"><span>24</span></div>
-                                        </div>
-                                        <div class="col-md-2 col-xs-4">
-                                            <p class="text-uppercase">Fri</p>
-                                            <div class="wi wi-night-rain font-18 text-slate"></div>
-                                            <div class="wi-small weather-cent"><span>20</span></div>
-                                        </div>
-                                        <div class="col-md-2 col-xs-4">
-                                            <p class="text-uppercase">Sat</p>
-                                            <div class="wi wi-sunrise font-18 text-success"></div>
-                                            <div class="wi-small weather-cent"><span>16</span></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="chart-box" style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:16px;">
+
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" role="tablist">
+					<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Activity</a></li>
+					<li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+					<li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Settings</a></li>
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="home">
+						<div class="message-widget">
+							<div>
+								<div class="user-img pull-left"> <img src="dist/img/img3.jpg" class="img-circle img-responsive" alt="User Image"> </div>
+								<div class="mail-contnet">
+									<h5>Florence Douglas</h5>
+									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
+									<span class="time m-bot-2">10:30 AM</span>
+									<div class="row">
+										<div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img5.jpg" alt="user" class="img-responsive img-rounded"></div>
+										<div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img6.jpg" alt="user" class="img-responsive img-rounded"></div>
+										<div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img7.jpg" alt="user" class="img-responsive img-rounded"></div>
+										<div class="m-top-2"><a href="#" class="pull-left">2 comment</a> <a href="#" class="pull-left"><i class="fa fa-heart text-success"></i> 5 Love</a> </div>
+									</div>
+								</div>
+							</div>
+							<div>
+								<div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
+								<div class="mail-contnet">
+									<h5>Florence Douglas</h5>
+									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
+									<span class="time m-bot-2">10:30 AM</span>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="profile">
+						<div class="message-widget">
+							<div>
+								<div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
+								<div class="mail-contnet">
+									<h5>Florence Douglas</h5>
+									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
+									<span class="time m-bot-2">10:30 AM</span>
+								</div>
+							</div>
+							<div>
+								<div class="user-img pull-left"> <img src="dist/img/img3.jpg" class="img-circle img-responsive" alt="User Image"> </div>
+								<div class="mail-contnet">
+									<h5>Florence Douglas</h5>
+									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
+									<span class="time m-bot-2">10:30 AM</span>
+									<div class="row">
+										<div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img5.jpg" alt="user" class="img-responsive img-rounded"></div>
+										<div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img6.jpg" alt="user" class="img-responsive img-rounded"></div>
+										<div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img7.jpg" alt="user" class="img-responsive img-rounded"></div>
+										<div class="m-top-2"><a href="#" class="pull-left">2 comment</a> <a href="#" class="pull-left"><i class="fa fa-heart text-success"></i> 5 Love</a> </div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="messages">
+						<div class="message-widget">
+							<div>
+								<div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
+								<div class="mail-contnet">
+									<h5>Florence Douglas</h5>
+									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
+									<span class="time m-bot-2">10:30 AM</span>
+								</div>
+							</div>
+							<div>
+								<div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
+								<div class="mail-contnet">
+									<h5>Florence Douglas</h5>
+									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
+									<span class="time m-bot-2">10:30 AM</span>
+								</div>
+							</div>
+							<div>
+								<div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
+								<div class="mail-contnet">
+									<h5>Florence Douglas</h5>
+									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
+									<span class="time m-bot-2">10:30 AM</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<div class="row">
+				<div class="col-lg-12">
+					<div>
+						<div class="panel-body" style="background:#ffffff;border:1px solid #e6eaf2;border-radius:12px;padding:12px;box-shadow:0 2px 8px rgba(16,24,40,.06);">
+							<div class="row">
+									<div class="col-md-5" style="display:flex;align-items:center;justify-content:center;">
+                                    @{
+                                        var todayClass = "text-warning";
+                                        double todayVal = 0;
+                                        try { todayVal = System.Convert.ToDouble(ViewBag.Weather, System.Globalization.CultureInfo.InvariantCulture); } catch { todayVal = 0; }
+                                        if (todayVal >= 30) todayClass = "text-danger";
+                                        else if (todayVal >= 20) todayClass = "text-warning";
+                                        else if (todayVal >= 10) todayClass = "text-primary";
+                                        else todayClass = "text-info";
+                                    }
+										<div style="width:100%;max-width:380px;margin:0 auto;background:#f7f9fc;border:1px solid #e6eaf2;border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:center;gap:16px;text-align:center;">
+											<div style="width:60px;height:60px;border-radius:50%;background:#eef3ff;display:flex;align-items:center;justify-content:center;">
+												<div class="wi wi-day-snow @todayClass" style="font-size:28px;"></div>
+											</div>
+											<div style="display:flex;flex-direction:column;line-height:1;align-items:center;">
+												<span class="text-uppercase text-muted" style="font-weight:700;letter-spacing:.6px;margin-bottom:6px;">Today</span>
+												<span class="@todayClass" style="font-weight:800;font-size:36px;">@(ViewBag.Weather != null ? ($"{ViewBag.Weather} °C") : "-")</span>
+											</div>
+										</div>
+									</div>
+								<div class="col-md-7">
+									<div class="row">
+										@{
+											var days = ViewBag.Days as System.Collections.Generic.List<string> ?? new System.Collections.Generic.List<string>();
+											var icons = ViewBag.ForecastIcons as System.Collections.Generic.List<string> ?? new System.Collections.Generic.List<string>();
+										}
+										@{
+											var temps = ViewBag.ForecastTemps as System.Collections.Generic.List<string> ?? new System.Collections.Generic.List<string>();
+										}
+										<div class="col-md-12" style="margin:6px 0 10px 0;">
+											<p class="text-uppercase text-muted" style="letter-spacing:0.5px;font-weight:600;">Next 6 Days</p>
+										</div>
+                                        @for (int i = 0; i < 6; i++)
+                                        {
+                                            var dayLabel = days.Count > i ? days[i] : "-";
+                                            var tempLabel = temps.Count > i ? temps[i] : "-";
+                                            int tVal;
+                                            bool ok = int.TryParse(tempLabel, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out tVal);
+                                            var cardBg = "#f7f9fc";
+                                            var iconCol = "text-indigo";
+                                            if (ok)
+                                            {
+                                                if (tVal >= 30) { cardBg = "#ffe5e5"; iconCol = "text-danger"; }
+                                                else if (tVal >= 20) { cardBg = "#fff3cd"; iconCol = "text-warning"; }
+                                                else if (tVal >= 10) { cardBg = "#e7f1ff"; iconCol = "text-primary"; }
+                                                else { cardBg = "#e5f7ff"; iconCol = "text-info"; }
+                                            }
+											<div class="col-md-2 col-xs-4">
+													<div class="text-center" style="background:@cardBg;border:1px solid #e6eaf2;border-radius:8px;padding:8px 6px;margin-bottom:8px;">
+													<p class="text-uppercase" style="margin-bottom:6px;font-weight:600;">@dayLabel</p>
+														<div class="@((icons.Count > i ? icons[i] : "wi wi-day-cloudy")) font-18 @iconCol" style="margin:4px 0 6px 0;"></div>
+													<div class="wi-small weather-cent"><span>@(tempLabel == "-" ? "-" : ($"{tempLabel} °C"))</span></div>
+												</div>
+											</div>
+										}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div> 
