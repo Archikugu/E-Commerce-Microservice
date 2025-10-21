@@ -1,0 +1,54 @@
+@model MultiShop.WebUI.Models.MailRequest
+
+@{
+    ViewData["Title"] = "Send Mail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="max-width:760px;">
+    <h3 class="mt-4 mb-3">Send Mail</h3>
+
+    @if (TempData["MailResult"] != null)
+    {
+        <div class="alert alert-info">@TempData["MailResult"]</div>
+    }
+
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <form asp-action="Send" asp-controller="Mail" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label for="To">To</label>
+            <input asp-for="To" class="form-control" placeholder="recipient@example.com" />
+            <span asp-validation-for="To" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="From">From (optional)</label>
+            <input asp-for="From" class="form-control" placeholder="your@example.com" />
+        </div>
+
+        <div class="form-group">
+            <label for="Subject">Subject</label>
+            <input asp-for="Subject" class="form-control" placeholder="Subject" />
+            <span asp-validation-for="Subject" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="Body">Body</label>
+            <textarea asp-for="Body" class="form-control" rows="8" placeholder="Write your message..."></textarea>
+            <span asp-validation-for="Body" class="text-danger"></span>
+        </div>
+
+        <div class="form-group form-check">
+            <input asp-for="IsHtml" class="form-check-input" />
+            <label class="form-check-label" for="IsHtml">Send as HTML</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send</button>
+        <a asp-action="SendMail" asp-controller="Mail" class="btn btn-secondary ml-2">Reset</a>
+    </form>
+</div>
+
+

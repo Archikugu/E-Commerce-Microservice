@@ -89,6 +89,7 @@ public class Program
 
         builder.Services.Configure<ClientSettings>(builder.Configuration.GetSection("ClientSettings"));
         builder.Services.Configure<ServiceAPISettings>(builder.Configuration.GetSection("ServiceAPISettings"));
+        builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
         builder.Services.AddScoped<ResourceOwnerPasswordTokenHandler>();
         builder.Services.AddScoped<ClientCrendentialTokenHandler>();
