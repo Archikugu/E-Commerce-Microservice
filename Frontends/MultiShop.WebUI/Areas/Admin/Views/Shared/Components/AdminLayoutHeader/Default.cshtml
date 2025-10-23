@@ -24,12 +24,22 @@
 			</form>
 			<!-- search form -->
 		</div>
+		<style>
+			/* Header search and icon colors */
+			.main-header .search-form .form-control{ color:#fff; background-color:transparent; border-color:rgba(255,255,255,.35); }
+			.main-header .search-form .form-control::placeholder{ color:#fff; opacity:1; }
+			.main-header .search-form .btn{ color:#fff; }
+			.main-header .navbar .fa-envelope,
+			.main-header .navbar .fa-bell{ color:#fff; opacity:.9; transition:opacity .15s ease-in-out; }
+			.main-header .navbar a:hover .fa-envelope,
+			.main-header .navbar a:hover .fa-bell{ color:#fff; opacity:1; }
+		</style>
 		<!-- Navbar Right Menu -->
 		<div class="navbar-custom-menu">
 			<ul class="nav navbar-nav">
 				<li class="dropdown messages-menu">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						<i class="icon-envelope"><span class="badge" style="position:relative;top:-10px"><strong id="messageCount">@((int)(ViewBag.MessageCount ?? 0))</strong></span></i>
+						<i class="fa fa-envelope"><span class="badge" style="position:relative;top:-10px"><strong id="messageCount">@((int)(ViewBag.MessageCount ?? 0))</strong></span></i>
 					</a>
 					<ul class="dropdown-menu">
 						<li class="header">You have <span id="headerMessageCountText">@((int)(ViewBag.MessageCount ?? 0))</span> messages</li>
@@ -53,7 +63,7 @@
 												</div>
                                                 <h4>@(string.IsNullOrWhiteSpace(m.SenderName) ? (string.IsNullOrWhiteSpace(m.SenderId) ? "(Unknown)" : m.SenderId) : m.SenderName)</h4>
 												<p>@(string.IsNullOrWhiteSpace(m.Subject) ? "(No Subject)" : m.Subject)</p>
-												<p><small><i class="fa fa-clock-o"></i> @m.MessageDate.ToString("HH:mm")</small></p>
+									<p><small><i class="fa fa-clock"></i> @m.MessageDate.ToString("HH:mm")</small></p>
 											</a>
 										</li>
 									}
@@ -67,14 +77,14 @@
 				<!-- Notifications Menu -->
 				<li class="dropdown notifications-menu">
 					<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						<i class="fa fa-comment"><span class="badge" style="position:relative;top:-10px"><strong id="headerCommentCount">0</strong></span></i>
+						<i class="fa fa-bell"><span class="badge" style="position:relative;top:-10px"><strong id="headerCommentCount">0</strong></span></i>
 					</a>
 					<ul class="dropdown-menu">
 						<li class="header">Comments</li>
 						<li>
 							<ul class="menu">
 								<li class="text-center" style="padding:10px;">
-									<i class="icon-bubble"></i> Total comments: <strong><span id="headerCommentCountInline">0</span></strong>
+									<i class="fa fa-comments"></i> Total comments: <strong><span id="headerCommentCountInline">0</span></strong>
 								</li>
 							</ul>
 						</li>
@@ -91,11 +101,11 @@
 							<p class="text-left">Florence Douglas <small>florence@gmail.com</small> </p>
 							<div class="view-link text-left"><a href="#">View Profile</a> </div>
 						</li>
-						<li><a href="#"><i class="icon-profile-male"></i> My Profile</a></li>
-						<li><a href="#"><i class="icon-wallet"></i> My Balance</a></li>
-						<li><a href="#"><i class="icon-envelope"></i> Inbox</a></li>
+						<li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
+						<li><a href="#"><i class="fa fa-wallet"></i> My Balance</a></li>
+						<li><a href="#"><i class="fa fa-envelope"></i> Inbox</a></li>
 						<li role="separator" class="divider"></li>
-						<li><a href="#"><i class="icon-gears"></i> Account Setting</a></li>
+						<li><a href="#"><i class="fa fa-cogs"></i> Account Setting</a></li>
 						<li role="separator" class="divider"></li>
 						<li><a href="#"><i class="fa fa-power-off"></i> Logout</a></li>
 					</ul>

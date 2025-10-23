@@ -8,35 +8,105 @@
 <section class="content container-fluid">
 	<div class="row">
 		<div class="col-md-12">
-			<div class="chart-box">
-				<h4>Product Image Creation Page</h4>
-				<br />
-				<div class="bs-example" data-example-id="bordered-table">
-					<form method="post">
-						<label>Select Product</label>
-						@Html.DropDownListFor(x => x.ProductId, (List<SelectListItem>)ViewBag.Products, "Select a Product", new { @style = "padding:0;", @class = "form-control" })
-						<br />
-						
-						<label>Product Images (URLs)</label>
-						<div id="imageContainer">
-							<div class="image-input-group mb-2">
-								<div class="input-group">
-									<input type="text" name="Images[0]" class="form-control" placeholder="Enter image URL" />
-									<div class="input-group-append">
-										<button type="button" class="btn btn-danger remove-image" style="display: none;">Remove</button>
-									</div>
-								</div>
-							</div>
-						</div>
-						
-						<button type="button" id="addImageBtn" class="btn btn-secondary mb-3">Add Another Image</button>
-						<br />
-						
-						<button type="submit" class="btn btn-success">Add Product Images</button>
-						<a asp-area="Admin" asp-controller="ProductImage" asp-action="Index" class="btn btn-secondary">Back to List</a>
-					</form>
-				</div>
-			</div>
+            <div class="chart-box">
+                <style>
+                    .chart-box{ border-radius:8px; border:1px solid rgba(0,0,0,.08); overflow:hidden; }
+                    .page-header { display:flex; align-items:center; justify-content:space-between; margin:0 0 12px 0; }
+                    .page-header h4 { margin:0; font-weight:600; }
+                    .form-group{ margin-bottom:12px; }
+                    .form-control{ border-radius:8px; border:1px solid rgba(0,0,0,.15); box-shadow:none; }
+                    .form-control:focus{ border-color:#0d6efd; box-shadow:0 0 0 .1rem rgba(13,110,253,.15); }
+                    .btn-add{ background:#198754; border-color:#198754; color:#fff; border-radius:20px; padding:8px 14px; transition:all .15s ease; box-shadow:0 2px 6px rgba(25,135,84,.18); }
+                    .btn-add:hover{ background:#157347; border-color:#157347; color:#fff; box-shadow:0 6px 16px rgba(25,135,84,.35); transform: translateY(-1px); text-decoration:none; }
+                    .btn-cancel{ border-radius:20px; padding:8px 14px; }
+                    .upload-item{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+                    .preview{ width:100px; height:75px; object-fit:cover; border-radius:6px; border:1px solid rgba(0,0,0,.1); display:none; }
+                </style>
+                <div class="page-header">
+                    <h4>Product Image Creation Page</h4>
+                    <a asp-area="Admin" asp-controller="ProductImage" asp-action="Index" class="btn btn-default btn-cancel"><i class="fa fa-arrow-left"></i> Back</a>
+                </div>
+                <div class="bs-example" data-example-id="bordered-table">
+                    <form method="post" id="piCreateForm">
+                        <div class="form-group">
+                            <label>Select Product</label>
+                            @Html.DropDownListFor(x => x.ProductId, (List<SelectListItem>)ViewBag.Products, "Select a Product", new { @style = "padding:0;", @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <label>Product Images</label>
+                            <div id="fileList"></div>
+                            <div class="upload-item">
+                                <input type="file" accept="image/*" multiple id="piFiles" />
+                                <button type="button" id="piAddBtn" class="btn btn-secondary">Upload & Add</button>
+                            </div>
+                            <div id="piError" class="alert alert-danger" style="display:none;"></div>
+                        </div>
+                        <div id="hiddenUrlContainer"></div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button type="submit" class="btn btn-add"><i class="fa fa-save" style="margin-right:8px;"></i> Add Product Images</button>
+                            <a asp-area="Admin" asp-controller="ProductImage" asp-action="Index" class="btn btn-default btn-cancel">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+                <script>
+                (function(){
+                    var filesInput = document.getElementById('piFiles');
+                    var addBtn = document.getElementById('piAddBtn');
+                    var fileList = document.getElementById('fileList');
+                    var hiddenUrlContainer = document.getElementById('hiddenUrlContainer');
+                    var formEl = document.getElementById('piCreateForm');
+                    var errBox = document.getElementById('piError');
+
+                    function addPreview(url){
+                        var wrap = document.createElement('div');
+                        wrap.className = 'upload-item';
+                        var img = document.createElement('img');
+                        img.className = 'preview';
+                        img.src = url; img.style.display = 'inline-block';
+                        var input = document.createElement('input');
+                        input.type = 'text'; input.value = url; input.className = 'form-control';
+                        input.readOnly = true; input.style.flex = '1';
+                        wrap.appendChild(img); wrap.appendChild(input);
+                        fileList.appendChild(wrap);
+                    }
+
+                    addBtn.addEventListener('click', function(){
+                        if (!filesInput || !filesInput.files || filesInput.files.length === 0){ return; }
+                        var files = Array.from(filesInput.files);
+                        // Upload sequentially to keep UI simple
+                        (function uploadNext(i){
+                            if (i >= files.length){ return; }
+                            var data = new FormData();
+                            data.append('file', files[i]);
+                            fetch('/Admin/ProductImage/UploadImage', { method:'POST', body:data })
+                                .then(function(r){ return r.ok ? r.json() : r.text().then(function(t){ throw new Error(t || ('HTTP '+r.status)); }); })
+                                .then(function(res){
+                                    var p = Promise.resolve(null);
+                                    if (res && res.fileName){
+                                        p = fetch('/Admin/ProductImage/GetSignedUrl?fileName='+encodeURIComponent(res.fileName)+'&minutes=10080')
+                                            .then(function(r){ return r.ok ? r.json() : null; })
+                                            .catch(function(){ return null; });
+                                    }
+                                    return p.then(function(signed){
+                                        var url = signed && signed.signedUrl ? signed.signedUrl : (res && res.url ? res.url : null);
+                                        if (url){
+                                            addPreview(url);
+                                            var h = document.createElement('input');
+                                            h.type='hidden'; h.name='Images['+ (hiddenUrlContainer.children.length) +']'; h.value=url;
+                                            hiddenUrlContainer.appendChild(h);
+                                        }
+                                        uploadNext(i+1);
+                                    });
+                                })
+                                .catch(function(e){
+                                    if (errBox){ errBox.textContent = 'Upload failed: '+ (e && e.message ? e.message : ''); errBox.style.display = 'block'; }
+                                    uploadNext(i+1);
+                                });
+                        })(0);
+                    });
+                })();
+                </script>
+            </div>
 		</div>
 	</div>
 </section>

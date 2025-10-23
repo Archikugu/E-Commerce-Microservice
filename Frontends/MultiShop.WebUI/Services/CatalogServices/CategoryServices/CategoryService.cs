@@ -1,4 +1,5 @@
 ﻿using MultiShop.WebUI.Dtos.CatalogDtos.CategoryDtos;
+using MultiShop.WebUI.Areas.Admin.Models;
 
 namespace MultiShop.WebUI.Services.CatalogServices.CategoryServices;
 
@@ -21,6 +22,17 @@ public class CategoryService : ICategoryService
         
         var categories = await responseMessage.Content.ReadFromJsonAsync<List<ResultCategoryDto>>();
         return categories ?? new List<ResultCategoryDto>();
+    }
+    public async Task<PagedResult<ResultCategoryDto>> GetCategoriesPagedAsync(int pageNumber, int pageSize)
+    {
+        var response = await _httpClient.GetAsync($"categories/paged?pageNumber={pageNumber}&pageSize={pageSize}");
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadAsStringAsync();
+            throw new Exception($"Failed to retrieve paged categories. Status: {(int)response.StatusCode} {response.StatusCode}. Content: {error}");
+        }
+        var result = await response.Content.ReadFromJsonAsync<PagedResult<ResultCategoryDto>>();
+        return result ?? new PagedResult<ResultCategoryDto> { Items = Array.Empty<ResultCategoryDto>(), PageNumber = pageNumber, PageSize = pageSize, TotalItems = 0 };
     }
     public async Task CreateCategoryAsync(CreateCategoryDto createCategoryDto)
     {

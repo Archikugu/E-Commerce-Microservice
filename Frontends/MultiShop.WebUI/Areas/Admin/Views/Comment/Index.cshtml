@@ -14,9 +14,30 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="chart-box">
-				<h4>Comment List</h4>
+				<style>
+					.chart-box{ border-radius:8px; border:1px solid rgba(0,0,0,.08); overflow:hidden; }
+					.page-header { display:flex; align-items:center; justify-content:space-between; margin:0 0 12px 0; }
+					.page-header h4 { margin:0; font-weight:600; }
+					.table .btn { border-radius:16px; padding:6px 10px; }
+					.btn-info{ background:#0dcaf0; border-color:#0dcaf0; color:#fff; }
+					.btn-update{ background:#ffc107; border-color:#ffc107; color:#212529; }
+					.btn-delete{ background:#dc3545; border-color:#dc3545; color:#fff; }
+					.btn-add{ background:#198754; border-color:#198754; color:#fff; border-radius:20px; padding:8px 14px; transition:all .15s ease; box-shadow:0 2px 6px rgba(25,135,84,.18); }
+					.btn-add:hover{ background:#157347; border-color:#157347; color:#fff; box-shadow:0 6px 16px rgba(25,135,84,.35); transform: translateY(-1px); text-decoration:none; }
+					.badge-active{ background:#28a745; }
+					.badge-passive{ background:#dc3545; }
+					.status-badge{ display:inline-block; min-width:86px; text-align:center; }
+					.btn-toggle{ min-width:120px; }
+					.table > thead > tr > th,
+					.table > tbody > tr > th,
+					.table > tbody > tr > td { vertical-align: middle; }
+				</style>
+				<div class="page-header">
+					<h4>Comment List</h4>
+					<a asp-area="Admin" asp-controller="Comment" asp-action="CreateComment" class="btn btn-add"><i class="fa fa-plus" style="margin-right:8px;"></i> Add New Comment</a>
+				</div>
 				<div class="bs-example" data-example-id="simple-table">
-					<table class="table">
+					<table class="table table-striped table-hover">
 						<thead>
 							<tr>
 								<th>#</th>
@@ -29,7 +50,7 @@
 								<th>Status</th>
 								<th>Product Name</th>
 								<th>Product Category</th>
-								<th>Actions</th>
+								<th style="width:300px;">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -56,33 +77,31 @@
 										}
 									</td>
 									<td>@item.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
-									<td>
-										@if (item.Status)
-										{
-											<span class="text-success font-weight-bold">Active</span>
-										}
-										else
-										{
-											<span class="text-danger font-weight-bold">Inactive</span>
-										}
-									</td>
+								<td>
+									@if (item.Status)
+									{
+										<span class="badge status-badge badge-active">Active</span>
+									}
+									else
+									{
+										<span class="badge status-badge badge-passive">Inactive</span>
+									}
+								</td>
 									<td>@(productDict != null && productDict.ContainsKey(item.ProductId) ? productDict[item.ProductId] : (products?.FirstOrDefault(p => p.ProductId == item.ProductId)?.ProductName ?? "N/A"))</td>
 									<td>@(productCategoryDict != null && productCategoryDict.ContainsKey(item.ProductId) ? productCategoryDict[item.ProductId] : "N/A")</td>
-									<td>
-										<a asp-area="Admin" asp-controller="Comment" asp-action="UpdateCommentStatus" asp-route-id="@item.UserCommentId" asp-route-status="@(!item.Status)" class="btn btn-sm @(item.Status ? "btn-warning" : "btn-success")">
-											@(item.Status ? "Deactivate" : "Activate")
-										</a>
-										<a asp-area="Admin" asp-controller="Comment" asp-action="UpdateComment" asp-route-id="@item.UserCommentId" class="btn btn-sm btn-info">Edit</a>
-										<a asp-area="Admin" asp-controller="Comment" asp-action="DeleteComment" asp-route-id="@item.UserCommentId" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</a>
-									</td>
+								<td>
+									<a asp-area="Admin" asp-controller="Comment" asp-action="UpdateCommentStatus" asp-route-id="@item.UserCommentId" asp-route-status="@(!item.Status)" class="btn btn-sm btn-toggle @(item.Status ? "btn-update" : "btn-add")">
+										@(item.Status ? "Deactivate" : "Activate")
+									</a>
+									<a asp-area="Admin" asp-controller="Comment" asp-action="UpdateComment" asp-route-id="@item.UserCommentId" class="btn btn-sm btn-info"><i class="fa fa-edit"></i> Edit</a>
+									<a asp-area="Admin" asp-controller="Comment" asp-action="DeleteComment" asp-route-id="@item.UserCommentId" class="btn btn-sm btn-delete" onclick="return confirm('Are you sure you want to delete this comment?')"><i class="fa fa-trash"></i> Delete</a>
+								</td>
 								</tr>
 							}
 						</tbody>
 					</table>
 
-					<a asp-area="Admin" asp-controller="Comment" asp-action="CreateComment" class="btn btn-success">
-						Add New Comment
-					</a>
+						<!-- Add button moved to header -->
 				</div>
 			</div>
 		</div>

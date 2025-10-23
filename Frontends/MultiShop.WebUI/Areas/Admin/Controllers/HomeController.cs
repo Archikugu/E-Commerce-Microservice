@@ -85,7 +85,8 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
             {
                 var client = _httpClientFactory.CreateClient();
                 using var request = new HttpRequestMessage(HttpMethod.Get, new Uri($"https://yahoo-weather5.p.rapidapi.com/weather?location={Uri.EscapeDataString(location)}&format=json&u=c"));
-                request.Headers.Add("x-rapidapi-key", "cb64a79606msh09533d50616a846p1c5e79jsne442b60c4edf");
+                request.Headers.Add("x-rapidapi-key", "");
+                //cb64a79606msh09533d50616a846p1c5e79jsne442b60c4edf
                 request.Headers.Add("x-rapidapi-host", "yahoo-weather5.p.rapidapi.com");
                 using var response = await client.SendAsync(request, cancellationToken);
                 response.EnsureSuccessStatusCode();
@@ -112,7 +113,8 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
             {
                 var client = _httpClientFactory.CreateClient();
                 using var request = new HttpRequestMessage(HttpMethod.Get, new Uri($"https://yahoo-weather5.p.rapidapi.com/weather?location={Uri.EscapeDataString(location)}&format=json&u=c"));
-                request.Headers.Add("x-rapidapi-key", "cb64a79606msh09533d50616a846p1c5e79jsne442b60c4edf");
+                request.Headers.Add("x-rapidapi-key", "");
+                //cb64a79606msh09533d50616a846p1c5e79jsne442b60c4edf
                 request.Headers.Add("x-rapidapi-host", "yahoo-weather5.p.rapidapi.com");
                 using var response = await client.SendAsync(request, cancellationToken);
                 response.EnsureSuccessStatusCode();

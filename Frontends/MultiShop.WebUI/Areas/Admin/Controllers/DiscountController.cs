@@ -36,6 +36,10 @@ public class DiscountController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(CreateDiscountCouponDto createDto)
     {
+        if (createDto.ValidDate.Date < DateTime.Today)
+        {
+            ModelState.AddModelError(nameof(createDto.ValidDate), "Valid date cannot be in the past.");
+        }
         if (!ModelState.IsValid)
         {
             return View(createDto);
@@ -62,6 +66,10 @@ public class DiscountController : Controller
     [HttpPost]
     public async Task<IActionResult> Update(UpdateDiscountCouponDto updateDto)
     {
+        if (updateDto.ValidDate.Date < DateTime.Today)
+        {
+            ModelState.AddModelError(nameof(updateDto.ValidDate), "Valid date cannot be in the past.");
+        }
         if (!ModelState.IsValid)
         {
             return View(updateDto);

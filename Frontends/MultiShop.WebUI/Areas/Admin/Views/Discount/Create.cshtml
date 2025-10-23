@@ -1,27 +1,51 @@
 @model MultiShop.WebUI.Dtos.DiscountDtos.DiscountCouponDtos.CreateDiscountCouponDto
 
-<div class="container-fluid">
-	<h4 class="mb-3">Create Discount Coupon</h4>
-	<form asp-area="Admin" asp-controller="Discount" asp-action="Create" method="post">
-		<div class="form-group">
-			<label>Code</label>
-			<input asp-for="Code" class="form-control" />
-		</div>
-		<div class="form-group">
-			<label>Rate (%)</label>
-			<input asp-for="Rate" type="number" class="form-control" />
-		</div>
-		<div class="form-group form-check">
-			<input asp-for="IsActive" class="form-check-input" type="checkbox" />
-			<label class="form-check-label" for="IsActive">Active</label>
-		</div>
-		<div class="form-group">
-			<label>Valid Date</label>
-			<input asp-for="ValidDate" type="date" class="form-control" />
-		</div>
-		<button type="submit" class="btn btn-primary">Save</button>
-		<a href="/Admin/Discount" class="btn btn-secondary">Cancel</a>
-	</form>
-</div>
+<section class="content container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="chart-box">
+				<style>
+					.chart-box{ border-radius:8px; border:1px solid rgba(0,0,0,.08); overflow:hidden; }
+					.page-header { display:flex; align-items:center; justify-content:space-between; margin:0 0 12px 0; }
+					.page-header h4 { margin:0; font-weight:600; }
+					.form-group{ margin-bottom:12px; }
+					.form-control{ border-radius:8px; border:1px solid rgba(0,0,0,.15); box-shadow:none; }
+					.form-control:focus{ border-color:#0d6efd; box-shadow:0 0 0 .1rem rgba(13,110,253,.15); }
+					.btn-add{ background:#198754; border-color:#198754; color:#fff; border-radius:20px; padding:8px 14px; transition:all .15s ease; box-shadow:0 2px 6px rgba(25,135,84,.18); }
+					.btn-add:hover{ background:#157347; border-color:#157347; color:#fff; box-shadow:0 6px 16px rgba(25,135,84,.35); transform: translateY(-1px); text-decoration:none; }
+					.btn-cancel{ border-radius:20px; padding:8px 14px; }
+				</style>
 
+				<div class="page-header">
+					<h4>Create Discount Coupon</h4>
+					<a href="/Admin/Discount" class="btn btn-default btn-cancel"><i class="fa fa-arrow-left"></i> Back</a>
+				</div>
 
+				<form asp-area="Admin" asp-controller="Discount" asp-action="Create" method="post">
+					<div class="form-group">
+						<label>Code</label>
+						<input asp-for="Code" class="form-control" placeholder="e.g. SAVE20" />
+					</div>
+					<div class="form-group">
+						<label>Rate (%)</label>
+						<input asp-for="Rate" type="number" class="form-control" placeholder="e.g. 20" />
+					</div>
+					<div class="form-group" style="display:flex; align-items:center; gap:8px;">
+						<div class="form-check">
+							<input asp-for="IsActive" class="form-check-input" type="checkbox" />
+							<label class="form-check-label" for="IsActive">Active</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label>Valid Date</label>
+						<input asp-for="ValidDate" type="date" class="form-control" min='@DateTime.Today.ToString("yyyy-MM-dd")' />
+					</div>
+					<div style="display:flex; align-items:center; gap:8px;">
+						<button type="submit" class="btn btn-add"><i class="fa fa-save" style="margin-right:8px;"></i> Save</button>
+						<a href="/Admin/Discount" class="btn btn-default btn-cancel">Cancel</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>

@@ -1,66 +1,155 @@
 ﻿ <!-- Left side column. contains the logo and sidebar -->
-<aside class="main-sidebar dark-bg">
+<aside class="main-sidebar">
     <section class="sidebar">
-        <div class="user-panel black-bg">
+        @{
+            var area = ViewContext.RouteData.Values["area"]?.ToString() ?? "";
+            var controller = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+            var action = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+            bool isAdmin = string.Equals(area, "Admin", StringComparison.OrdinalIgnoreCase);
+            var catalogControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Category","Brand","Product","ProductImage","ProductDetail","Feature","FeatureSlider","SpecialOffer","OfferDiscount","Discount","Comment","Contact","About" };
+            bool catalogOpen = isAdmin && catalogControllers.Contains(controller);
+            var usersControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "User","Role" };
+            bool usersOpen = isAdmin && usersControllers.Contains(controller);
+            var storeControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Cargo" };
+            bool storeOpen = isAdmin && storeControllers.Contains(controller);
+            var marketingControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Discount","OfferDiscount","SpecialOffer" };
+            bool marketingOpen = isAdmin && marketingControllers.Contains(controller);
+            var contentControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Feature","FeatureSlider","Comment","About","Contact" };
+            bool contentOpen = isAdmin && contentControllers.Contains(controller);
+            var messageControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Message" };
+            bool messageOpen = isAdmin && messageControllers.Contains(controller);
+            var settingsControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Settings" };
+            bool settingsOpen = isAdmin && settingsControllers.Contains(controller);
+            var reportsControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Statistics" };
+            bool reportsOpen = isAdmin && reportsControllers.Contains(controller);
+            Func<string, string, bool> isActive = (ctrl, act) => string.Equals(controller, ctrl, StringComparison.OrdinalIgnoreCase) && (string.IsNullOrEmpty(act) || string.Equals(action, act, StringComparison.OrdinalIgnoreCase));
+        }
+        <div class="user-panel">
             <div class="pull-left image"> <img src="~/OvioAdminTemplate/html/dist/img/img1.jpg" class="img-circle" alt="User Image"> </div>
             <div class="pull-left info">
                 <p>Florence Douglas</p>
                 <a href="#"><i class="fa fa-circle"></i> Online</a>
             </div>
         </div>
+        <style>
+            /* Colored icons for better visual recognition */
+            .sidebar-menu i.icon-home{color:#0d6efd;}
+            .sidebar-menu i.icon-dashboard{color:#6f42c1;}
+            .sidebar-menu i.icon-catalog{color:#17a2b8;}
+            .sidebar-menu i.icon-customers{color:#28a745;}
+            .sidebar-menu i.icon-sales{color:#fd7e14;}
+            .sidebar-menu i.icon-store{color:#007bff;}
+            .sidebar-menu i.icon-marketing{color:#e83e8c;}
+            .sidebar-menu i.icon-content{color:#20c997;}
+            .sidebar-menu i.icon-reports{color:#ffc107;}
+            .sidebar-menu i.icon-communication{color:#0dcaf0;}
+            .sidebar-menu i.icon-settings{color:#6610f2;}
+            .sidebar-menu i.icon-signout{color:#dc3545;}
+        </style>
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="header dark-bg">Menu</li>
-            <li> <a asp-area="" asp-controller="Home" asp-action="Index"> <i class="fa fa-home"></i> <span>Home Page</span></a> </li>
-            <li> <a asp-area="Admin" asp-controller="Home" asp-action="Index"> <i class="fa fa-dashboard"></i> <span>Dashboard</span></a> </li>
-            <li class="header dark-bg">Catalog</li>
-            <li class="treeview">
-                <a href="#"> <i class="fa fa-archive"></i> <span>Catalog</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
-                <ul class="treeview-menu" style="display: none;">
-                    <li><a asp-area="Admin" asp-controller="Category" asp-action="Index"><i class="fa fa-angle-right"></i> Categories</a></li>
-                    <li><a asp-area="Admin" asp-controller="Brand" asp-action="Index"><i class="fa fa-angle-right"></i> Brands</a></li>
-                    <li><a asp-area="Admin" asp-controller="Product" asp-action="Index"><i class="fa fa-angle-right"></i> Products</a></li>
-                    <li><a asp-area="Admin" asp-controller="ProductImage" asp-action="Index"><i class="fa fa-angle-right"></i> Product Images</a></li>
-                    <li><a asp-area="Admin" asp-controller="ProductDetail" asp-action="Index"><i class="fa fa-angle-right"></i> Product Details</a></li>
-                    <li><a asp-area="Admin" asp-controller="Feature" asp-action="Index"><i class="fa fa-angle-right"></i> Features</a></li>
-                    <li><a asp-area="Admin" asp-controller="FeatureSlider" asp-action="Index"><i class="fa fa-angle-right"></i> Feature Sliders</a></li>
-                    <li><a asp-area="Admin" asp-controller="SpecialOffer" asp-action="Index"><i class="fa fa-angle-right"></i> Special Offers</a></li>
-                    <li><a asp-area="Admin" asp-controller="OfferDiscount" asp-action="Index"><i class="fa fa-angle-right"></i> Offer Discounts</a></li>
-                    <li><a asp-area="Admin" asp-controller="Discount" asp-action="Index"><i class="fa fa-angle-right"></i> Discounts</a></li>
-                    <li><a asp-area="Admin" asp-controller="Comment" asp-action="Index"><i class="fa fa-angle-right"></i> Comments</a></li>
-                    <li><a asp-area="Admin" asp-controller="Contact" asp-action="Index"><i class="fa fa-angle-right"></i> Contacts</a></li>
-                    <li><a asp-area="Admin" asp-controller="About" asp-action="Index"><i class="fa fa-angle-right"></i> About</a></li>
+            <li class="header">Menu</li>
+            <li class="@(string.IsNullOrEmpty(area) && isActive("Home", "Index") ? "active" : null)"> <a asp-area="" asp-controller="Home" asp-action="Index"> <i class="fa fa-home icon-home"></i> <span>Home Page</span></a> </li>
+            <li class="@(isAdmin && isActive("Home", "Index") ? "active" : null)"> <a asp-area="Admin" asp-controller="Home" asp-action="Index"> <i class="fa fa-tachometer icon-dashboard"></i> <span>Dashboard</span></a> </li>
+            <li class="header">Catalog</li>
+            <li class="treeview @(catalogOpen ? "active menu-open" : null)">
+                <a href="#"> <i class="fa fa-archive icon-catalog"></i> <span>Catalog</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <ul class="treeview-menu" style="@(catalogOpen ? "display: block;" : "display: none;")">
+                    <li class="@(isActive("Category", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Category" asp-action="Index"><i class="fa fa-angle-right"></i> Categories</a></li>
+                    <li class="@(isActive("Brand", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Brand" asp-action="Index"><i class="fa fa-angle-right"></i> Brands</a></li>
+                    <li class="@(isActive("Product", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Product" asp-action="Index"><i class="fa fa-angle-right"></i> Products</a></li>
+                    <li class="@(isActive("ProductImage", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="ProductImage" asp-action="Index"><i class="fa fa-angle-right"></i> Product Images</a></li>
+                    <li class="@(isActive("ProductDetail", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="ProductDetail" asp-action="Index"><i class="fa fa-angle-right"></i> Product Details</a></li>
+                    <li class="@(isActive("Feature", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Feature" asp-action="Index"><i class="fa fa-angle-right"></i> Features</a></li>
+                    <li class="@(isActive("FeatureSlider", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="FeatureSlider" asp-action="Index"><i class="fa fa-angle-right"></i> Feature Sliders</a></li>
+                    <li class="@(isActive("SpecialOffer", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="SpecialOffer" asp-action="Index"><i class="fa fa-angle-right"></i> Special Offers</a></li>
+                    <li class="@(isActive("OfferDiscount", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="OfferDiscount" asp-action="Index"><i class="fa fa-angle-right"></i> Offer Discounts</a></li>
+                    <li class="@(isActive("Discount", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Discount" asp-action="Index"><i class="fa fa-angle-right"></i> Discounts</a></li>
+                    <li class="@(isActive("Comment", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Comment" asp-action="Index"><i class="fa fa-angle-right"></i> Comments</a></li>
+                    <li class="@(isActive("Contact", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Contact" asp-action="Index"><i class="fa fa-angle-right"></i> Contacts</a></li>
+                    <li class="@(isActive("About", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="About" asp-action="Index"><i class="fa fa-angle-right"></i> About</a></li>
                 </ul>
             </li>
 
-            <li class="header dark-bg">Users & Orders</li>
+            <li class="header">Users & Orders</li>
+            <li class="treeview @(usersOpen ? "active menu-open" : null)">
+                <a href="#"> <i class="fa fa-users icon-customers"></i> <span>Customers</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <ul class="treeview-menu" style="@(usersOpen ? "display: block;" : "display: none;")">
+                    <li class="@(isActive("User", "UserList") ? "active" : null)"><a asp-area="Admin" asp-controller="User" asp-action="UserList"><i class="fa fa-angle-right"></i> User List</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Roles</a></li>
+                </ul>
+            </li>
             <li class="treeview">
-                <a href="#"> <i class="fa fa-users"></i> <span>Users & Orders</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <a href="#"> <i class="fa fa-credit-card icon-sales"></i> <span>Sales</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
                 <ul class="treeview-menu" style="display: none;">
-                    <li><a asp-area="Admin" asp-controller="User" asp-action="UserList"><i class="fa fa-angle-right"></i> User List</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Order List</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Orders</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Invoices</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Transactions</a></li>
                 </ul>
             </li>
 
-            <li class="header dark-bg">Store</li>
-            <li class="treeview">
-                <a href="#"> <i class="fa fa-shopping-bag"></i> <span>Store</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
-                <ul class="treeview-menu" style="display: none;">
+            <li class="header">Store</li>
+            <li class="treeview @(storeOpen ? "active menu-open" : null)">
+                <a href="#"> <i class="fa fa-shopping-cart icon-store"></i> <span>Store</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <ul class="treeview-menu" style="@(storeOpen ? "display: block;" : "display: none;")">
                     <li><a href="#"><i class="fa fa-angle-right"></i> Cash Register</a></li>
                     <li><a href="#"><i class="fa fa-angle-right"></i> Statistics</a></li>
-                    <li><a asp-area="Admin" asp-controller="Cargo" asp-action="CargoCompanyList"><i class="fa fa-angle-right"></i> Cargo Companies</a></li>
+                    <li class="@(string.Equals(controller, "Cargo", StringComparison.OrdinalIgnoreCase) && string.Equals(action, "CargoCompanyList", StringComparison.OrdinalIgnoreCase) ? "active" : null)"><a asp-area="Admin" asp-controller="Cargo" asp-action="CargoCompanyList"><i class="fa fa-angle-right"></i> Cargo Companies</a></li>
                 </ul>
             </li>
 
-            <li class="header dark-bg">Communication & Settings</li>
-            <li class="treeview">
-                <a href="#"> <i class="fa fa-cogs"></i> <span>Communication & Settings</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
-                <ul class="treeview-menu" style="display: none;">
-                    <li><a asp-area="User" asp-controller="Message" asp-action="Inbox"><i class="fa fa-angle-right"></i> Messages</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Settings</a></li>
+            <li class="header">Marketing</li>
+            <li class="treeview @(marketingOpen ? "active menu-open" : null)">
+                <a href="#"> <i class="fa fa-bullhorn icon-marketing"></i> <span>Marketing</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <ul class="treeview-menu" style="@(marketingOpen ? "display: block;" : "display: none;")">
+                    <li class="@(isActive("Discount", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Discount" asp-action="Index"><i class="fa fa-angle-right"></i> Discounts</a></li>
+                    <li class="@(isActive("OfferDiscount", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="OfferDiscount" asp-action="Index"><i class="fa fa-angle-right"></i> Offer Discounts</a></li>
+                    <li class="@(isActive("SpecialOffer", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="SpecialOffer" asp-action="Index"><i class="fa fa-angle-right"></i> Special Offers</a></li>
                 </ul>
             </li>
-            <li> <a asp-area="" asp-controller="Login" asp-action="Logout"> <i class="fa fa-sign-out"></i> <span>Sign Out</span></a> </li>
+
+            <li class="header">Content</li>
+            <li class="treeview @(contentOpen ? "active menu-open" : null)">
+                <a href="#"> <i class="fa fa-copy icon-content"></i> <span>Content</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <ul class="treeview-menu" style="@(contentOpen ? "display: block;" : "display: none;")">
+                    <li class="@(isActive("Feature", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Feature" asp-action="Index"><i class="fa fa-angle-right"></i> Features</a></li>
+                    <li class="@(isActive("FeatureSlider", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="FeatureSlider" asp-action="Index"><i class="fa fa-angle-right"></i> Feature Sliders</a></li>
+                    <li class="@(isActive("Comment", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Comment" asp-action="Index"><i class="fa fa-angle-right"></i> Comments</a></li>
+                    <li class="@(isActive("About", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="About" asp-action="Index"><i class="fa fa-angle-right"></i> About</a></li>
+                    <li class="@(isActive("Contact", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Contact" asp-action="Index"><i class="fa fa-angle-right"></i> Contacts</a></li>
+                </ul>
+            </li>
+
+            <li class="header">Reports</li>
+            <li class="treeview @(reportsOpen ? "active menu-open" : null)">
+                <a href="#"> <i class="fa fa-line-chart icon-reports"></i> <span>Reports</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <ul class="treeview-menu" style="@(reportsOpen ? "display: block;" : "display: none;")">
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Sales Report</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Customer Report</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Catalog Report</a></li>
+                </ul>
+            </li>
+
+            <li class="header">Communication</li>
+            <li class="treeview @(messageOpen ? "active menu-open" : null)">
+                <a href="#"> <i class="fa fa-envelope icon-communication"></i> <span>Communication</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <ul class="treeview-menu" style="@(messageOpen ? "display: block;" : "display: none;")">
+                    <li class="@(string.Equals(controller, "Message", StringComparison.OrdinalIgnoreCase) ? "active" : null)"><a asp-area="User" asp-controller="Message" asp-action="Inbox"><i class="fa fa-angle-right"></i> Messages</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Notifications</a></li>
+                </ul>
+            </li>
+
+            <li class="header">Settings</li>
+            <li class="treeview @(settingsOpen ? "active menu-open" : null)">
+                <a href="#"> <i class="fa fa-cogs icon-settings"></i> <span>Settings</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
+                <ul class="treeview-menu" style="@(settingsOpen ? "display: block;" : "display: none;")">
+                    <li><a href="#"><i class="fa fa-angle-right"></i> General</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Email</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Payments</a></li>
+                    <li><a href="#"><i class="fa fa-angle-right"></i> Integrations</a></li>
+                </ul>
+            </li>
+            <li> <a asp-area="" asp-controller="Login" asp-action="Logout"> <i class="fa fa-sign-out icon-signout"></i> <span>Sign Out</span></a> </li>
 
         </ul>
         <!-- sidebar-menu -->

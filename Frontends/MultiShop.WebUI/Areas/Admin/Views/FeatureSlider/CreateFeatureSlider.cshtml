@@ -11,26 +11,119 @@
 
         <div class="col-md-12">
             <div class="chart-box">
-                <h4>Feature Slider Image Creation Page</h4>
-                <br />
-                <div class="bs-example" data-example-id="bordered-table">
+                <style>
+                    .chart-box{ border-radius:8px; border:1px solid rgba(0,0,0,.08); overflow:hidden; }
+                    .page-header { display:flex; align-items:center; justify-content:space-between; margin:0 0 12px 0; }
+                    .page-header h4 { margin:0; font-weight:600; }
+                    .form-group{ margin-bottom:12px; }
+                    .form-control{ border-radius:8px; border:1px solid rgba(0,0,0,.15); box-shadow:none; }
+                    .form-control:focus{ border-color:#0d6efd; box-shadow:0 0 0 .1rem rgba(13,110,253,.15); }
+                    .btn-add{ background:#198754; border-color:#198754; color:#fff; border-radius:20px; padding:8px 14px; transition:all .15s ease; box-shadow:0 2px 6px rgba(25,135,84,.18); }
+                    .btn-add:hover{ background:#157347; border-color:#157347; color:#fff; box-shadow:0 6px 16px rgba(25,135,84,.35); transform: translateY(-1px); text-decoration:none; }
+                    .btn-cancel{ border-radius:20px; padding:8px 14px; }
+                    .custom-file{ display:flex; align-items:center; gap:8px; }
+                    .btn-upload{ border-radius:20px; padding:8px 14px; border:1px solid #0d6efd; color:#0d6efd; background:#fff; box-shadow:0 1px 2px rgba(13,110,253,.08); }
+                    .btn-upload:hover{ background:#0d6efd; color:#fff; box-shadow:0 4px 12px rgba(13,110,253,.3); }
+                    .file-name{ font-size:13px; color:#6c757d; }
+                    .preview-wrap{ margin-top:8px; }
+                    .preview-img{ display:none; width:240px; height:120px; object-fit:cover; border-radius:8px; border:1px solid rgba(0,0,0,.1); box-shadow:0 2px 6px rgba(0,0,0,.06); }
+                </style>
 
-                    <form method="post">
-                        <label>Feature Slider Title</label>
-                        <input type="text" class="form-control" asp-for="Title" />
-                        <br />
-                        <label>Feature Slider Description</label>
-                        <input type="text" class="form-control" asp-for="Description" />
-                        <br />
-                        <label>Feature Slider Image Url</label>
-                        <input type="text" class="form-control" asp-for="ImageUrl" />
-                        <br />
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" asp-for="Status" />
-                            <label class="form-check-label" asp-for="Status">Active Status</label>
+                <div class="page-header">
+                    <h4>Create Feature Slider</h4>
+                    <a asp-area="Admin" asp-controller="FeatureSlider" asp-action="Index" class="btn btn-default btn-cancel"><i class="fa fa-arrow-left"></i> Back</a>
+                </div>
+
+                <div class="bs-example" data-example-id="bordered-table">
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                    <form method="post" id="fsCreateForm">
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            <label>Feature Slider Title</label>
+                            <input type="text" class="form-control" asp-for="Title" placeholder="e.g. Big Summer Sale" required />
+                            <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
-                        <br />
-                        <button class="btn btn-success">Add Feature Slider</button>
+                        <div class="form-group">
+                            <label>Feature Slider Description</label>
+                            <input type="text" class="form-control" asp-for="Description" placeholder="Short description" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label>Feature Slider Image</label>
+                            <input type="hidden" asp-for="ImageUrl" />
+                            <div class="custom-file">
+                                <input type="file" id="fsImageFile" accept="image/*" style="display:none;" />
+                                <label for="fsImageFile" class="btn btn-default btn-upload"><i class="fa fa-upload" style="margin-right:6px;"></i> Choose Image</label>
+                                <span id="fsFileNameText" class="file-name">No file chosen</span>
+                            </div>
+                            <div class="preview-wrap">
+                                <img id="fsImagePreview" class="preview-img" alt="Preview" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" asp-for="Status" />
+                                <label class="form-check-label" asp-for="Status">Active Status</label>
+                            </div>
+                        </div>
+                        <div id="fsUploadError" class="alert alert-danger" style="display:none; margin-top:8px;"></div>
+
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button type="button" id="fsSubmitBtn" class="btn btn-add"><i class="fa fa-plus" style="margin-right:8px;"></i> Add Feature Slider</button>
+                            <a asp-area="Admin" asp-controller="FeatureSlider" asp-action="Index" class="btn btn-default btn-cancel">Cancel</a>
+                        </div>
+
+                        <script>
+                            (function(){
+                                var btn = document.getElementById('fsSubmitBtn');
+                                var fileInput = document.getElementById('fsImageFile');
+                                var formEl = document.getElementById('fsCreateForm');
+                                var fileNameText = document.getElementById('fsFileNameText');
+                                var previewImg = document.getElementById('fsImagePreview');
+                                if (fileInput && fileNameText){
+                                    fileInput.addEventListener('change', function(){
+                                        var f = (fileInput.files && fileInput.files[0]) ? fileInput.files[0] : null;
+                                        fileNameText.textContent = f ? f.name : 'No file chosen';
+                                        if (previewImg){
+                                            if (f){ previewImg.src = URL.createObjectURL(f); previewImg.style.display = 'inline-block'; }
+                                            else { previewImg.removeAttribute('src'); previewImg.style.display = 'none'; }
+                                        }
+                                    });
+                                }
+                                if(!btn || !formEl) return;
+                                btn.addEventListener('click', function(){
+                                    var errBox = document.getElementById('fsUploadError');
+                                    if (errBox) { errBox.style.display = 'none'; errBox.textContent = ''; }
+                                    var file = fileInput && fileInput.files && fileInput.files[0];
+                                    if(!file){ formEl.submit(); return; }
+                                    btn.disabled = true; var originalText = btn.innerHTML; btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Uploading...';
+                                    var data = new FormData();
+                                    data.append('file', file);
+                                    fetch('/Admin/FeatureSlider/UploadImage', { method:'POST', body:data })
+                                        .then(function(r){ return r.ok ? r.json() : r.text().then(function(t){ throw new Error(t || ('HTTP '+r.status)); }); })
+                                        .then(function(res){
+                                            var p = Promise.resolve(null);
+                                            if (res && res.fileName){
+                                                p = fetch('/Admin/FeatureSlider/GetSignedUrl?fileName='+encodeURIComponent(res.fileName)+'&minutes=10080')
+                                                    .then(function(r){ return r.ok ? r.json() : null; })
+                                                    .catch(function(){ return null; });
+                                            }
+                                            return p.then(function(signed){
+                                                var imageInput = document.querySelector('input[name="ImageUrl"]');
+                                                if (imageInput){
+                                                    if (signed && signed.signedUrl){ imageInput.value = signed.signedUrl; }
+                                                    else if(res && res.url){ imageInput.value = res.url; }
+                                                }
+                                                formEl.submit();
+                                            });
+                                        })
+                                        .catch(function(e){
+                                            if (errBox) { errBox.textContent = 'Image upload failed. '+ (e && e.message ? e.message : ''); errBox.style.display = 'block'; }
+                                            btn.disabled = false; btn.innerHTML = originalText;
+                                        });
+                                });
+                            })();
+                        </script>
                     </form>
 
                 </div>

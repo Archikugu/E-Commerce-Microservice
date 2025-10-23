@@ -10,12 +10,44 @@
 <section class="content container-fluid">
 	<div class="row">
 		<div class="col-md-12">
-			<div class="chart-box">
-				<h4>Brand List</h4>
-				<p>This table displays all existing brands in the system. You can view products within each brand, update brand details, or remove brands as needed.</p>
-
-				<div class="bs-example" data-example-id="simple-table">
-					<table class="table">
+            <div class="chart-box">
+                <style>
+                    .chart-box{ border-radius:8px; border:1px solid rgba(0,0,0,.08); overflow:hidden; }
+                    .page-header { display:flex; align-items:center; justify-content:space-between; margin:0 0 12px 0; }
+                    .page-header h4 { margin:0; font-weight:600; }
+                    .table .btn { border-radius:16px; padding:6px 10px; }
+                    .btn-update{ background:#ffc107; border-color:#ffc107; color:#212529; }
+                    .btn-delete{ background:#dc3545; border-color:#dc3545; color:#fff; }
+                    .btn-add{ background:#198754; border-color:#198754; color:#fff; border-radius:20px; padding:8px 14px; transition:all .15s ease; box-shadow:0 2px 6px rgba(25,135,84,.18); }
+                    .btn-add:hover{ background:#157347; border-color:#157347; color:#fff; box-shadow:0 6px 16px rgba(25,135,84,.35); transform: translateY(-1px); text-decoration:none; }
+                    .header-controls{ display:flex; align-items:center; gap:8px; flex-wrap:nowrap; }
+                    .items-per-page-select{ display:inline-block; width:auto; padding:4px 10px; height:32px; line-height:20px; border:1px solid rgba(0,0,0,.15); border-radius:16px; background-color:#fff; color:#212529; }
+                    .items-per-page-label{ font-size:12px; }
+                    .table > thead > tr > th,
+                    .table > tbody > tr > th,
+                    .table > tbody > tr > td { vertical-align: middle; }
+                </style>
+                <div class="page-header">
+                    <h4>Brand List</h4>
+                    <div class="header-controls">
+                        <form method="get" style="display:flex; align-items:center; gap:6px; margin:0;">
+                            <input type="hidden" name="pageNumber" value="1" />
+                            @{
+                                int curSize = (int)(ViewBag.PageSize ?? 10);
+                            }
+                            <label class="text-muted items-per-page-label" style="margin:0;">Items per page</label>
+                            <select name="pageSize" class="form-control items-per-page-select" onchange="this.form.submit()">
+                                <option value="5" selected="@(curSize==5 ? "selected" : null)">5</option>
+                                <option value="10" selected="@(curSize==10 ? "selected" : null)">10</option>
+                                <option value="25" selected="@(curSize==25 ? "selected" : null)">25</option>
+                                <option value="50" selected="@(curSize==50 ? "selected" : null)">50</option>
+                                <option value="100" selected="@(curSize==100 ? "selected" : null)">100</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+                <div class="bs-example" data-example-id="simple-table">
+                    <table class="table table-striped table-hover">
 						<thead>
 							<tr>
 								<th>#</th>
@@ -35,23 +67,46 @@
 									<td>
 										@if (!string.IsNullOrEmpty(item.ImageUrl))
 										{
-											<img src="@item.ImageUrl" alt="@item.BrandName" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;" />
+                                            <img src="@item.ImageUrl" alt="@item.BrandName" style="width: 80px; height: 60px; object-fit: cover; border-radius: 6px; border:1px solid rgba(0,0,0,.05);" />
 										}
 										else
 										{
 											<span class="text-muted">No Image</span>
 										}
 									</td>
-									<td><a asp-area="Admin" asp-controller="Brand" asp-action="DeleteBrand" asp-route-id="@item.BrandId" class="btn btn-danger">Delete</a></td>
-									<td><a asp-area="Admin" asp-controller="Brand" asp-action="UpdateBrand" asp-route-id="@item.BrandId" class="btn btn-warning">Update</a></td>
+                                    <td><a asp-area="Admin" asp-controller="Brand" asp-action="DeleteBrand" asp-route-id="@item.BrandId" class="btn btn-delete btn-sm"><i class="fa fa-trash"></i> Delete</a></td>
+                                    <td><a asp-area="Admin" asp-controller="Brand" asp-action="UpdateBrand" asp-route-id="@item.BrandId" class="btn btn-update btn-sm"><i class="fa fa-edit"></i> Update</a></td>
 								</tr>
 							}
 						</tbody>
 					</table>
-
-					<a asp-area="Admin" asp-controller="Brand" asp-action="CreateBrand" class="btn btn-success">
-						Add New Brand
-					</a>
+                    <div style="text-align:center; margin-top:16px;">
+                        <nav aria-label="Brand pagination" style="display:inline-block;">
+                            <ul class="pagination pagination-sm" style="margin:0; display:inline-flex;">
+                                @{
+                                    int pageNumber = (int)(ViewBag.PageNumber ?? 1);
+                                    int pageSize = (int)(ViewBag.PageSize ?? 10);
+                                    int totalItems = (int)(ViewBag.TotalItems ?? 0);
+                                    int totalPages = Math.Max(1, (int)Math.Ceiling((double)totalItems / Math.Max(1, pageSize)));
+                                    int prev = Math.Max(1, pageNumber - 1);
+                                    int next = Math.Min(totalPages, pageNumber + 1);
+                                    int start = Math.Max(1, pageNumber - 2);
+                                    int end = Math.Min(totalPages, start + 4);
+                                }
+                                <li class="@(pageNumber == 1 ? "disabled" : null)"><a asp-area="Admin" asp-controller="Brand" asp-action="Index" asp-route-pageNumber="1" asp-route-pageSize="@pageSize">First</a></li>
+                                <li class="@(pageNumber == 1 ? "disabled" : null)"><a asp-area="Admin" asp-controller="Brand" asp-action="Index" asp-route-pageNumber="@prev" asp-route-pageSize="@pageSize">Prev</a></li>
+                                @for (int i = start; i <= end; i++)
+                                {
+                                    <li class="@(i == pageNumber ? "active" : null)"><a asp-area="Admin" asp-controller="Brand" asp-action="Index" asp-route-pageNumber="@i" asp-route-pageSize="@pageSize">@i</a></li>
+                                }
+                                <li class="@(pageNumber == totalPages ? "disabled" : null)"><a asp-area="Admin" asp-controller="Brand" asp-action="Index" asp-route-pageNumber="@next" asp-route-pageSize="@pageSize">Next</a></li>
+                                <li class="@(pageNumber == totalPages ? "disabled" : null)"><a asp-area="Admin" asp-controller="Brand" asp-action="Index" asp-route-pageNumber="@totalPages" asp-route-pageSize="@pageSize">Last</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <div style="text-align:right; margin-top:12px;">
+                        <a asp-area="Admin" asp-controller="Brand" asp-action="CreateBrand" class="btn btn-add"><i class="fa fa-plus" style="margin-right:8px;"></i> Add New Brand</a>
+                    </div>
 				</div>
 			</div>
 		</div>

@@ -19,12 +19,14 @@ public class ProductImagesController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> ProductImageList()
     {
         var values = await _ProductImageService.GetAllProductImageAsync();
         return Ok(values);
     }
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetProductImageById(string id)
     {
         var values = await _ProductImageService.GetByIdProductImageAsync(id);
@@ -32,6 +34,7 @@ public class ProductImagesController : ControllerBase
     }
 
     [HttpGet("ProductImagesByProductId/{productId}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetProductImagesByProductId(string productId)
     {
         var values = await _ProductImageService.GetProductImagesByProductIdAsync(productId);
@@ -39,6 +42,7 @@ public class ProductImagesController : ControllerBase
     }
 
     [HttpGet("ProductImageSliderByProductId/{productId}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetProductImageSliderByProductId(string productId)
     {
         var values = await _ProductImageService.GetProductImageSliderByProductIdAsync(productId);

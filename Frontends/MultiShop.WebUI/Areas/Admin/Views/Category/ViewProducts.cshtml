@@ -11,11 +11,47 @@
     <div class="row">
         <div class="col-md-12">
             <div class="chart-box">
-                <h4>Products in Category: @ViewBag.CategoryName</h4>
-                <p>This table displays all products within the selected category.</p>
+                <style>
+                    .chart-box{ border-radius:8px; border:1px solid rgba(0,0,0,.08); overflow:hidden; }
+                    .product-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; border:1px solid rgba(0,0,0,.05); transition: transform .2s ease, box-shadow .2s ease; }
+                    .product-thumb:hover { transform: scale(1.05); box-shadow:0 6px 16px rgba(0,0,0,.15); }
+                    .btn-update{ background:#ffc107; border-color:#ffc107; color:#212529; border-radius:16px; padding:6px 10px; }
+                    .btn-delete{ background:#dc3545; border-color:#dc3545; color:#fff; border-radius:16px; padding:6px 10px; }
+                    .btn.btn-back{ border-radius:24px; border:1px solid #0d6efd; color:#fff; background:#0d6efd; padding:8px 14px; transition: all .15s ease; box-shadow:0 2px 6px rgba(13,110,253,.18); }
+                    .btn.btn-back:hover{ background:#0b5ed7; border-color:#0b5ed7; color:#fff; box-shadow:0 6px 16px rgba(13,110,253,.35); transform: translateY(-1px); text-decoration:none; }
+                    .btn.btn-back i{ margin-right:8px; transition: transform .15s ease; }
+                    .btn.btn-back:hover i{ transform: translateX(-2px); }
+                    .page-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+                    .page-header h4 { margin:0; font-weight:600; }
+                    .price-badge { font-size:14px; padding:4px 8px; border-radius:16px; display:inline-block; }
+                    .items-per-page-select{ display:inline-block; width:auto; padding:4px 10px; height:32px; line-height:20px; border:1px solid rgba(0,0,0,.15); border-radius:16px; background-color:#fff; color:#212529; }
+                    .items-per-page-label{ font-size:12px; }
+                    .table > thead > tr > th,
+                    .table > tbody > tr > th,
+                    .table > tbody > tr > td { vertical-align: middle; }
+                </style>
+
+                <div class="page-header">
+                    <h4>Products in Category : <span class="label label-primary" style="background:#0d6efd;">@ViewBag.CategoryName</span></h4>
+                    <form method="get" style="margin-left:auto; display:flex; align-items:center; gap:6px;">
+                        <input type="hidden" name="id" value="@((string)(ViewBag.CategoryId ?? ""))" />
+                        <input type="hidden" name="pageNumber" value="1" />
+                        @{
+                            int curSize = (int)(ViewBag.PageSize ?? 10);
+                        }
+                        <label class="text-muted items-per-page-label" style="margin:0;">Items per page</label>
+                        <select name="pageSize" class="form-control items-per-page-select" onchange="this.form.submit()">
+                            <option value="5" selected="@(curSize==5 ? "selected" : null)">5</option>
+                            <option value="10" selected="@(curSize==10 ? "selected" : null)">10</option>
+                            <option value="25" selected="@(curSize==25 ? "selected" : null)">25</option>
+                            <option value="50" selected="@(curSize==50 ? "selected" : null)">50</option>
+                            <option value="100" selected="@(curSize==100 ? "selected" : null)">100</option>
+                        </select>
+                    </form>
+                </div>
 
                 <div class="bs-example" data-example-id="simple-table">
-                    <table class="table">
+                    <table class="table table-striped table-hover">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -37,11 +73,11 @@
                                     <tr>
                                         <th scope="row">@count</th>
                                         <td>@item.ProductName</td>
-                                        <td>@item.Price.ToString("C")</td>
+                                        <td><span class="label label-success price-badge" style="background:#28a745;">@item.Price.ToString("C")</span></td>
                                         <td>
                                             @if (!string.IsNullOrEmpty(item.ImageUrl))
                                             {
-                                                <img src="@item.ImageUrl" alt="@item.ProductName" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;" />
+                                                <img src="@item.ImageUrl" alt="@item.ProductName" class="product-thumb" />
                                             }
                                             else
                                             {
@@ -52,15 +88,23 @@
                                         <td>
                                             @if (!string.IsNullOrEmpty(item.Description) && item.Description.Length > 50)
                                             {
-                                                @(item.Description.Substring(0, 50) + "...")
+                                                <span title="@item.Description">@(item.Description.Substring(0, 50) + "...")</span>
                                             }
                                             else
                                             {
                                                 @item.Description
                                             }
                                         </td>
-                                        <td><a asp-area="Admin" asp-controller="Product" asp-action="DeleteProduct" asp-route-id="@item.ProductId" class="btn btn-danger">Delete</a></td>
-                                        <td><a asp-area="Admin" asp-controller="Product" asp-action="UpdateProduct" asp-route-id="@item.ProductId" class="btn btn-warning">Update</a></td>
+                                        <td>
+                                            <a asp-area="Admin" asp-controller="Product" asp-action="DeleteProduct" asp-route-id="@item.ProductId" class="btn btn-delete btn-sm" onclick="return confirm('Are you sure you want to delete this product?');">
+                                                <i class="fa fa-trash"></i> Delete
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a asp-area="Admin" asp-controller="Product" asp-action="UpdateProduct" asp-route-id="@item.ProductId" class="btn btn-update btn-sm">
+                                                <i class="fa fa-edit"></i> Update
+                                            </a>
+                                        </td>
                                     </tr>
                                 }
                             }
@@ -73,8 +117,35 @@
                         </tbody>
                     </table>
 
-                    <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-secondary">
-                        Back to Categories
+                    <div style="text-align:center; margin-top:16px;">
+                        <nav aria-label="Products pagination" style="display:inline-block;">
+                            <ul class="pagination pagination-sm" style="margin:0; display:inline-flex;">
+                                @{
+                                    int pageNumber = (int)(ViewBag.PageNumber ?? 1);
+                                    int pageSize = (int)(ViewBag.PageSize ?? 10);
+                                    int totalItems = (int)(ViewBag.TotalItems ?? 0);
+                                    int totalPages = Math.Max(1, (int)Math.Ceiling((double)totalItems / Math.Max(1, pageSize)));
+                                    int prev = Math.Max(1, pageNumber - 1);
+                                    int next = Math.Min(totalPages, pageNumber + 1);
+                                    int start = Math.Max(1, pageNumber - 2);
+                                    int end = Math.Min(totalPages, start + 4);
+                                    string catId = (string)(ViewBag.CategoryId ?? "");
+                                }
+                                <li class="@(pageNumber == 1 ? "disabled" : null)"><a asp-area="Admin" asp-controller="Category" asp-action="ViewProducts" asp-route-id="@catId" asp-route-pageNumber="1" asp-route-pageSize="@pageSize">First</a></li>
+                                <li class="@(pageNumber == 1 ? "disabled" : null)"><a asp-area="Admin" asp-controller="Category" asp-action="ViewProducts" asp-route-id="@catId" asp-route-pageNumber="@prev" asp-route-pageSize="@pageSize">Prev</a></li>
+                                @for (int i = start; i <= end; i++)
+                                {
+                                    <li class="@(i == pageNumber ? "active" : null)"><a asp-area="Admin" asp-controller="Category" asp-action="ViewProducts" asp-route-id="@catId" asp-route-pageNumber="@i" asp-route-pageSize="@pageSize">@i</a></li>
+                                }
+                                <li class="@(pageNumber == totalPages ? "disabled" : null)"><a asp-area="Admin" asp-controller="Category" asp-action="ViewProducts" asp-route-id="@catId" asp-route-pageNumber="@next" asp-route-pageSize="@pageSize">Next</a></li>
+                                <li class="@(pageNumber == totalPages ? "disabled" : null)"><a asp-area="Admin" asp-controller="Category" asp-action="ViewProducts" asp-route-id="@catId" asp-route-pageNumber="@totalPages" asp-route-pageSize="@pageSize">Last</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+                <div style="margin-top:12px;">
+                    <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="btn btn-default btn-back">
+                        <i class="fa fa-arrow-left"></i> Back to Categories
                     </a>
                 </div>
             </div>

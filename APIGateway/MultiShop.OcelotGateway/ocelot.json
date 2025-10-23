@@ -134,6 +134,12 @@
             "AuthenticationOptions": {
                 "AuthenticationProviderKey": "OcelotAuthenticationScheme",
                 "AllowedScopes": ["ImagesFullPermission"]
+            },
+            "HttpHandlerOptions": {
+                "AllowAutoRedirect": false,
+                "UseCookieContainer": false,
+                "UseProxy": false,
+                "DangerousAcceptAnyServerCertificateValidator": true
             }
         },
         {

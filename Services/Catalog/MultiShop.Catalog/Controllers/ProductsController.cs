@@ -19,12 +19,14 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public async Task<IActionResult> ProductsList()
     {
         var values = await _ProductsService.GetAllProductAsync();
         return Ok(values);
     }
     [HttpGet("{id}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetProductsById(string id)
     {
         var values = await _ProductsService.GetByIdProductAsync(id);
@@ -52,6 +54,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("GetProductsWithCategory")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetProductsWithCategory()
     {
         var values = await _ProductsService.GetProductsWithCategoryAsync();
@@ -59,6 +62,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("GetProductsWithCategoryByCategoryId/{categoryId}")]
+    [AllowAnonymous]
     public async Task<IActionResult> GetProductsWithCategoryByCategoryId(string categoryId)
     {
         var values = await _ProductsService.GetProductsWithCategoryByCategoryIdAsync(categoryId);

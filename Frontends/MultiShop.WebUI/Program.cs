@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using Microsoft.AspNetCore.Localization;
 using MultiShop.WebUI.Handlers;
 using MultiShop.WebUI.Services.Abstract;
@@ -68,7 +69,14 @@ public class Program
         builder.Services.AddHttpClient();
 
         // Add services to the container.
-        builder.Services.AddControllersWithViews();
+        if (builder.Environment.IsDevelopment())
+        {
+            builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+        }
+        else
+        {
+            builder.Services.AddControllersWithViews();
+        }
 
         // Add Memory Cache
         builder.Services.AddMemoryCache();

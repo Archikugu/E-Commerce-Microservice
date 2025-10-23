@@ -11,19 +11,49 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="chart-box">
-				<h4>Category List</h4>
-				<p>This table displays all existing categories in the system. You can view products within each category, update category details, or remove categories as needed.</p>
-
+				<style>
+					.chart-box{ border-radius:8px; border:1px solid rgba(0,0,0,.08); overflow:hidden; }
+					.table .btn { border-radius: 16px; padding: 6px 10px; }
+					.btn-view{ background:#0dcaf0; border-color:#0dcaf0; color:#fff; }
+					.btn-update{ background:#ffc107; border-color:#ffc107; color:#212529; }
+					.btn-delete{ background:#dc3545; border-color:#dc3545; color:#fff; }
+					.btn-add{ background:#198754; border-color:#198754; color:#fff; border-radius:20px; padding:8px 14px; transition:all .15s ease; box-shadow:0 2px 6px rgba(25,135,84,.18); }
+					.btn-add:hover{ background:#157347; border-color:#157347; color:#fff; box-shadow:0 6px 16px rgba(25,135,84,.35); transform: translateY(-1px); text-decoration:none; }
+					.category-thumb{ transition: transform .2s ease, box-shadow .2s ease; border-radius:6px; }
+					.category-thumb:hover{ transform: scale(1.05); box-shadow:0 6px 16px rgba(0,0,0,.15); }
+					.items-per-page-select{ display:inline-block; width:auto; padding:4px 10px; height:32px; line-height:20px; border:1px solid rgba(0,0,0,.15); border-radius:16px; background-color:#fff; color:#212529; }
+					.items-per-page-label{ font-size:12px; }
+					.table > thead > tr > th,
+					.table > tbody > tr > th,
+					.table > tbody > tr > td { vertical-align: middle; }
+				</style>
+				<div class="clearfix" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+					<h3 style="margin:0; font-weight:600;">Categories</h3>
+					<form method="get" style="margin-left:auto; display:flex; align-items:center; gap:6px;">
+						<input type="hidden" name="pageNumber" value="1" />
+						@{
+							int curSize = (int)(ViewBag.PageSize ?? 10);
+						}
+						<label class="text-muted items-per-page-label" style="margin:0;">Items per page</label>
+						<select name="pageSize" class="form-control items-per-page-select" onchange="this.form.submit()">
+							<option value="5" selected="@(curSize==5 ? "selected" : null)">5</option>
+							<option value="10" selected="@(curSize==10 ? "selected" : null)">10</option>
+							<option value="25" selected="@(curSize==25 ? "selected" : null)">25</option>
+							<option value="50" selected="@(curSize==50 ? "selected" : null)">50</option>
+							<option value="100" selected="@(curSize==100 ? "selected" : null)">100</option>
+						</select>
+					</form>
+				</div>
 				<div class="bs-example" data-example-id="simple-table">
-					<table class="table">
+					<table class="table table-striped table-hover" style="margin-bottom:0;">
 						<thead>
 							<tr>
-								<th>#</th>
+								<th style="width:60px;">#</th>
 								<th>Category Name</th>
-								<th>Image</th>
-								<th>Products in This Category</th>
-								<th>Delete</th>
-								<th>Update</th>
+								<th style="width:120px;">Image</th>
+								<th style="width:190px;">Products</th>
+								<th style="width:110px;">Update</th>
+								<th style="width:100px;">Delete</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -32,27 +62,64 @@
 								count++;
 								<tr>
 									<th scope="row">@count</th>
-									<td>@item.CategoryName</td>
+									<td style="font-weight:500;">@item.CategoryName</td>
 									<td>
 										@if (!string.IsNullOrEmpty(item.ImageUrl))
 										{
-											<img src="@item.ImageUrl" alt="@item.CategoryName" style="width: 80px; height: 60px; object-fit: cover; border-radius: 4px;" />
+											<img src="@item.ImageUrl" alt="@item.CategoryName" class="category-thumb" style="width: 80px; height: 60px; object-fit: cover; border:1px solid rgba(0,0,0,.05);" />
 										}
 										else
 										{
 											<span class="text-muted">No Image</span>
 										}
 									</td>
-									<td><a asp-area="Admin" asp-controller="Category" asp-action="ViewProducts" asp-route-id="@item.CategoryId" class="btn btn-primary">View Products</a></td>
-									<td><a asp-area="Admin" asp-controller="Category" asp-action="DeleteCategory" asp-route-id="@item.CategoryId" class="btn btn-danger">Delete</a></td>
-									<td><a asp-area="Admin" asp-controller="Category" asp-action="UpdateCategory" asp-route-id="@item.CategoryId" class="btn btn-warning">Update</a></td>
+									<td>
+									<a asp-area="Admin" asp-controller="Category" asp-action="ViewProducts" asp-route-id="@item.CategoryId" class="btn btn-view btn-sm">
+											<i class="fa fa-list"></i> View Products
+										</a>
+									</td>
+									<td>
+									<a asp-area="Admin" asp-controller="Category" asp-action="UpdateCategory" asp-route-id="@item.CategoryId" class="btn btn-update btn-sm">
+											<i class="fa fa-edit"></i> Update
+										</a>
+									</td>
+									<td>
+									<a asp-area="Admin" asp-controller="Category" asp-action="DeleteCategory" asp-route-id="@item.CategoryId" class="btn btn-delete btn-sm" onclick="return confirm('Are you sure you want to delete this category?');">
+											<i class="fa fa-trash"></i> Delete
+										</a>
+									</td>
 								</tr>
 							}
 						</tbody>
 					</table>
-
-					<a asp-area="Admin" asp-controller="Category" asp-action="CreateCategory" class="btn btn-success">
-						Add New Category
+				</div>
+				<div style="text-align:center; margin-top:16px;">
+					<nav aria-label="Category pagination" style="display:inline-block;">
+						<ul class="pagination pagination-sm" style="margin:0; display:inline-flex;">
+                            @{
+                                int pageNumber = (int)(ViewBag.PageNumber ?? 1);
+                                int pageSize = (int)(ViewBag.PageSize ?? 10);
+                                int totalItems = (int)(ViewBag.TotalItems ?? 0);
+                                int totalPages = Math.Max(1, (int)Math.Ceiling((double)totalItems / Math.Max(1, pageSize)));
+                                int prev = Math.Max(1, pageNumber - 1);
+                                int next = Math.Min(totalPages, pageNumber + 1);
+                                int start = Math.Max(1, pageNumber - 2);
+                                int end = Math.Min(totalPages, start + 4);
+                            }
+                            <li class="@(pageNumber == 1 ? "disabled" : null)"><a asp-area="Admin" asp-controller="Category" asp-action="Index" asp-route-pageNumber="1" asp-route-pageSize="@pageSize">First</a></li>
+                            <li class="@(pageNumber == 1 ? "disabled" : null)"><a asp-area="Admin" asp-controller="Category" asp-action="Index" asp-route-pageNumber="@prev" asp-route-pageSize="@pageSize">Prev</a></li>
+                            @for (int i = start; i <= end; i++)
+                            {
+                                <li class="@(i == pageNumber ? "active" : null)"><a asp-area="Admin" asp-controller="Category" asp-action="Index" asp-route-pageNumber="@i" asp-route-pageSize="@pageSize">@i</a></li>
+                            }
+                            <li class="@(pageNumber == totalPages ? "disabled" : null)"><a asp-area="Admin" asp-controller="Category" asp-action="Index" asp-route-pageNumber="@next" asp-route-pageSize="@pageSize">Next</a></li>
+                            <li class="@(pageNumber == totalPages ? "disabled" : null)"><a asp-area="Admin" asp-controller="Category" asp-action="Index" asp-route-pageNumber="@totalPages" asp-route-pageSize="@pageSize">Last</a></li>
+                        </ul>
+					</nav>
+                </div>
+				<div style="text-align:right; margin-top:12px;">
+					<a asp-area="Admin" asp-controller="Category" asp-action="CreateCategory" class="btn btn-add">
+						<i class="fa fa-plus" style="margin-right:8px;"></i> Add New Category
 					</a>
 				</div>
 			</div>
