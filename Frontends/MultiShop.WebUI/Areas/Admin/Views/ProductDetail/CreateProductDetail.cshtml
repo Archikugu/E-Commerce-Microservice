@@ -9,26 +9,43 @@
 	<div class="row">
 
 		<div class="col-md-12">
-			<div class="chart-box">
-				<h4>Product Detail Creation Page</h4>
-				<br />
-				<div class="bs-example" data-example-id="bordered-table">
-
-					<form method="post">
-						<label>Product</label>
-						@Html.DropDownListFor(x => x.ProductId, (List<SelectListItem>)ViewBag.Products, new { @style = "padding:0;", @class = "form-control" })
-						<br />
-						<label>Description</label>
-						<textarea class="form-control" asp-for="Description" rows="5"></textarea>
-						<br />
-						<label>Info</label>
-						<textarea class="form-control" asp-for="Info" rows="5"></textarea>
-						<br />
-						<button class="btn btn-success">Add Product Detail</button>
-					</form>
-
-				</div>
-			</div>
+            <div class="chart-box">
+                <style>
+                    .chart-box{ border-radius:8px; border:1px solid rgba(0,0,0,.08); overflow:hidden; }
+                    .page-header { display:flex; align-items:center; justify-content:space-between; margin:0 0 12px 0; }
+                    .page-header h4 { margin:0; font-weight:600; }
+                    .form-group{ margin-bottom:12px; }
+                    .form-control{ border-radius:8px; border:1px solid rgba(0,0,0,.15); box-shadow:none; }
+                    .form-control:focus{ border-color:#0d6efd; box-shadow:0 0 0 .1rem rgba(13,110,253,.15); }
+                    .btn-add{ background:#198754; border-color:#198754; color:#fff; border-radius:20px; padding:8px 14px; transition:all .15s ease; box-shadow:0 2px 6px rgba(25,135,84,.18); }
+                    .btn-add:hover{ background:#157347; border-color:#157347; color:#fff; box-shadow:0 6px 16px rgba(25,135,84,.35); transform: translateY(-1px); text-decoration:none; }
+                    .btn-cancel{ border-radius:20px; padding:8px 14px; }
+                </style>
+                <div class="page-header">
+                    <h4>Create Product Detail</h4>
+                    <a asp-area="Admin" asp-controller="ProductDetail" asp-action="Index" class="btn btn-default btn-cancel"><i class="fa fa-arrow-left"></i> Back</a>
+                </div>
+                <div class="bs-example" data-example-id="bordered-table">
+                    <form method="post">
+                        <div class="form-group">
+                            <label>Product</label>
+                            @Html.DropDownListFor(x => x.ProductId, (List<SelectListItem>)ViewBag.Products, new { @style = "padding:0;", @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" asp-for="Description" rows="5"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Info</label>
+                            <textarea class="form-control" asp-for="Info" rows="5"></textarea>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button class="btn btn-add"><i class="fa fa-save" style="margin-right:8px;"></i> Add Product Detail</button>
+                            <a asp-area="Admin" asp-controller="ProductDetail" asp-action="Index" class="btn btn-default btn-cancel">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
 		</div>
 	</div>
 </section>

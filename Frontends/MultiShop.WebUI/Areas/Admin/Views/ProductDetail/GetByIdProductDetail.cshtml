@@ -9,7 +9,18 @@
     <div class="row">
         <div class="col-md-12">
             <div class="chart-box">
-                <h4>Product Detail Information</h4>
+                <style>
+                    .chart-box{ border-radius:8px; border:1px solid rgba(0,0,0,.08); overflow:hidden; }
+                    .page-header { display:flex; align-items:center; justify-content:space-between; margin:0 0 12px 0; }
+                    .page-header h4 { margin:0; font-weight:600; }
+                    .btn-cancel{ border-radius:20px; padding:8px 14px; }
+                </style>
+                <div class="page-header">
+                    <h4>Product Detail Information</h4>
+                    <div>
+                        <a asp-area="Admin" asp-controller="ProductDetail" asp-action="Index" class="btn btn-default btn-cancel"><i class="fa fa-arrow-left"></i> Back</a>
+                    </div>
+                </div>
                 <div class="bs-example" data-example-id="bordered-table">
                     <table class="table table-bordered">
                         <tbody>
@@ -32,9 +43,9 @@
                         </tbody>
                     </table>
 
-                    <div class="form-group">
-                        <a asp-area="Admin" asp-controller="ProductDetail" asp-action="UpdateProductDetail" asp-route-id="@Model.ProductDetailId" class="btn btn-warning">Update</a>
-                        <a asp-area="Admin" asp-controller="ProductDetail" asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <div class="form-group" style="display:flex; align-items:center; gap:8px;">
+                        <a asp-area="Admin" asp-controller="ProductDetail" asp-action="UpdateProductDetail" asp-route-id="@Model.ProductDetailId" class="btn btn-warning" style="border-radius:20px;"><i class="fa fa-edit"></i> Update</a>
+                        <a asp-area="Admin" asp-controller="ProductDetail" asp-action="Index" class="btn btn-default btn-cancel">Back to List</a>
                     </div>
                 </div>
             </div>
