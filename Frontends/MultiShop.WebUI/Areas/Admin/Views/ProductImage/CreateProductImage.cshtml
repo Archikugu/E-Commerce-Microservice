@@ -66,8 +66,24 @@
                         var input = document.createElement('input');
                         input.type = 'text'; input.value = url; input.className = 'form-control';
                         input.readOnly = true; input.style.flex = '1';
-                        wrap.appendChild(img); wrap.appendChild(input);
+                        var hidden = document.createElement('input');
+                        hidden.type='hidden'; hidden.name='Images[0]'; hidden.value=url; // name reindexed later
+                        var rm = document.createElement('button');
+                        rm.type='button'; rm.className='btn btn-danger remove-image'; rm.textContent='Remove';
+                        wrap.appendChild(img);
+                        wrap.appendChild(input);
+                        wrap.appendChild(hidden);
+                        wrap.appendChild(rm);
                         fileList.appendChild(wrap);
+                        reindexHidden();
+                    }
+
+                    function reindexHidden(){
+                        var hiddens = fileList.querySelectorAll('input[type="hidden"][name^="Images["]');
+                        hiddens.forEach(function(h, idx){ h.name = 'Images['+ idx +']'; });
+                        // Show remove button even if only one item exists
+                        var rms = fileList.querySelectorAll('.remove-image');
+                        rms.forEach(function(b){ b.style.display = 'inline-block'; });
                     }
 
                     addBtn.addEventListener('click', function(){
@@ -89,12 +105,7 @@
                                     }
                                     return p.then(function(signed){
                                         var url = signed && signed.signedUrl ? signed.signedUrl : (res && res.url ? res.url : null);
-                                        if (url){
-                                            addPreview(url);
-                                            var h = document.createElement('input');
-                                            h.type='hidden'; h.name='Images['+ (hiddenUrlContainer.children.length) +']'; h.value=url;
-                                            hiddenUrlContainer.appendChild(h);
-                                        }
+                                        if (url){ addPreview(url); }
                                         uploadNext(i+1);
                                     });
                                 })
@@ -104,6 +115,14 @@
                                 });
                         })(0);
                     });
+
+                    // Delegated remove for dynamically added rows
+                    fileList.addEventListener('click', function(e){
+                        if (e.target && e.target.classList.contains('remove-image')){
+                            var host = e.target.closest('.upload-item');
+                            if (host){ host.remove(); reindexHidden(); }
+                        }
+                    });
                 })();
                 </script>
             </div>
@@ -112,45 +131,50 @@
 </section>
 
 <script>
-	let imageIndex = 1;
-	
-	document.getElementById('addImageBtn').addEventListener('click', function() {
-		const container = document.getElementById('imageContainer');
-		const newDiv = document.createElement('div');
-		newDiv.className = 'image-input-group mb-2';
-		newDiv.innerHTML = `
-			<div class="input-group">
-				<input type="text" name="Images[${imageIndex}]" class="form-control" placeholder="Enter image URL" />
-				<div class="input-group-append">
-					<button type="button" class="btn btn-danger remove-image">Remove</button>
-				</div>
-			</div>
-		`;
-		container.appendChild(newDiv);
-		imageIndex++;
-		updateRemoveButtons();
-	});
-	
-	document.addEventListener('click', function(e) {
-		if (e.target.classList.contains('remove-image')) {
-			e.target.closest('.image-input-group').remove();
-			updateIndexes();
-			updateRemoveButtons();
-		}
-	});
-	
-	function updateIndexes() {
-		const inputs = document.querySelectorAll('#imageContainer input[type="text"]');
-		inputs.forEach((input, index) => {
-			input.name = `Images[${index}]`;
-		});
-		imageIndex = inputs.length;
-	}
-	
-	function updateRemoveButtons() {
-		const removeButtons = document.querySelectorAll('.remove-image');
-		removeButtons.forEach(button => {
-			button.style.display = removeButtons.length > 1 ? 'block' : 'none';
-		});
-	}
+    (function(){
+        let imageIndex = 1;
+        const addBtn = document.getElementById('addImageBtn');
+        const container = document.getElementById('imageContainer');
+        if (!addBtn || !container) return; // guard: optional legacy controls not present
+
+        addBtn.addEventListener('click', function() {
+            const newDiv = document.createElement('div');
+            newDiv.className = 'image-input-group mb-2';
+            newDiv.innerHTML = `
+                <div class="input-group">
+                    <input type="text" name="Images[${imageIndex}]" class="form-control" placeholder="Enter image URL" />
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-danger remove-image">Remove</button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(newDiv);
+            imageIndex++;
+            updateRemoveButtons();
+        });
+
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-image')) {
+                const host = e.target.closest('.image-input-group');
+                if (host) host.remove();
+                updateIndexes();
+                updateRemoveButtons();
+            }
+        });
+
+        function updateIndexes() {
+            const inputs = document.querySelectorAll('#imageContainer input[type="text"]');
+            inputs.forEach((input, index) => {
+                input.name = `Images[${index}]`;
+            });
+            imageIndex = inputs.length;
+        }
+        
+        function updateRemoveButtons() {
+            const removeButtons = document.querySelectorAll('.remove-image');
+            removeButtons.forEach(button => {
+                button.style.display = removeButtons.length > 1 ? 'block' : 'none';
+            });
+        }
+    })();
 </script>

@@ -91,7 +91,28 @@ public class CloudStorageService : ICloudStorageService
         catch (Exception ex)
         {
             _logger.LogError($"Error while uploading file {fileNameToSave}: {ex.Message}");
-            throw;
+            // DEV FALLBACK: write to local wwwroot when GCS not reachable (e.g., DNS outage)
+            try
+            {
+                var root = Path.Combine(AppContext.BaseDirectory, "wwwroot", "uploads");
+                if (!Directory.Exists(root)) Directory.CreateDirectory(root);
+                var localPath = Path.Combine(root, fileNameToSave);
+                using (var fs = new FileStream(localPath, FileMode.Create, FileAccess.Write, FileShare.None))
+                {
+                    await fileToUpload.CopyToAsync(fs);
+                }
+                var baseUrl = _options.FallbackBaseUrl?.TrimEnd('/') ?? string.Empty; // e.g., https://localhost:7008
+                var publicUrl = string.IsNullOrEmpty(baseUrl)
+                    ? $"/uploads/{fileNameToSave}"
+                    : $"{baseUrl}/uploads/{fileNameToSave}";
+                _logger.LogWarning($"GCS unavailable. Saved locally: {publicUrl}");
+                return publicUrl;
+            }
+            catch (Exception inner)
+            {
+                _logger.LogError($"Local fallback failed for {fileNameToSave}: {inner.Message}");
+                throw;
+            }
         }
     }
 }

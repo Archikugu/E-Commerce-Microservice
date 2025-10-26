@@ -21,10 +21,14 @@
                     <div asp-validation-summary="All" class="text-danger"></div>
 
                     <div class="form-group">
-                        <label>Select Product</label>
-                        @Html.DropDownListFor(x => x.ProductId, (List<SelectListItem>)ViewBag.Products, "Select a Product", new { @style = "padding:0;", @class = "form-control" })
+                        <label>Product</label>
+                        @Html.HiddenFor(x => x.ProductId)
+                        @{
+                            var products = ViewBag.Products as List<SelectListItem>;
+                            var selectedName = products?.FirstOrDefault(p => p.Value == Model.ProductId)?.Text ?? "N/A";
+                        }
+                        <input type="text" class="form-control" value="@selectedName" readonly />
                         <br />
-                        
                         <label>Product Images</label>
                         <div id="imageContainer">
                             @if (Model?.Images != null && Model.Images.Any())
@@ -34,7 +38,7 @@
                                     <div class="upload-item">
                                         <img src="@Model.Images[i]" class="preview" style="display:inline-block;" />
                                         <input type="text" name="Images[@i]" value="@Model.Images[i]" class="form-control" placeholder="Image URL" />
-                                        <button type="button" class="btn btn-danger remove-image" style="display:@(Model.Images.Count > 1 ? "block" : "none")">Remove</button>
+                                        <button type="button" class="btn btn-danger remove-image">Remove</button>
                                     </div>
                                 }
                             }
@@ -66,7 +70,7 @@
                         var img = document.createElement('img'); img.className='preview'; img.src=url; img.style.display='inline-block';
                         var input = document.createElement('input'); input.type='text'; input.name='Images['+ (imageIndex++) +']'; input.value=url; input.className='form-control';
                         var rm = document.createElement('button'); rm.type='button'; rm.className='btn btn-danger remove-image'; rm.textContent='Remove';
-                        rm.addEventListener('click', function(){ wrap.remove(); });
+                        rm.addEventListener('click', function(){ wrap.remove(); updateIndexes(); });
                         wrap.appendChild(img); wrap.appendChild(input); wrap.appendChild(rm);
                         container.appendChild(wrap);
                     }
@@ -94,6 +98,13 @@
                                 })
                                 .catch(function(e){ if (errBox){ errBox.textContent='Upload failed: '+(e && e.message ? e.message : ''); errBox.style.display='block'; } uploadNext(i+1); });
                         })(0);
+                    });
+                    // Delegated remove for existing rows
+                    container.addEventListener('click', function(e){
+                        if (e.target && e.target.classList.contains('remove-image')){
+                            var host = e.target.closest('.upload-item');
+                            if (host){ host.remove(); updateIndexes(); }
+                        }
                     });
                 })();
                 </script>
