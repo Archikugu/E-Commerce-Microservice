@@ -8,7 +8,7 @@
             bool isAdmin = string.Equals(area, "Admin", StringComparison.OrdinalIgnoreCase);
             var catalogControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Category","Brand","Product","ProductImage","ProductDetail","Feature","FeatureSlider","SpecialOffer","OfferDiscount","Discount","Comment","Contact","About" };
             bool catalogOpen = isAdmin && catalogControllers.Contains(controller);
-            var usersControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "User","Role" };
+            var usersControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "User","Role","UserRole" };
             bool usersOpen = isAdmin && usersControllers.Contains(controller);
             var storeControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Cargo" };
             bool storeOpen = isAdmin && storeControllers.Contains(controller);
@@ -77,6 +77,7 @@
                 <ul class="treeview-menu" style="@(usersOpen ? "display: block;" : "display: none;")">
                     <li class="@(isActive("User", "UserList") ? "active" : null)"><a asp-area="Admin" asp-controller="User" asp-action="UserList"><i class="fa fa-angle-right"></i> User List</a></li>
                     <li class="@(isActive("Role", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Role" asp-action="Index"><i class="fa fa-angle-right"></i> Roles</a></li>
+                    <li class="@(isActive("UserRole", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="UserRole" asp-action="Index"><i class="fa fa-angle-right"></i> Role Assignment</a></li>
                 </ul>
             </li>
             <li class="treeview">

@@ -57,4 +57,10 @@ public class LoginController : Controller
         await HttpContext.SignOutAsync();
         return Redirect("/");
     }
+
+    [HttpGet]
+    public IActionResult AccessDenied()
+    {
+        return View();
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Net.Http.Json;
 using Duende.IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -190,7 +191,7 @@ public class IdentityService : IIdentityService
             UserName = signInDto.UserName,
             Password = signInDto.Password,
             Address = discoveryEndPoint.TokenEndpoint,
-            Scope = "openid profile email BasketFullPermission DiscountFullPermission OrderFullPermission MessageFullPermission CargoFullPermission OcelotFullPermission  offline_access"
+            Scope = "openid profile email BasketFullPermission DiscountFullPermission OrderFullPermission MessageFullPermission CargoFullPermission OcelotFullPermission IdentityServerApi offline_access"
         };
 
         var token = await _httpClient.RequestPasswordTokenAsync(passwordTokenRequest);
@@ -247,6 +248,27 @@ public class IdentityService : IIdentityService
         {
             mergedClaims.Add(new Claim(ClaimTypes.NameIdentifier, subjectClaim));
         }
+
+        // Fetch roles from IdentityServer and add as role claims
+        try
+        {
+            if (!string.IsNullOrWhiteSpace(subjectClaim))
+            {
+                var rolesResponse = await _httpClient.GetAsync($"{_serviceAPISettings.IdentityServerUrl}/api/UserRoles/{subjectClaim}/roles");
+                if (rolesResponse.IsSuccessStatusCode)
+                {
+                    var roles = await rolesResponse.Content.ReadFromJsonAsync<List<string>>() ?? new List<string>();
+                    foreach (var role in roles)
+                    {
+                        if (!string.IsNullOrWhiteSpace(role) && mergedClaims.All(c => c.Type == null || !(c.Type == "role" && c.Value == role)))
+                        {
+                            mergedClaims.Add(new Claim("role", role));
+                        }
+                    }
+                }
+            }
+        }
+        catch { }
 
         ClaimsIdentity claimsIdentity = new ClaimsIdentity(mergedClaims, CookieAuthenticationDefaults.AuthenticationScheme, "name", "role");
 

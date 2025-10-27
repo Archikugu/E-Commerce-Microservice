@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using Microsoft.AspNetCore.Localization;
+using System.IO.Compression;
+using Microsoft.AspNetCore.ResponseCompression;
 using MultiShop.WebUI.Handlers;
 using MultiShop.WebUI.Services.Abstract;
 using MultiShop.WebUI.Services.BasketServices;
@@ -56,6 +58,7 @@ public class Program
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, opt =>
         {
             opt.LoginPath = "/Login/Index";
+            opt.AccessDeniedPath = "/Login/AccessDenied";
             opt.ExpireTimeSpan = TimeSpan.FromDays(5);
             opt.Cookie.Name = "MultiShopCookie";
             opt.SlidingExpiration = true;
@@ -94,6 +97,16 @@ public class Program
         });
 
         builder.Services.AddSignalR();
+
+        // Response Compression (Brotli/Gzip)
+        builder.Services.AddResponseCompression(options =>
+        {
+            options.EnableForHttps = true;
+            options.Providers.Add<BrotliCompressionProvider>();
+            options.Providers.Add<GzipCompressionProvider>();
+        });
+        builder.Services.Configure<BrotliCompressionProviderOptions>(o => o.Level = CompressionLevel.Fastest);
+        builder.Services.Configure<GzipCompressionProviderOptions>(o => o.Level = CompressionLevel.Fastest);
 
         builder.Services.Configure<ClientSettings>(builder.Configuration.GetSection("ClientSettings"));
         builder.Services.Configure<ServiceAPISettings>(builder.Configuration.GetSection("ServiceAPISettings"));
@@ -229,6 +242,12 @@ public class Program
             opt.BaseAddress = new Uri(values.IdentityServerUrl.TrimEnd('/'));
         }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
+        // User Role service (IdentityServer + local_api scope token)
+        builder.Services.AddHttpClient<IUserRoleService, UserRoleService>(opt =>
+        {
+            opt.BaseAddress = new Uri(values.IdentityServerUrl.TrimEnd('/'));
+        }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+
         // Catalog Statistics service (Ocelot + client credentials)
         builder.Services.AddHttpClient<ICatalogStatisticsService, CatalogStatisticsService>(opt =>
         {
@@ -254,6 +273,12 @@ public class Program
             .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
             .AddDataAnnotationsLocalization();
 
+        // Authorization policies
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+        });
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -265,6 +290,7 @@ public class Program
         }
 
         app.UseHttpsRedirection();
+        app.UseResponseCompression();
         app.UseStaticFiles();
         app.UseRouting();
 
@@ -283,10 +309,18 @@ public class Program
 
         app.MapStaticAssets();
 
-        // Admin area route registration
-        app.MapControllerRoute(
-            name: "areas",
-            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+        // Admin area only: require Admin role
+        app.MapAreaControllerRoute(
+            name: "admin_area",
+            areaName: "Admin",
+            pattern: "Admin/{controller=Home}/{action=Index}/{id?}")
+            .RequireAuthorization("AdminOnly");
+
+        // Other areas (e.g., User) without Admin role requirement
+        app.MapAreaControllerRoute(
+            name: "user_area",
+            areaName: "User",
+            pattern: "User/{controller=Home}/{action=Index}/{id?}");
 
         // Default route registration
         app.MapControllerRoute(

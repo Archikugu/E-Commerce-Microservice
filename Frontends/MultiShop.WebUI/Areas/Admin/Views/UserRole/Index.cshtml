@@ -1,0 +1,54 @@
+@using MultiShop.WebUI.Dtos.IdentityDtos.UserDtos
+@model List<ResultUserDto>
+
+@{
+    ViewData["Title"] = "User Roles";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <div class="page-header" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+                    <h4 style="margin:0; font-weight:600;">Users</h4>
+                </div>
+                <div class="bs-example" data-example-id="simple-table">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width:60px;">#</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>User Name</th>
+                                <th style="width:140px;">Assign Roles</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var i = 0;
+                            }
+                            @foreach (var u in Model ?? new List<ResultUserDto>())
+                            {
+                                i++;
+                                <tr>
+                                    <th scope="row">@i</th>
+                                    <td>@u.FullName</td>
+                                    <td>@u.Email</td>
+                                    <td>@u.UserName</td>
+                                    <td>
+                                        <a asp-area="Admin" asp-controller="UserRole" asp-action="Assign" asp-route-id="@u.Id" asp-route-fullName="@u.FullName" class="btn btn-primary btn-sm" style="border-radius:16px;">
+                                            <i class="fa fa-shield"></i> Manage Roles
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
