@@ -1,0 +1,46 @@
+@using MultiShop.WebUI.Dtos.IdentityDtos.RoleDtos
+@model UpdateRoleDto
+
+@{
+    ViewData["Title"] = "Update Role";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <style>
+                    .chart-box{ border-radius:8px; border:1px solid rgba(0,0,0,.08); overflow:hidden; }
+                    .page-header { display:flex; align-items:center; justify-content:space-between; margin:0 0 12px 0; }
+                    .page-header h4 { margin:0; font-weight:600; }
+                    .form-group{ margin-bottom:12px; }
+                    .form-control{ border-radius:8px; border:1px solid rgba(0,0,0,.15); box-shadow:none; }
+                    .form-control:focus{ border-color:#0d6efd; box-shadow:0 0 0 .1rem rgba(13,110,253,.15); }
+                    .btn-update{ background:#ffc107; border-color:#ffc107; color:#212529; border-radius:20px; padding:8px 14px; transition:all .15s ease; box-shadow:0 2px 6px rgba(255,193,7,.18); }
+                    .btn-update:hover{ background:#e0a800; border-color:#e0a800; color:#212529; box-shadow:0 6px 16px rgba(255,193,7,.35); transform: translateY(-1px); text-decoration:none; }
+                    .btn-cancel{ border-radius:20px; padding:8px 14px; }
+                </style>
+                <div class="page-header">
+                    <h4>Update Role</h4>
+                    <a asp-area="Admin" asp-controller="Role" asp-action="Index" class="btn btn-default btn-cancel"><i class="fa fa-arrow-left"></i> Back</a>
+                </div>
+                <form method="post">
+                    <input type="hidden" asp-for="Id" />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label>Role Name</label>
+                        <input class="form-control" asp-for="Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <button type="submit" class="btn btn-update"><i class="fa fa-save" style="margin-right:8px;"></i> Update</button>
+                        <a asp-area="Admin" asp-controller="Role" asp-action="Index" class="btn btn-default btn-cancel">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+

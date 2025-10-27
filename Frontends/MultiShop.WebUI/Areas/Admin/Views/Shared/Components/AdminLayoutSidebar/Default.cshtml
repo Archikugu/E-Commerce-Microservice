@@ -76,7 +76,7 @@
                 <a href="#"> <i class="fa fa-users icon-customers"></i> <span>Customers</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
                 <ul class="treeview-menu" style="@(usersOpen ? "display: block;" : "display: none;")">
                     <li class="@(isActive("User", "UserList") ? "active" : null)"><a asp-area="Admin" asp-controller="User" asp-action="UserList"><i class="fa fa-angle-right"></i> User List</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Roles</a></li>
+                    <li class="@(isActive("Role", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Role" asp-action="Index"><i class="fa fa-angle-right"></i> Roles</a></li>
                 </ul>
             </li>
             <li class="treeview">

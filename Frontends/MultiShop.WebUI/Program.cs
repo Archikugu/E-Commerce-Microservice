@@ -223,6 +223,12 @@ public class Program
             opt.BaseAddress = new Uri(values.IdentityServerUrl.TrimEnd('/'));
         }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
 
+        // Role service (IdentityServer + local_api scope token)
+        builder.Services.AddHttpClient<IRoleService, RoleService>(opt =>
+        {
+            opt.BaseAddress = new Uri(values.IdentityServerUrl.TrimEnd('/'));
+        }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+
         // Catalog Statistics service (Ocelot + client credentials)
         builder.Services.AddHttpClient<ICatalogStatisticsService, CatalogStatisticsService>(opt =>
         {
