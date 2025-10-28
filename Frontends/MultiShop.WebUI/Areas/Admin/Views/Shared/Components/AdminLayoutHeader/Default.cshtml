@@ -9,7 +9,7 @@
 		<span class="logo-lg"><img src="~/OvioAdminTemplate/html/dist/img/logo-lg.png" alt="Ovio"></span>
 	</a>
 
-	<!-- Header Navbar -->
+    <!-- Header Navbar -->
 	<nav class="navbar navbar-static-top" role="navigation">
 		<!-- Sidebar toggle button-->
 		<a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button"> <span class="sr-only">Toggle navigation</span> </a>
@@ -34,7 +34,26 @@
 			.main-header .navbar a:hover .fa-envelope,
 			.main-header .navbar a:hover .fa-bell{ color:#fff; opacity:1; }
 		</style>
-		<!-- Navbar Right Menu -->
+        @{
+            var firstName = User?.FindFirst("given_name")?.Value
+                ?? User?.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value;
+            var lastName = User?.FindFirst("family_name")?.Value
+                ?? User?.FindFirst(System.Security.Claims.ClaimTypes.Surname)?.Value;
+            var displayName = ($"{firstName} {lastName}").Trim();
+            if (string.IsNullOrWhiteSpace(displayName))
+            {
+                displayName = User?.FindFirst("name")?.Value
+                    ?? User?.Identity?.Name
+                    ?? User?.FindFirst("preferred_username")?.Value
+                    ?? User?.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
+                    ?? User?.FindFirst("email")?.Value
+                    ?? "User";
+            }
+            var email = User?.FindFirst("email")?.Value
+                ?? User?.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value
+                ?? string.Empty;
+        }
+        <!-- Navbar Right Menu -->
 		<div class="navbar-custom-menu">
 			<ul class="nav navbar-nav">
 				<li class="dropdown messages-menu">
@@ -93,21 +112,20 @@
 				</li>
 				<!-- Tasks Menu -->
 				<!-- User Account Menu -->
-				<li class="dropdown user user-menu">
-					<a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img src="~/OvioAdminTemplate/html/dist/img/img1.jpg" class="user-image" alt="User Image"> <span class="hidden-xs">Florence Douglas</span> </a>
+                <li class="dropdown user user-menu">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <img src="~/OvioAdminTemplate/html/dist/img/admin.png" class="user-image" alt="User Image"> <span class="hidden-xs">@displayName</span> </a>
 					<ul class="dropdown-menu">
 						<li class="user-header">
-							<div class="pull-left user-img"><img src="~/OvioAdminTemplate/html/dist/img/img1.jpg" class="img-responsive" alt="User"></div>
-							<p class="text-left">Florence Douglas <small>florence@gmail.com</small> </p>
-							<div class="view-link text-left"><a href="#">View Profile</a> </div>
+							<div class="pull-left user-img"><img src="~/OvioAdminTemplate/html/dist/img/admin1.png" class="img-responsive" alt="User"></div>
+                            <p class="text-left">@displayName <small>@email</small> </p>
+							<div class="view-link text-left"><a href="/User/">View Profile</a> </div>
 						</li>
-						<li><a href="#"><i class="fa fa-user"></i> My Profile</a></li>
-						<li><a href="#"><i class="fa fa-wallet"></i> My Balance</a></li>
-						<li><a href="#"><i class="fa fa-envelope"></i> Inbox</a></li>
+						<li><a href="/User/"><i class="fa fa-user"></i> My Profile</a></li>
+                        <li><a href="/User/Message/Inbox"><i class="fa fa-inbox"></i> Inbox</a></li>
 						<li role="separator" class="divider"></li>
 						<li><a href="#"><i class="fa fa-cogs"></i> Account Setting</a></li>
 						<li role="separator" class="divider"></li>
-						<li><a href="#"><i class="fa fa-power-off"></i> Logout</a></li>
+                        <li><a asp-area="" asp-controller="Login" asp-action="Logout"><i class="fa fa-power-off"></i> Logout</a></li>
 					</ul>
 				</li>
 			</ul>

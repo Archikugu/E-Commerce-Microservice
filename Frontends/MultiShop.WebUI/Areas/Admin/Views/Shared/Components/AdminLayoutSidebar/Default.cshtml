@@ -23,11 +23,26 @@
             var reportsControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Statistics" };
             bool reportsOpen = isAdmin && reportsControllers.Contains(controller);
             Func<string, string, bool> isActive = (ctrl, act) => string.Equals(controller, ctrl, StringComparison.OrdinalIgnoreCase) && (string.IsNullOrEmpty(act) || string.Equals(action, act, StringComparison.OrdinalIgnoreCase));
+
+            var firstName = User?.FindFirst("given_name")?.Value
+                ?? User?.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value;
+            var lastName = User?.FindFirst("family_name")?.Value
+                ?? User?.FindFirst(System.Security.Claims.ClaimTypes.Surname)?.Value;
+            var sidebarDisplayName = ($"{firstName} {lastName}").Trim();
+            if (string.IsNullOrWhiteSpace(sidebarDisplayName))
+            {
+                sidebarDisplayName = User?.FindFirst("name")?.Value
+                    ?? User?.Identity?.Name
+                    ?? User?.FindFirst("preferred_username")?.Value
+                    ?? User?.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
+                    ?? User?.FindFirst("email")?.Value
+                    ?? "User";
+            }
         }
         <div class="user-panel">
-            <div class="pull-left image"> <img src="~/OvioAdminTemplate/html/dist/img/img1.jpg" class="img-circle" alt="User Image"> </div>
+            <div class="pull-left image"> <img src="~/OvioAdminTemplate/html/dist/img/admin.png" class="img-circle" alt="User Image"> </div>
             <div class="pull-left info">
-                <p>Florence Douglas</p>
+                <p>@sidebarDisplayName</p>
                 <a href="#"><i class="fa fa-circle"></i> Online</a>
             </div>
         </div>
