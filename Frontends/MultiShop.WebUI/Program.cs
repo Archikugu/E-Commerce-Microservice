@@ -27,6 +27,7 @@ using MultiShop.WebUI.Services.DiscountServices.DiscountCouponServices;
 using MultiShop.WebUI.Services.MessageServices;
 using MultiShop.WebUI.Services.OrderServices.OrderAddressServices;
 using MultiShop.WebUI.Services.OrderServices.OrderOrderingServices;
+using MultiShop.WebUI.Services.OrderServices.OrderDetailServices;
 using MultiShop.WebUI.Services.StatisticsServices.CatalogStatistic;
 using MultiShop.WebUI.Services.StatisticsServices.CommentStatisticServices;
 using MultiShop.WebUI.Services.StatisticsServices.DiscountStatisticServices;
@@ -214,6 +215,12 @@ public class Program
 
         // Order Ordering service (Ocelot + token)
         builder.Services.AddHttpClient<IOrderOrderingService, OrderOrderingService>(opt =>
+        {
+            opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Order.Path.TrimStart('/')}");
+        }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();
+
+        // Order Detail service (Ocelot + token)
+        builder.Services.AddHttpClient<IOrderDetailService, OrderDetailService>(opt =>
         {
             opt.BaseAddress = new Uri($"{values.OcelotUrl.TrimEnd('/')}/{values.Order.Path.TrimStart('/')}");
         }).AddHttpMessageHandler<ResourceOwnerPasswordTokenHandler>();

@@ -1,0 +1,24 @@
+@{
+    ViewData["Title"] = "Payment Successful";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row px-xl-5">
+        <div class="col-12 d-flex justify-content-center">
+            <div class="text-center p-5" style="max-width:640px; width:100%; background:linear-gradient(180deg,#f6fffb,#ecfbf3); border:1px solid rgba(0,0,0,.06); border-radius:16px; box-shadow:0 10px 24px rgba(0,0,0,.08);">
+                <div style="width:88px; height:88px; margin:0 auto 16px; border-radius:50%; background:#e6ffed; display:flex; align-items:center; justify-content:center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                </div>
+                <h3 class="mb-2" style="color:#166534;">Your order has been received</h3>
+                <p class="mb-4" style="color:#065f46;">Thank you. Your payment was successful and your cart has been cleared.</p>
+                <div class="d-flex flex-wrap justify-content-center mt-3" style="gap:12px;">
+                    <a href="/" class="btn btn-outline-success px-4 py-2" style="border-radius:10px;">Continue Shopping</a>
+                    <a href="/User/MyOrder/MyOrderList" class="btn btn-success px-4 py-2" style="border-radius:10px;">View My Orders</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,53 +1,89 @@
 ﻿@using MultiShop.WebUI.Dtos.OrderDtos.OrderOrderingDtos
 @model List<ResultOrderingByUserIdDto>
 @{
-	ViewData["Title"] = "MyOrderList";
-	Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
-	int count = 0;
-	string tableRowColor = "";
-
+ViewData["Title"] = "My Orders";
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+    var totalAmount = (Model?.Sum(x => x.TotalPrice)) ?? 0m;
 }
 
-<h1>My Orders</h1>
-
 <div class="row">
-	<div class="col-lg-6 grid-margin stretch-card">
-		<div class="card">
-			<div class="card-body">
-				<h4 class="card-title">Order History</h4>
-				<p class="card-description">Your recent orders listed below</p>
-				<div class="table-responsive">
-					<table class="table">
-						<thead>
-							<tr>
-								<th>Order ID</th>
-								<th>Total Price</th>
-								<th>Order Date</th>
-								<th>Order Detail</th>
-							</tr>
-						</thead>
-						<tbody>
-							@foreach (var item in Model)
-							{
-								count++;
+    <div class="col-12 grid-margin">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+                    <div>
+                        <h4 class="card-title mb-1">My Orders</h4>
+                        <p class="card-description mb-0">Your recent orders listed below</p>
+                    </div>
+                    <div class="d-flex align-items-center" style="gap:12px;">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="mdi mdi-magnify"></i></span>
+                            </div>
+                            <input type="text" id="orderSearch" class="form-control" placeholder="Search by ID or date...">
+                        </div>
+                        <span class="badge badge-outline-success">Total: @totalAmount.ToString("C")</span>
+                    </div>
+                </div>
 
-								if (count % 2 == 0) { tableRowColor = "table-info"; }
-
-								else { tableRowColor = "table-dark"; }
-
-								<tr class="@tableRowColor">
-									<td>@count</td>
-									<td>@item.TotalPrice.ToString("C")</td>
-									<td>@item.OrderDate.ToString("dd MMM yyyy")</td>
-									<td><a href="#" class="btn btn-warning">Order Detail</a></td>
-								</tr>
-							}
-						</tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle" id="ordersTable">
+                        <thead class="thead-light">
+                            <tr>
+                                <th style="width:120px;">Order ID</th>
+                                <th style="width:180px;" class="text-right">Total Price</th>
+                                <th style="width:220px;">Order Date</th>
+                                <th style="width:160px;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model.OrderByDescending(o => o.OrderDate))
+                                {
+                                    <tr>
+                                        <td>
+                                            <span class="badge badge-inverse-primary">#@item.OrderingId</span>
+                                        </td>
+                                        <td class="text-right">@item.TotalPrice.ToString("C")</td>
+                                        <td>@item.OrderDate.ToString("dd MMM yyyy, HH:mm")</td>
+                                        <td>
+                                            <a href="/User/MyOrder/Detail/@item.OrderingId" class="btn btn-sm btn-warning">
+                                                <i class="mdi mdi-file-document"></i> Details
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted">No orders found.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        (function(){
+            var input = document.getElementById('orderSearch');
+            var table = document.getElementById('ordersTable');
+            if(!input || !table) return;
+            input.addEventListener('input', function(){
+                var q = (this.value || '').toLowerCase();
+                var rows = table.querySelectorAll('tbody tr');
+                rows.forEach(function(r){
+                    var txt = r.textContent.toLowerCase();
+                    r.style.display = txt.indexOf(q) >= 0 ? '' : 'none';
+                });
+            });
+        })();
+    </script>
+}
 

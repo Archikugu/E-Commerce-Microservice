@@ -48,6 +48,7 @@
                     <div class="form-group mb-3">
                         <label>Card Number</label>
                         <input type="text" class="form-control" id="cardNumber" maxlength="19" placeholder="Please enter card number" style="border-radius: 10px;">
+                        <div class="invalid-feedback" id="cardNumberError">Please enter a valid card number.</div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-4">
@@ -71,6 +72,7 @@
                         <div class="form-group col-md-4">
                             <label>Expiry Year</label>
                             <input type="text" class="form-control" id="expiryYear" maxlength="2" placeholder="YY" style="border-radius: 10px;">
+                            <div class="invalid-feedback" id="expiryError">Please enter a valid expiry date.</div>
                         </div>
                         <div class="form-group col-md-4">
                             <label>CVC</label>
@@ -84,6 +86,7 @@
     </div>
 </div>
 
+<script src="~/js/card-utils.js"></script>
 <script>
 (function() {
     const numberInput = document.getElementById('cardNumber');
@@ -98,12 +101,37 @@
     const cvcPreview = document.getElementById('previewCvc');
     const cardEl = document.getElementById('card');
 
-    const formatNumber = (val) => val.replace(/\D/g, '').slice(0,16).replace(/(.{4})/g, '$1 ').trim();
+    const formatNumber = window.formatCardNumber;
+
+    function validateCardNumber(showErrors) {
+        const raw = numberInput.value || '';
+        const digits = raw.replace(/\D/g, '');
+        const isComplete = digits.length === 16; // current input limits to 16 digits
+        const isValid = isComplete && window.luhnCheck(digits);
+
+        numberInput.classList.remove('is-valid', 'is-invalid');
+
+        if (isValid) {
+            numberInput.classList.add('is-valid');
+            const err = document.getElementById('cardNumberError');
+            if (err) err.textContent = '';
+            return true;
+        }
+
+        if (showErrors) {
+            numberInput.classList.add('is-invalid');
+            const err = document.getElementById('cardNumberError');
+            if (err) err.textContent = 'Please enter a valid card number.';
+        }
+
+        return false;
+    }
 
     numberInput.addEventListener('input', function() {
         const formatted = formatNumber(this.value);
         this.value = formatted;
         numberPreview.textContent = formatted || '•••• •••• •••• ••••';
+        validateCardNumber(false);
     });
 
     holderInput.addEventListener('input', function() {
@@ -116,6 +144,7 @@
         yyInput.value = yy;
         const txt = (mm && yy) ? `${mm}/${yy}` : 'MM/YY';
         expiryPreview.textContent = txt;
+        validateExpiry(false);
     }
     mmInput.addEventListener('change', updateExpiry);
     yyInput.addEventListener('input', updateExpiry);
@@ -134,6 +163,76 @@
         this.value = val;
         cvcPreview.textContent = val || '•••';
     });
+
+    numberInput.addEventListener('blur', function() { validateCardNumber(true); });
+
+    function fullYearFromYY(yy) {
+        const two = parseInt((yy || '').toString().slice(0,2), 10);
+        if (Number.isNaN(two)) return null;
+        return 2000 + two;
+    }
+
+    function validateExpiry(showErrors) {
+        const mmStr = (mmInput.value || '').toString();
+        const yyStr = (yyInput.value || '').toString();
+
+        const mm = parseInt(mmStr, 10);
+        const year = fullYearFromYY(yyStr);
+
+        let valid = true;
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = now.getMonth() + 1;
+
+        if (!mm || mm < 1 || mm > 12) valid = false;
+        if (!year) valid = false;
+        if (valid) {
+            if (year < currentYear) valid = false;
+            else if (year === currentYear && mm < currentMonth) valid = false;
+        }
+
+        mmInput.classList.remove('is-invalid');
+        yyInput.classList.remove('is-invalid');
+        const err = document.getElementById('expiryError');
+        if (err) err.textContent = '';
+
+        if (!valid && showErrors) {
+            mmInput.classList.add('is-invalid');
+            yyInput.classList.add('is-invalid');
+            if (err) err.textContent = 'Please enter a valid expiry date.';
+        }
+
+        return valid;
+    }
+
+    const payBtn = document.getElementById('btnPay');
+    if (payBtn) {
+        payBtn.addEventListener('click', async function() {
+            if (!validateCardNumber(true)) {
+                numberInput.focus();
+                return;
+            }
+            if (!validateExpiry(true)) {
+                if (!mmInput.value) mmInput.focus(); else yyInput.focus();
+                return;
+            }
+            try {
+                const resp = await fetch('/Payment/Process', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                if (resp.ok) {
+                    window.location.href = '/Payment/Success';
+                } else {
+                    const txt = await resp.text();
+                    alert('An error occurred during the payment process. ' + (txt || ''));
+                }
+            } catch (e) {
+                alert('İstek gönderilemedi: ' + (e && e.message ? e.message : e));
+            }
+        });
+    }
 })();
 </script>
 

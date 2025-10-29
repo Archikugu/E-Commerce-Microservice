@@ -34,8 +34,8 @@ namespace MultiShop.Order.WebAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrdering(CreateOrderingCommand command)
         {
-            await _mediator.Send(command);
-            return Ok("Order successfully added");
+            var createdId = await _mediator.Send(command);
+            return Ok(createdId);
         }
 
         [HttpDelete]

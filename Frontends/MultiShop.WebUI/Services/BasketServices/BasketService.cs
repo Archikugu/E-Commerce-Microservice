@@ -43,8 +43,9 @@ public class BasketService : IBasketService
 
     public async Task DeleteBasket(string userId)
     {
-        var resp = await _httpClient.DeleteAsync($"baskets/{userId}");
-        if (!resp.IsSuccessStatusCode)
+        // Backend kimliği token'dan aldığı için kullanıcı id'si göndermiyoruz
+        var resp = await _httpClient.DeleteAsync("baskets");
+        if (!resp.IsSuccessStatusCode && (int)resp.StatusCode != 404)
         {
             var error = await resp.Content.ReadAsStringAsync();
             throw new Exception($"Failed to delete basket. Status: {(int)resp.StatusCode} {resp.StatusCode}. Content: {error}");

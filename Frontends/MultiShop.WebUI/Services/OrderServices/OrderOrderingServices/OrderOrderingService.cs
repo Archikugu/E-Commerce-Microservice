@@ -30,7 +30,7 @@ public class OrderOrderingService : IOrderOrderingService
                ?? new List<ResultOrderingByUserIdDto>();
     }
 
-    public async Task CreateOrderingAsync(CreateOrderingDto dto)
+    public async Task<int> CreateOrderingAsync(CreateOrderingDto dto)
     {
         var resp = await _httpClient.PostAsJsonAsync("orderings", dto);
         if (!resp.IsSuccessStatusCode)
@@ -38,6 +38,10 @@ public class OrderOrderingService : IOrderOrderingService
             var error = await resp.Content.ReadAsStringAsync();
             throw new Exception($"Failed to create ordering. Status: {(int)resp.StatusCode} {resp.StatusCode}. Content: {error}");
         }
+        // API int id döndürüyor
+        var id = await resp.Content.ReadFromJsonAsync<int>();
+        if (id <= 0) throw new Exception("Ordering id parse edilemedi veya geçersiz döndü.");
+        return id;
     }
 
     public async Task CreateOrderDetailAsync(CreateOrderDetailDto dto)

@@ -2,85 +2,94 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
         <li class="nav-item sidebar-category">
-            <p>Navigation</p>
+            <p>Overview</p>
             <span></span>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="index.html">
+            <a class="nav-link" href="/User/Home/Index">
                 <i class="mdi mdi-view-quilt menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
-                <div class="badge badge-info badge-pill">2</div>
             </a>
         </li>
+
         <li class="nav-item sidebar-category">
-            <p>Components</p>
+            <p>Orders</p>
             <span></span>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                <i class="mdi mdi-palette menu-icon"></i>
-                <span class="menu-title">UI Elements</span>
+            <a class="nav-link" href="/User/MyOrder/MyOrderList">
+                <i class="mdi mdi-cart-outline menu-icon"></i>
+                <span class="menu-title">My Orders</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Order/Index">
+                <i class="mdi mdi-map-marker menu-icon"></i>
+                <span class="menu-title">Address Book</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Basket/Index">
+                <i class="mdi mdi-basket menu-icon"></i>
+                <span class="menu-title">Basket</span>
+            </a>
+        </li>
+
+        <li class="nav-item sidebar-category">
+            <p>Messages</p>
+            <span></span>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#user-messages" aria-expanded="false" aria-controls="user-messages">
+                <i class="mdi mdi-email menu-icon"></i>
+                <span class="menu-title">Messages</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="ui-basic">
+            <div class="collapse" id="user-messages">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/buttons.html">Buttons</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/User/Message/Inbox">Inbox</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="/User/Message/Sendbox">Sendbox</a></li>
                 </ul>
             </div>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" href="pages/forms/basic_elements.html">
-                <i class="mdi mdi-view-headline menu-icon"></i>
-                <span class="menu-title">Form elements</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="pages/charts/chartjs.html">
-                <i class="mdi mdi-chart-pie menu-icon"></i>
-                <span class="menu-title">Charts</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="pages/tables/basic-table.html">
-                <i class="mdi mdi-grid-large menu-icon"></i>
-                <span class="menu-title">Tables</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="pages/icons/mdi.html">
-                <i class="mdi mdi-emoticon menu-icon"></i>
-                <span class="menu-title">Icons</span>
-            </a>
-        </li>
+
         <li class="nav-item sidebar-category">
-            <p>Pages</p>
+            <p>Account</p>
             <span></span>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
-                <i class="mdi mdi-account menu-icon"></i>
-                <span class="menu-title">User Pages</span>
-                <i class="menu-arrow"></i>
+            <a class="nav-link" href="/User/Index">
+                <i class="mdi mdi-account-circle menu-icon"></i>
+                <span class="menu-title">Account Info</span>
             </a>
-            <div class="collapse" id="auth">
-                <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="pages/samples/login-2.html"> Login 2 </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="pages/samples/register.html"> Register </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="pages/samples/register-2.html"> Register 2 </a></li>
-                    <li class="nav-item"> <a class="nav-link" href="pages/samples/lock-screen.html"> Lockscreen </a></li>
-                </ul>
-            </div>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Discount/Index">
+                <i class="mdi mdi-tag menu-icon"></i>
+                <span class="menu-title">Discounts & Coupons</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Comments/Index">
+                <i class="mdi mdi-comment-text-outline menu-icon"></i>
+                <span class="menu-title">Comments</span>
+            </a>
+        </li>
+
         <li class="nav-item sidebar-category">
-            <p>Apps</p>
+            <p>Help</p>
             <span></span>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="docs/documentation.html">
-                <i class="mdi mdi-file-document-box-outline menu-icon"></i>
-                <span class="menu-title">Documentation</span>
+            <a class="nav-link" href="/Contact/Index">
+                <i class="mdi mdi-help-circle-outline menu-icon"></i>
+                <span class="menu-title">Support / Contact</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Login/Logout">
+                <i class="mdi mdi-logout menu-icon"></i>
+                <span class="menu-title">Logout</span>
             </a>
         </li>
     </ul>
