@@ -12,6 +12,8 @@
             bool usersOpen = isAdmin && usersControllers.Contains(controller);
             var storeControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Cargo" };
             bool storeOpen = isAdmin && storeControllers.Contains(controller);
+            var salesControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Order" };
+            bool salesOpen = isAdmin && salesControllers.Contains(controller);
             var marketingControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Discount","OfferDiscount","SpecialOffer" };
             bool marketingOpen = isAdmin && marketingControllers.Contains(controller);
             var contentControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Feature","FeatureSlider","Comment","About","Contact" };
@@ -95,10 +97,10 @@
                     <li class="@(isActive("UserRole", "Index") ? "active" : null)"><a asp-area="Admin" asp-controller="UserRole" asp-action="Index"><i class="fa fa-angle-right"></i> Role Assignment</a></li>
                 </ul>
             </li>
-            <li class="treeview">
+            <li class="treeview @(salesOpen ? "active menu-open" : null)">
                 <a href="#"> <i class="fa fa-credit-card icon-sales"></i> <span>Sales</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
-                <ul class="treeview-menu" style="display: none;">
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Orders</a></li>
+                <ul class="treeview-menu" style="@(salesOpen ? "display: block;" : "display: none;")">
+                    <li class="@(isActive("Order","Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Order" asp-action="Index"><i class="fa fa-angle-right"></i> Orders</a></li>
                     <li><a href="#"><i class="fa fa-angle-right"></i> Invoices</a></li>
                     <li><a href="#"><i class="fa fa-angle-right"></i> Transactions</a></li>
                 </ul>

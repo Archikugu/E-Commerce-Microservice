@@ -21,6 +21,7 @@ namespace MultiShop.Order.Application.Features.Mediator.Handlers.OrderingHandler
                 OrderDate = request.OrderDate,
                 TotalPrice = request.TotalPrice,
                 UserId = request.UserId,
+                Status = "New",
             };
             await _orderingRepository.CreateAsync(entity);
             return entity.OrderingId;

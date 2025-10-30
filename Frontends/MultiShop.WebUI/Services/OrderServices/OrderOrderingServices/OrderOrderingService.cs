@@ -10,6 +10,22 @@ public class OrderOrderingService : IOrderOrderingService
     {
         _httpClient = httpClient;
     }
+    public async Task<List<ResultOrderingByUserIdDto>> GetOrderingListAsync()
+    {
+        var resp = await _httpClient.GetAsync("orderings");
+        if (!resp.IsSuccessStatusCode)
+        {
+            if ((int)resp.StatusCode == 404)
+            {
+                return new List<ResultOrderingByUserIdDto>();
+            }
+            var error = await resp.Content.ReadAsStringAsync();
+            throw new Exception($"Failed to retrieve orderings. Status: {(int)resp.StatusCode} {resp.StatusCode}. Content: {error}");
+        }
+        return await resp.Content.ReadFromJsonAsync<List<ResultOrderingByUserIdDto>>()
+               ?? new List<ResultOrderingByUserIdDto>();
+    }
+
     public async Task<List<ResultOrderingByUserIdDto>> GetOrderingByUserId(string userId)
     {
         if (string.IsNullOrWhiteSpace(userId))
@@ -51,6 +67,17 @@ public class OrderOrderingService : IOrderOrderingService
         {
             var error = await resp.Content.ReadAsStringAsync();
             throw new Exception($"Failed to create order detail. Status: {(int)resp.StatusCode} {resp.StatusCode}. Content: {error}");
+        }
+    }
+
+    public async Task UpdateStatusAsync(int orderingId, string status)
+    {
+        if (string.IsNullOrWhiteSpace(status)) throw new ArgumentException("status");
+        var resp = await _httpClient.PatchAsync($"orderings/status/{orderingId}?status={Uri.EscapeDataString(status)}", null);
+        if (!resp.IsSuccessStatusCode)
+        {
+            var error = await resp.Content.ReadAsStringAsync();
+            throw new Exception($"Failed to update status. Status: {(int)resp.StatusCode} {resp.StatusCode}. Content: {error}");
         }
     }
 }

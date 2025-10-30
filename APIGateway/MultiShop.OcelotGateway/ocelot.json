@@ -94,7 +94,7 @@
                     "Port": 7003
                 }
             ],
-            "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
+            "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete", "Patch" ],
             "UpstreamPathTemplate": "/services/order/{everything}",
             "UpstreamScheme": "https",
             "AuthenticationOptions": {

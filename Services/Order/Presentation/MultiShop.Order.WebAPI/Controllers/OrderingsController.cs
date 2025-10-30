@@ -52,6 +52,13 @@ namespace MultiShop.Order.WebAPI.Controllers
             return Ok("Order successfully updated");
         }
 
+        [HttpPatch("status/{id}")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromQuery] string status)
+        {
+            await _mediator.Send(new UpdateOrderingStatusCommand(id, status));
+            return Ok("Status updated");
+        }
+
         [HttpGet("GetOrderingByUserId/{id}")]
         public async Task<IActionResult> GetOrderingByUserId(string id)
         {

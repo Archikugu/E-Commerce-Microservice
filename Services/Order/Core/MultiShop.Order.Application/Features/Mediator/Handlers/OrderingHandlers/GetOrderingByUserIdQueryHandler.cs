@@ -23,7 +23,8 @@ public class GetOrderingByUserIdQueryHandler : IRequestHandler<GetOrderingByUser
             OrderDate = o.OrderDate,
             OrderingId = o.OrderingId,
             TotalPrice = o.TotalPrice,
-            UserId = o.UserId
+            UserId = o.UserId,
+            Status = o.Status
         }).ToList();
     }
 }

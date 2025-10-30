@@ -32,6 +32,7 @@ ViewData["Title"] = "My Orders";
                             <tr>
                                 <th style="width:120px;">Order ID</th>
                                 <th style="width:180px;" class="text-right">Total Price</th>
+                                <th style="width:180px;">Status</th>
                                 <th style="width:220px;">Order Date</th>
                                 <th style="width:160px;">Action</th>
                             </tr>
@@ -46,6 +47,16 @@ ViewData["Title"] = "My Orders";
                                             <span class="badge badge-inverse-primary">#@item.OrderingId</span>
                                         </td>
                                         <td class="text-right">@item.TotalPrice.ToString("C")</td>
+                                        <td>
+                                            @{ var statusClass = (item.Status ?? "New").ToLowerInvariant() switch {
+                                                "processing" => "badge-warning",
+                                                "shipped" => "badge-info",
+                                                "delivered" => "badge-success",
+                                                "cancelled" => "badge-danger",
+                                                _ => "badge-secondary"
+                                            }; }
+                                            <span class="badge @statusClass">@(item.Status ?? "New")</span>
+                                        </td>
                                         <td>@item.OrderDate.ToString("dd MMM yyyy, HH:mm")</td>
                                         <td>
                                             <a href="/User/MyOrder/Detail/@item.OrderingId" class="btn btn-sm btn-warning">
@@ -58,7 +69,7 @@ ViewData["Title"] = "My Orders";
                             else
                             {
                                 <tr>
-                                    <td colspan="4" class="text-center text-muted">No orders found.</td>
+                                    <td colspan="5" class="text-center text-muted">No orders found.</td>
                                 </tr>
                             }
                         </tbody>
