@@ -11,4 +11,5 @@ public interface IProductService
     Task<GetByIdProductDto> GetByIdProductAsync(string id);
     Task<List<ResultProductsWithCategoryDto>> GetProductsWithCategoryAsync();
     Task<List<ResultProductsWithCategoryDto>> GetProductsWithCategoryByCategoryIdAsync(string categoryId);
+    Task<bool> DecrementStockAsync(string productId, int quantity);
 }

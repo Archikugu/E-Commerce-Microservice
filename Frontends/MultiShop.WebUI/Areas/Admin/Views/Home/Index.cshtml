@@ -4,7 +4,47 @@
 }
 
 <div class="container-fluid">
-	<div class="row" style="margin-bottom:12px;"></div>
+	<div class="row" style="margin-bottom:12px;">
+	</div>
+	<div class="row">
+		<!-- Order Statistics Section -->
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-shopping-bag"></i> </div>
+				<div class="media-info">
+					<h5>Total Orders</h5>
+					<h3>@ViewBag.TotalOrders</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box" style="background:linear-gradient(135deg,#10b981,#34d399);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-dollar"></i> </div>
+				<div class="media-info">
+					<h5>Total Revenue</h5>
+					<h3>@ViewBag.TotalRevenue?.ToString("C")</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-calendar-day"></i> </div>
+				<div class="media-info">
+					<h5>Today's Revenue</h5>
+					<h3>@ViewBag.TodayRevenue?.ToString("C")</h3>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-3 col-xs-6">
+            <div class="media-box" style="background:linear-gradient(135deg,#ef4444,#f87171);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-clock"></i> </div>
+				<div class="media-info">
+					<h5>Pending Orders</h5>
+					<h3>@ViewBag.PendingOrders</h3>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="row">
         <div class="col-lg-3 col-xs-6">
             <div class="media-box" style="background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
@@ -126,48 +166,85 @@
 	</div>
 
 	<div class="row">
-		<div class="col-lg-7">
+		<div class="col-lg-8">
+			<div class="chart-box" style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:20px;">
+				<h4 style="margin-bottom:20px;">Sales Overview</h4>
+				<canvas id="salesChart" style="max-height:300px;"></canvas>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:20px;">
+				<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+					<h4 style="margin:0;">Order Status</h4>
+					<div style="background:linear-gradient(135deg,#0ea5e9,#22d3ee);border-radius:8px;padding:8px 16px;color:#fff;font-size:12px;font-weight:600;">
+						@{
+							var todayClass = "text-white";
+							double todayVal = 0;
+							try { todayVal = System.Convert.ToDouble(ViewBag.Weather, System.Globalization.CultureInfo.InvariantCulture); } catch { todayVal = 0; }
+						}
+						<i class="wi wi-day-sunny" style="margin-right:6px;"></i>@(ViewBag.Weather != null ? $"{ViewBag.Weather}°C" : "-")
+					</div>
+				</div>
+				<canvas id="statusChart" style="max-height:280px;"></canvas>
+			</div>
+		</div>
+		<div class="col-lg-12">
 			<div class="chart-box" style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:16px;">
-				<h4>Cheapest & Most Expensive Products</h4>
+				<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+					<h4 style="margin:0;">Recent Orders</h4>
+					<a asp-area="Admin" asp-controller="Order" asp-action="Index" class="btn btn-sm btn-primary">
+						<i class="fa fa-arrow-right"></i> View All Orders
+					</a>
+				</div>
 				<div class="table-responsive">
-					<table class="table table-striped table-bordered table-hover">
-						<thead class="bg-info">
+					<table class="table table-striped table-hover" style="margin-bottom:0;">
+						<thead>
 							<tr>
-								<th>Type</th>
-								<th>Product</th>
-								<th class="text-right">Price</th>
+								<th style="width:80px;">Order ID</th>
+								<th>Customer</th>
+								<th style="width:150px;">Status</th>
+								<th style="width:120px;" class="text-right">Amount</th>
+								<th style="width:180px;">Date</th>
+								<th style="width:80px;">Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							@if (ViewBag.CheapestProduct != null)
+							@{
+								var recentOrders = ViewBag.RecentOrders as System.Collections.Generic.List<MultiShop.WebUI.Dtos.OrderDtos.OrderOrderingDtos.ResultOrderingByUserIdDto> ?? new System.Collections.Generic.List<MultiShop.WebUI.Dtos.OrderDtos.OrderOrderingDtos.ResultOrderingByUserIdDto>();
+								var userMap = ViewBag.UserMap as System.Collections.Generic.Dictionary<string, string> ?? new System.Collections.Generic.Dictionary<string, string>();
+							}
+							@if (recentOrders.Any())
 							{
-								<tr class="table-success">
-									<td>Cheapest</td>
-									<td>@ViewBag.CheapestProduct.ProductName</td>
-									<td class="text-right">@(((decimal)ViewBag.CheapestProduct.Price).ToString("C"))</td>
+								@foreach (var order in recentOrders)
+								{
+									var statusClass = (order.Status ?? "New").ToLowerInvariant() switch {
+										"processing" => "badge-warning",
+										"shipped" => "badge-info",
+										"delivered" => "badge-success",
+										"cancelled" => "badge-danger",
+										_ => "badge-secondary"
+									};
+									<tr>
+										<td><span class="badge badge-inverse-primary">#@order.OrderingId</span></td>
+										<td class="text-truncate" style="max-width:200px;">@(userMap.ContainsKey(order.UserId) && !string.IsNullOrWhiteSpace(userMap[order.UserId]) ? userMap[order.UserId] : "—")</td>
+										<td><span class="badge @statusClass">@(order.Status ?? "New")</span></td>
+										<td class="text-right">@order.TotalPrice.ToString("C")</td>
+										<td>@order.OrderDate.ToString("dd MMM yyyy, HH:mm")</td>
+										<td>
+											<a href="/User/MyOrder/Detail/@order.OrderingId" class="btn btn-sm btn-info" title="View Details">
+												<i class="fa fa-eye"></i>
+											</a>
+										</td>
 								</tr>
+							}
 							}
 							else
 							{
-								<tr class="table-success">
-									<td>Cheapest</td>
-									<td colspan="2" class="text-muted">No product</td>
-								</tr>
-							}
-
-							@if (ViewBag.MostExpensiveProduct != null)
-							{
-								<tr class="table-danger">
-									<td>Most Expensive</td>
-									<td>@ViewBag.MostExpensiveProduct.ProductName</td>
-									<td class="text-right">@(((decimal)ViewBag.MostExpensiveProduct.Price).ToString("C"))</td>
-								</tr>
-							}
-							else
-							{
-								<tr class="table-danger">
-									<td>Most Expensive</td>
-									<td colspan="2" class="text-muted">No product</td>
+								<tr>
+									<td colspan="6" class="text-center text-muted" style="padding:40px;">
+										<i class="fa fa-shopping-bag" style="font-size:48px; opacity:0.3;"></i><br><br>
+										No orders yet
+									</td>
 								</tr>
 							}
 						</tbody>
@@ -175,269 +252,99 @@
 				</div>
 			</div>
 		</div>
-		<div class="col-lg-5">
-			<div class="chart-box" style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:16px;">
-				<h4>Sales Overview</h4>
-				<div class="chart">
-					<div id="container1"></div>
-					<!--for values check "Sales Overview" chart on char-function.js-->
 				</div>
-			</div>
-		</div>
-		<div class="col-lg-5">
-			<div class="chart-box" style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:16px;">
-				<h4>Recent Messages</h4>
-				<div class="message-widget">
-					@{
-						var msgs = ViewBag.RecentMessages as System.Collections.Generic.List<MultiShop.WebUI.Dtos.MessageDtos.ResultMessageDto> ?? new System.Collections.Generic.List<MultiShop.WebUI.Dtos.MessageDtos.ResultMessageDto>();
-					}
-					@if (msgs.Count > 0)
-					{
-						foreach (var m in msgs)
-						{
-							var iconClass = m.IsRead ? "fa fa-check-circle text-success" : "fa fa-times-circle text-danger";
-							<a href="#">
-								<div class="user-img pull-left"> <i class="@iconClass" style="font-size:28px; margin:8px 12px 0 0;"></i> </div>
-								<div class="mail-contnet">
-									<h5>@(string.IsNullOrWhiteSpace(m.Subject) ? "(No Subject)" : m.Subject)</h5>
-									<span class="mail-desc">@m.MessageDetail</span> <span class="time">@m.MessageDate.ToString("HH:mm")</span>
-								</div>
-							</a>
-						}
-					}
-					else
-					{
-						<div class="text-muted">No messages</div>
-					}
-				</div>
-			</div>
-		</div>
-		<div class="col-lg-7">
-			<div class="chart-box" style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:16px;">
-				<h4>Recent Orders</h4>
-				<div class="table-block">
-					<div class="info-block">
-						<p>Total paid invoices 5340, unpaid 130. <span class="pull-right"><a href="app/invoice.html">Invoice Summary <i class="fa fa-long-arrow-right"></i></a></span> </p>
-					</div>
-					<div class="table-responsive">
-						<table class="table table-responsive">
-							<thead>
-								<tr>
-									<th>SKU</th>
-									<th>Invoice#</th>
-									<th>Customer Name</th>
-									<th>Status</th>
-									<th>Amount</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td class="text-truncate">OV-101777</td>
-									<td class="text-truncate"><a href="#">VIO-0035421</a></td>
-									<td class="text-truncate">Florence Douglas</td>
-									<td class="text-truncate"><span class="lable-tag tag-success">Paid</span></td>
-									<td class="text-truncate">$ 653.00</td>
-								</tr>
-								<tr>
-									<td class="text-truncate">OV-101775</td>
-									<td class="text-truncate"><a href="#">VIO-0028954</a></td>
-									<td class="text-truncate">Dr. Douglas</td>
-									<td class="text-truncate"><span class="lable-tag tag-unpaid">Overdue</span></td>
-									<td class="text-truncate">$ 421.00</td>
-								</tr>
-								<tr>
-									<td class="text-truncate">OV-101687</td>
-									<td class="text-truncate"><a href="#">VIO-0025864</a></td>
-									<td class="text-truncate">Andrew Florence</td>
-									<td class="text-truncate"><span class="lable-tag tag-success">Paid</span></td>
-									<td class="text-truncate">$ 632.00</td>
-								</tr>
-								<tr>
-									<td class="text-truncate">OV-101657</td>
-									<td class="text-truncate"><a href="#">VIO-0085815</a></td>
-									<td class="text-truncate">Florence Sr.</td>
-									<td class="text-truncate"><span class="lable-tag tag-success">Paid</span></td>
-									<td class="text-truncate">$ 285.00</td>
-								</tr>
-								<tr>
-									<td class="text-truncate">OV-101625</td>
-									<td class="text-truncate"><a href="#">VIO-0053812</a></td>
-									<td class="text-truncate">Florence Douglas</td>
-									<td class="text-truncate"><span class="lable-tag tag-warning">Overdue</span></td>
-									<td class="text-truncate">$ 538.00</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 
-	<div class="row">
-		<div class="col-lg-6">
-			<div class="chart-box" style="background:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.08);padding:16px;">
-
-				<!-- Nav tabs -->
-				<ul class="nav nav-tabs" role="tablist">
-					<li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Activity</a></li>
-					<li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
-					<li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Settings</a></li>
-				</ul>
-
-				<!-- Tab panes -->
-				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane active" id="home">
-						<div class="message-widget">
-							<div>
-								<div class="user-img pull-left"> <img src="dist/img/img3.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-								<div class="mail-contnet">
-									<h5>Florence Douglas</h5>
-									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-									<span class="time m-bot-2">10:30 AM</span>
-									<div class="row">
-										<div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img5.jpg" alt="user" class="img-responsive img-rounded"></div>
-										<div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img6.jpg" alt="user" class="img-responsive img-rounded"></div>
-										<div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img7.jpg" alt="user" class="img-responsive img-rounded"></div>
-										<div class="m-top-2"><a href="#" class="pull-left">2 comment</a> <a href="#" class="pull-left"><i class="fa fa-heart text-success"></i> 5 Love</a> </div>
-									</div>
-								</div>
-							</div>
-							<div>
-								<div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-								<div class="mail-contnet">
-									<h5>Florence Douglas</h5>
-									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-									<span class="time m-bot-2">10:30 AM</span>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div role="tabpanel" class="tab-pane" id="profile">
-						<div class="message-widget">
-							<div>
-								<div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-								<div class="mail-contnet">
-									<h5>Florence Douglas</h5>
-									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-									<span class="time m-bot-2">10:30 AM</span>
-								</div>
-							</div>
-							<div>
-								<div class="user-img pull-left"> <img src="dist/img/img3.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-								<div class="mail-contnet">
-									<h5>Florence Douglas</h5>
-									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-									<span class="time m-bot-2">10:30 AM</span>
-									<div class="row">
-										<div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img5.jpg" alt="user" class="img-responsive img-rounded"></div>
-										<div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img6.jpg" alt="user" class="img-responsive img-rounded"></div>
-										<div class="col-lg-4 col-xs-4 m-bot-2"><img src="dist/img/img7.jpg" alt="user" class="img-responsive img-rounded"></div>
-										<div class="m-top-2"><a href="#" class="pull-left">2 comment</a> <a href="#" class="pull-left"><i class="fa fa-heart text-success"></i> 5 Love</a> </div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div role="tabpanel" class="tab-pane" id="messages">
-						<div class="message-widget">
-							<div>
-								<div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-								<div class="mail-contnet">
-									<h5>Florence Douglas</h5>
-									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-									<span class="time m-bot-2">10:30 AM</span>
-								</div>
-							</div>
-							<div>
-								<div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-								<div class="mail-contnet">
-									<h5>Florence Douglas</h5>
-									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-									<span class="time m-bot-2">10:30 AM</span>
-								</div>
-							</div>
-							<div>
-								<div class="user-img pull-left"> <img src="dist/img/img2.jpg" class="img-circle img-responsive" alt="User Image"> </div>
-								<div class="mail-contnet">
-									<h5>Florence Douglas</h5>
-									<p>Lorem Ipsum is simply dummy text of the printing and type setting industry. Lorem Ipsum has been the printing and type setting simply dummy text industry.</p>
-									<span class="time m-bot-2">10:30 AM</span>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
-		</div>
-		<div class="col-lg-6">
-			<div class="row">
-				<div class="col-lg-12">
-					<div>
-						<div class="panel-body" style="background:#ffffff;border:1px solid #e6eaf2;border-radius:12px;padding:12px;box-shadow:0 2px 8px rgba(16,24,40,.06);">
-							<div class="row">
-									<div class="col-md-5" style="display:flex;align-items:center;justify-content:center;">
-                                    @{
-                                        var todayClass = "text-warning";
-                                        double todayVal = 0;
-                                        try { todayVal = System.Convert.ToDouble(ViewBag.Weather, System.Globalization.CultureInfo.InvariantCulture); } catch { todayVal = 0; }
-                                        if (todayVal >= 30) todayClass = "text-danger";
-                                        else if (todayVal >= 20) todayClass = "text-warning";
-                                        else if (todayVal >= 10) todayClass = "text-primary";
-                                        else todayClass = "text-info";
-                                    }
-										<div style="width:100%;max-width:380px;margin:0 auto;background:#f7f9fc;border:1px solid #e6eaf2;border-radius:12px;padding:16px 20px;display:flex;align-items:center;justify-content:center;gap:16px;text-align:center;">
-											<div style="width:60px;height:60px;border-radius:50%;background:#eef3ff;display:flex;align-items:center;justify-content:center;">
-												<div class="wi wi-day-snow @todayClass" style="font-size:28px;"></div>
-											</div>
-											<div style="display:flex;flex-direction:column;line-height:1;align-items:center;">
-												<span class="text-uppercase text-muted" style="font-weight:700;letter-spacing:.6px;margin-bottom:6px;">Today</span>
-												<span class="@todayClass" style="font-weight:800;font-size:36px;">@(ViewBag.Weather != null ? ($"{ViewBag.Weather} °C") : "-")</span>
-											</div>
-										</div>
-									</div>
-								<div class="col-md-7">
-									<div class="row">
-										@{
-											var days = ViewBag.Days as System.Collections.Generic.List<string> ?? new System.Collections.Generic.List<string>();
-											var icons = ViewBag.ForecastIcons as System.Collections.Generic.List<string> ?? new System.Collections.Generic.List<string>();
-										}
-										@{
-											var temps = ViewBag.ForecastTemps as System.Collections.Generic.List<string> ?? new System.Collections.Generic.List<string>();
-										}
-										<div class="col-md-12" style="margin:6px 0 10px 0;">
-											<p class="text-uppercase text-muted" style="letter-spacing:0.5px;font-weight:600;">Next 6 Days</p>
-										</div>
-                                        @for (int i = 0; i < 6; i++)
-                                        {
-                                            var dayLabel = days.Count > i ? days[i] : "-";
-                                            var tempLabel = temps.Count > i ? temps[i] : "-";
-                                            int tVal;
-                                            bool ok = int.TryParse(tempLabel, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out tVal);
-                                            var cardBg = "#f7f9fc";
-                                            var iconCol = "text-indigo";
-                                            if (ok)
-                                            {
-                                                if (tVal >= 30) { cardBg = "#ffe5e5"; iconCol = "text-danger"; }
-                                                else if (tVal >= 20) { cardBg = "#fff3cd"; iconCol = "text-warning"; }
-                                                else if (tVal >= 10) { cardBg = "#e7f1ff"; iconCol = "text-primary"; }
-                                                else { cardBg = "#e5f7ff"; iconCol = "text-info"; }
-                                            }
-											<div class="col-md-2 col-xs-4">
-													<div class="text-center" style="background:@cardBg;border:1px solid #e6eaf2;border-radius:8px;padding:8px 6px;margin-bottom:8px;">
-													<p class="text-uppercase" style="margin-bottom:6px;font-weight:600;">@dayLabel</p>
-														<div class="@((icons.Count > i ? icons[i] : "wi wi-day-cloudy")) font-18 @iconCol" style="margin:4px 0 6px 0;"></div>
-													<div class="wi-small weather-cent"><span>@(tempLabel == "-" ? "-" : ($"{tempLabel} °C"))</span></div>
-												</div>
-											</div>
-										}
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div> 
+
+@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+@{
+    var salesData = ViewBag.SalesData as List<decimal> ?? new List<decimal>();
+    var salesLabels = ViewBag.SalesLabels as List<string> ?? new List<string>();
+    var statusCounts = ViewBag.StatusCounts as Dictionary<string, int> ?? new Dictionary<string, int>();
+}
+// Sales Chart
+const salesCtx = document.getElementById('salesChart');
+if (salesCtx) {
+    new Chart(salesCtx, {
+        type: 'line',
+        data: {
+            labels: @Html.Raw(Json.Serialize(salesLabels)),
+            datasets: [{
+                label: 'Revenue',
+                data: @Html.Raw(Json.Serialize(salesData)),
+                borderColor: 'rgb(79, 70, 229)',
+                backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value.toFixed(2);
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Status Chart
+const statusCtx = document.getElementById('statusChart');
+if (statusCtx) {
+    const statusData = @Html.Raw(Json.Serialize(statusCounts.Values));
+    const statusLabels = @Html.Raw(Json.Serialize(statusCounts.Keys));
+    const statusColors = [
+        'rgb(156, 163, 175)',  // New - gray
+        'rgb(245, 158, 11)',   // Processing - yellow
+        'rgb(14, 165, 233)',   // Shipped - blue
+        'rgb(16, 185, 129)',   // Delivered - green
+        'rgb(239, 68, 68)'     // Cancelled - red
+    ];
+
+    new Chart(statusCtx, {
+        type: 'doughnut',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                data: statusData,
+                backgroundColor: statusColors,
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        boxWidth: 12
+                    }
+                }
+            }
+        }
+    });
+}
+</script>
+}

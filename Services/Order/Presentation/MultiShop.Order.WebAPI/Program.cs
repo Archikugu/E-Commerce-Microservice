@@ -21,6 +21,7 @@ builder.Services.AddApplicationService(builder.Configuration);
 
 
 builder.Services.AddControllers();
+builder.Services.AddHttpClient();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

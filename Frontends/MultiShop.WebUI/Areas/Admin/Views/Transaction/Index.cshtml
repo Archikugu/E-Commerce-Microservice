@@ -1,0 +1,157 @@
+@using MultiShop.WebUI.Dtos.OrderDtos.OrderOrderingDtos
+@model List<ResultOrderingByUserIdDto>
+@{
+    ViewData["Title"] = "Transactions";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    int count = 0;
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box">
+                <style>
+                    .chart-box{ border-radius:8px; border:1px solid rgba(0,0,0,.08); overflow:hidden; }
+                    .table .btn { border-radius: 16px; padding: 6px 10px; }
+                    .btn-view{ background:#0dcaf0; border-color:#0dcaf0; color:#fff; }
+                    .items-per-page-select{ display:inline-block; width:auto; padding:4px 10px; height:32px; line-height:20px; border:1px solid rgba(0,0,0,.15); border-radius:16px; background-color:#fff; color:#212529; }
+                    .table > thead > tr > th,
+                    .table > tbody > tr > th,
+                    .table > tbody > tr > td { vertical-align: middle; }
+                </style>
+                <div class="clearfix" style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <h3 style="margin:0; font-weight:600;">Transactions</h3>
+                        <input id="q" type="text" class="form-control items-per-page-select" placeholder="Search by Transaction/User" style="min-width:280px;" />
+                        <form method="get" style="display:flex; align-items:center; gap:6px;">
+                            <input type="hidden" name="pageNumber" value="1" />
+                            <select name="status" class="form-control items-per-page-select" onchange="this.form.submit()" style="width:auto;">
+                                <option value="All" selected="@(ViewBag.SelectedStatus == "All" ? "selected" : null)">All Status</option>
+                                <option value="New" selected="@(ViewBag.SelectedStatus == "New" ? "selected" : null)">New</option>
+                                <option value="Processing" selected="@(ViewBag.SelectedStatus == "Processing" ? "selected" : null)">Processing</option>
+                                <option value="Shipped" selected="@(ViewBag.SelectedStatus == "Shipped" ? "selected" : null)">Shipped</option>
+                                <option value="Delivered" selected="@(ViewBag.SelectedStatus == "Delivered" ? "selected" : null)">Delivered</option>
+                                <option value="Cancelled" selected="@(ViewBag.SelectedStatus == "Cancelled" ? "selected" : null)">Cancelled</option>
+                            </select>
+                        </form>
+                    </div>
+                    <div style="margin-left:auto; display:flex; align-items:center; gap:6px;">
+                        <form method="get" style="display:flex; align-items:center; gap:6px;">
+                            <input type="hidden" name="pageNumber" value="1" />
+                            <input type="hidden" name="status" value="@(ViewBag.SelectedStatus ?? "All")" />
+                            @{
+                                int curSize = (int)(ViewBag.PageSize ?? 10);
+                            }
+                            <label class="text-muted items-per-page-label" style="margin:0;">Items per page</label>
+                            <select name="pageSize" class="form-control items-per-page-select" onchange="this.form.submit()">
+                                <option value="5" selected="@(curSize==5 ? "selected" : null)">5</option>
+                                <option value="10" selected="@(curSize==10 ? "selected" : null)">10</option>
+                                <option value="25" selected="@(curSize==25 ? "selected" : null)">25</option>
+                                <option value="50" selected="@(curSize==50 ? "selected" : null)">50</option>
+                                <option value="100" selected="@(curSize==100 ? "selected" : null)">100</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+                <div class="bs-example" data-example-id="simple-table">
+                    @functions{
+                        public static string GetStatusClass(string? status)
+                        {
+                            status = (status ?? "New").ToLowerInvariant();
+                            return status switch
+                            {
+                                "processing" => "badge-warning",
+                                "shipped" => "badge-info",
+                                "delivered" => "badge-success",
+                                "cancelled" => "badge-danger",
+                                _ => "badge-secondary"
+                            };
+                        }
+                    }
+                    <table class="table table-striped table-hover" id="transactionsTable" style="margin-bottom:0;">
+                        <thead>
+                            <tr>
+                                <th style="width:60px;">#</th>
+                                <th style="width:120px;">Transaction ID</th>
+                                <th>Customer</th>
+                                <th>User ID</th>
+                                <th style="width:140px;">Status</th>
+                                <th style="width:160px;" class="text-right">Amount</th>
+                                <th style="width:220px;">Date</th>
+                                <th style="width:110px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ var userMap = ViewBag.UserMap as Dictionary<string, string> ?? new Dictionary<string, string>(); }
+                            @foreach (var o in Model.OrderByDescending(x => x.OrderDate))
+                            {
+                                count++;
+                                <tr>
+                                    <th scope="row">@count</th>
+                                    <td><span class="badge badge-inverse-primary">TXN-@o.OrderingId.ToString("D4")</span></td>
+                                    <td style="max-width:280px;" class="text-truncate">@(userMap.ContainsKey(o.UserId) && !string.IsNullOrWhiteSpace(userMap[o.UserId]) ? userMap[o.UserId] : "—")</td>
+                                    <td style="max-width:420px;" class="text-truncate">@o.UserId</td>
+                                    <td><span class="badge @GetStatusClass(o.Status)">@(o.Status ?? "New")</span></td>
+                                    <td class="text-right">@o.TotalPrice.ToString("C")</td>
+                                    <td>@o.OrderDate.ToString("dd MMM yyyy, HH:mm")</td>
+                                    <td>
+                                        <a href="/User/MyOrder/Detail/@o.OrderingId" class="btn btn-view btn-sm" target="_blank">
+                                            <i class="fa fa-eye"></i> View
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                            @if (!Model.Any())
+                            {
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted">No transactions found.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div style="text-align:center; margin-top:16px;">
+                    <nav aria-label="Transaction pagination" style="display:inline-block;">
+                        <ul class="pagination pagination-sm" style="margin:0; display:inline-flex;">
+                            @{
+                                int pageNumber = (int)(ViewBag.PageNumber ?? 1);
+                                int pageSize = (int)(ViewBag.PageSize ?? 10);
+                                int totalItems = (int)(ViewBag.TotalItems ?? 0);
+                                int totalPages = Math.Max(1, (int)Math.Ceiling((double)totalItems / Math.Max(1, pageSize)));
+                                int prev = Math.Max(1, pageNumber - 1);
+                                int next = Math.Min(totalPages, pageNumber + 1);
+                                int start = Math.Max(1, pageNumber - 2);
+                                int end = Math.Min(totalPages, start + 4);
+                            }
+                            <li class="@(pageNumber == 1 ? "disabled" : null)"><a asp-area="Admin" asp-controller="Transaction" asp-action="Index" asp-route-pageNumber="1" asp-route-pageSize="@pageSize" asp-route-status="@(ViewBag.SelectedStatus ?? "All")">First</a></li>
+                            <li class="@(pageNumber == 1 ? "disabled" : null)"><a asp-area="Admin" asp-controller="Transaction" asp-action="Index" asp-route-pageNumber="@prev" asp-route-pageSize="@pageSize" asp-route-status="@(ViewBag.SelectedStatus ?? "All")">Prev</a></li>
+                            @for (int i = start; i <= end; i++)
+                            {
+                                <li class="@(i == pageNumber ? "active" : null)"><a asp-area="Admin" asp-controller="Transaction" asp-action="Index" asp-route-pageNumber="@i" asp-route-pageSize="@pageSize" asp-route-status="@(ViewBag.SelectedStatus ?? "All")">@i</a></li>
+                            }
+                            <li class="@(pageNumber == totalPages ? "disabled" : null)"><a asp-area="Admin" asp-controller="Transaction" asp-action="Index" asp-route-pageNumber="@next" asp-route-pageSize="@pageSize" asp-route-status="@(ViewBag.SelectedStatus ?? "All")">Next</a></li>
+                            <li class="@(pageNumber == totalPages ? "disabled" : null)"><a asp-area="Admin" asp-controller="Transaction" asp-action="Index" asp-route-pageNumber="@totalPages" asp-route-pageSize="@pageSize" asp-route-status="@(ViewBag.SelectedStatus ?? "All")">Last</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<script>
+(function(){
+    var q = document.getElementById('q');
+    var table = document.getElementById('transactionsTable');
+    if (!q || !table) return;
+    q.addEventListener('input', function(){
+        var v = (this.value || '').toLowerCase();
+        table.querySelectorAll('tbody tr').forEach(function(r){
+            r.style.display = r.textContent.toLowerCase().indexOf(v) >= 0 ? '' : 'none';
+        });
+    });
+})();
+</script>
+}
+

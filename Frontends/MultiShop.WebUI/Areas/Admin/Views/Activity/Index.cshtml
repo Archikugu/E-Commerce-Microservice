@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = "Activity Log";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box" style="border-radius:8px; border:1px solid rgba(0,0,0,.08); padding:20px;">
+                <h3 style="margin:0 0 16px 0; font-weight:600;">Activity Log</h3>
+                <pre style="background:#0f172a; color:#e2e8f0; padding:16px; border-radius:8px; max-height:600px; overflow:auto;">
+@foreach (var line in (IEnumerable<string>)ViewBag.LogLines)
+{
+@line
+}
+                </pre>
+            </div>
+        </div>
+    </div>
+    
+</section>
+
+

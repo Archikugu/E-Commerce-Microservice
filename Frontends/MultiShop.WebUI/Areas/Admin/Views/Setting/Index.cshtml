@@ -1,0 +1,185 @@
+@{
+    ViewData["Title"] = "Settings";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom:20px;">
+            <h3 style="margin:0; font-weight:600;">System Settings</h3>
+            <p class="text-muted">Configure general, email, payment, and integration settings</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- General Settings -->
+        <div class="col-md-6">
+            <div class="chart-box" style="border-radius:8px; border:1px solid rgba(0,0,0,.08); padding:20px; margin-bottom:20px;">
+                <h4 class="mb-3" style="border-bottom:2px solid #e5e7eb; padding-bottom:8px;">General Settings</h4>
+                <div class="form-group">
+                    <label for="siteName">Site Name</label>
+                    <input type="text" class="form-control" id="siteName" value="MultiShop ECommerce" placeholder="Site Name">
+                </div>
+                <div class="form-group">
+                    <label for="siteDescription">Site Description</label>
+                    <textarea class="form-control" id="siteDescription" rows="3" placeholder="Site Description">Your trusted e-commerce platform</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="maintenanceMode">Maintenance Mode</label>
+                    <select class="form-control" id="maintenanceMode">
+                        <option value="false" selected>Disabled</option>
+                        <option value="true">Enabled</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="timezone">Timezone</label>
+                    <select class="form-control" id="timezone">
+                        <option value="UTC" selected>UTC</option>
+                        <option value="Europe/Istanbul">Europe/Istanbul</option>
+                        <option value="America/New_York">America/New_York</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="alert('General settings saved successfully')">
+                    <i class="fa fa-save"></i> Save General Settings
+                </button>
+            </div>
+        </div>
+
+        <!-- Email Settings -->
+        <div class="col-md-6">
+            <div class="chart-box" style="border-radius:8px; border:1px solid rgba(0,0,0,.08); padding:20px; margin-bottom:20px;">
+                <h4 class="mb-3" style="border-bottom:2px solid #e5e7eb; padding-bottom:8px;">Email Settings</h4>
+                <div class="form-group">
+                    <label for="smtpHost">SMTP Host</label>
+                    <input type="text" class="form-control" id="smtpHost" value="smtp.gmail.com" placeholder="smtp.gmail.com">
+                </div>
+                <div class="form-group">
+                    <label for="smtpPort">SMTP Port</label>
+                    <input type="number" class="form-control" id="smtpPort" value="587" placeholder="587">
+                </div>
+                <div class="form-group">
+                    <label for="smtpUsername">SMTP Username</label>
+                    <input type="text" class="form-control" id="smtpUsername" placeholder="your-email@gmail.com">
+                </div>
+                <div class="form-group">
+                    <label for="smtpPassword">SMTP Password</label>
+                    <input type="password" class="form-control" id="smtpPassword" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="useSsl" checked> Use SSL/TLS
+                        </label>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="alert('Email settings saved successfully')">
+                    <i class="fa fa-save"></i> Save Email Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Payment Settings -->
+        <div class="col-md-6">
+            <div class="chart-box" style="border-radius:8px; border:1px solid rgba(0,0,0,.08); padding:20px; margin-bottom:20px;">
+                <h4 class="mb-3" style="border-bottom:2px solid #e5e7eb; padding-bottom:8px;">Payment Settings</h4>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="creditCard" checked> Credit Card
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="paypal"> PayPal
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="bankTransfer"> Bank Transfer
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="currency">Default Currency</label>
+                    <select class="form-control" id="currency">
+                        <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="TRY" selected>TRY (₺)</option>
+                        <option value="GBP">GBP (£)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="paymentMethod">Default Payment Method</label>
+                    <select class="form-control" id="paymentMethod">
+                        <option value="CreditCard" selected>Credit Card</option>
+                        <option value="PayPal">PayPal</option>
+                        <option value="BankTransfer">Bank Transfer</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="alert('Payment settings saved successfully')">
+                    <i class="fa fa-save"></i> Save Payment Settings
+                </button>
+            </div>
+        </div>
+
+        <!-- Integrations -->
+        <div class="col-md-6">
+            <div class="chart-box" style="border-radius:8px; border:1px solid rgba(0,0,0,.08); padding:20px; margin-bottom:20px;">
+                <h4 class="mb-3" style="border-bottom:2px solid #e5e7eb; padding-bottom:8px;">Integrations</h4>
+                <div class="form-group">
+                    <label for="googleAnalytics">Google Analytics ID</label>
+                    <input type="text" class="form-control" id="googleAnalytics" placeholder="UA-XXXXX-Y">
+                </div>
+                <div class="form-group">
+                    <label for="facebookPixel">Facebook Pixel ID</label>
+                    <input type="text" class="form-control" id="facebookPixel" placeholder="123456789">
+                </div>
+                <div class="form-group">
+                    <label for="stripeKey">Stripe Publishable Key</label>
+                    <input type="text" class="form-control" id="stripeKey" placeholder="pk_test_...">
+                </div>
+                <div class="form-group">
+                    <label for="paypalClientId">PayPal Client ID</label>
+                    <input type="text" class="form-control" id="paypalClientId" placeholder="Client ID">
+                </div>
+                <button type="button" class="btn btn-primary" onclick="alert('Integration settings saved successfully')">
+                    <i class="fa fa-save"></i> Save Integration Settings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Info -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box" style="border-radius:8px; border:1px solid rgba(0,0,0,.08); padding:20px;">
+                <h4 class="mb-3" style="border-bottom:2px solid #e5e7eb; padding-bottom:8px;">System Information</h4>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Total Revenue:</strong><br>
+                        <span class="text-success">@ViewBag.TotalRevenue?.ToString("C")</span>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Total Orders:</strong><br>
+                        <span class="text-info">@ViewBag.TotalOrders</span>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Registered Users:</strong><br>
+                        <span class="text-primary">@ViewBag.UserCount</span>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Total Products:</strong><br>
+                        <span class="text-warning">@ViewBag.ProductCount</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

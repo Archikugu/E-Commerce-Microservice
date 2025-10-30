@@ -10,19 +10,19 @@
             bool catalogOpen = isAdmin && catalogControllers.Contains(controller);
             var usersControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "User","Role","UserRole" };
             bool usersOpen = isAdmin && usersControllers.Contains(controller);
-            var storeControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Cargo" };
+            var storeControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Cargo", "CashRegister", "Stock" };
             bool storeOpen = isAdmin && storeControllers.Contains(controller);
-            var salesControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Order" };
+            var salesControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Order", "Invoice", "Transaction" };
             bool salesOpen = isAdmin && salesControllers.Contains(controller);
             var marketingControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Discount","OfferDiscount","SpecialOffer" };
             bool marketingOpen = isAdmin && marketingControllers.Contains(controller);
             var contentControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Feature","FeatureSlider","Comment","About","Contact" };
             bool contentOpen = isAdmin && contentControllers.Contains(controller);
-            var messageControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Message" };
+            var messageControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Message", "Notification" };
             bool messageOpen = isAdmin && messageControllers.Contains(controller);
-            var settingsControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Settings" };
+            var settingsControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Setting" };
             bool settingsOpen = isAdmin && settingsControllers.Contains(controller);
-            var reportsControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Statistics" };
+            var reportsControllers = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { "Statistics", "Report" };
             bool reportsOpen = isAdmin && reportsControllers.Contains(controller);
             Func<string, string, bool> isActive = (ctrl, act) => string.Equals(controller, ctrl, StringComparison.OrdinalIgnoreCase) && (string.IsNullOrEmpty(act) || string.Equals(action, act, StringComparison.OrdinalIgnoreCase));
 
@@ -101,8 +101,8 @@
                 <a href="#"> <i class="fa fa-credit-card icon-sales"></i> <span>Sales</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
                 <ul class="treeview-menu" style="@(salesOpen ? "display: block;" : "display: none;")">
                     <li class="@(isActive("Order","Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Order" asp-action="Index"><i class="fa fa-angle-right"></i> Orders</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Invoices</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Transactions</a></li>
+                    <li class="@(isActive("Invoice","Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Invoice" asp-action="Index"><i class="fa fa-angle-right"></i> Invoices</a></li>
+                    <li class="@(isActive("Transaction","Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Transaction" asp-action="Index"><i class="fa fa-angle-right"></i> Transactions</a></li>
                 </ul>
             </li>
 
@@ -110,9 +110,9 @@
             <li class="treeview @(storeOpen ? "active menu-open" : null)">
                 <a href="#"> <i class="fa fa-shopping-cart icon-store"></i> <span>Store</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
                 <ul class="treeview-menu" style="@(storeOpen ? "display: block;" : "display: none;")">
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Cash Register</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Statistics</a></li>
-                    <li class="@(string.Equals(controller, "Cargo", StringComparison.OrdinalIgnoreCase) && string.Equals(action, "CargoCompanyList", StringComparison.OrdinalIgnoreCase) ? "active" : null)"><a asp-area="Admin" asp-controller="Cargo" asp-action="CargoCompanyList"><i class="fa fa-angle-right"></i> Cargo Companies</a></li>
+                    <li class="@(isActive("CashRegister","Index") ? "active" : null)"><a asp-area="Admin" asp-controller="CashRegister" asp-action="Index"><i class="fa fa-angle-right"></i> Cash Register</a></li>
+                    <li class="@(isActive("Cargo","CargoCompanyList") ? "active" : null)"><a asp-area="Admin" asp-controller="Cargo" asp-action="CargoCompanyList"><i class="fa fa-angle-right"></i> Cargo Companies</a></li>
+                    <li class="@(isActive("Stock","Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Stock" asp-action="Index"><i class="fa fa-angle-right"></i> Stock Management</a></li>
                 </ul>
             </li>
 
@@ -142,9 +142,8 @@
             <li class="treeview @(reportsOpen ? "active menu-open" : null)">
                 <a href="#"> <i class="fa fa-line-chart icon-reports"></i> <span>Reports</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
                 <ul class="treeview-menu" style="@(reportsOpen ? "display: block;" : "display: none;")">
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Sales Report</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Customer Report</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Catalog Report</a></li>
+                    <li class="@(isActive("Report","Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Report" asp-action="Index"><i class="fa fa-angle-right"></i> All Reports</a></li>
+                    <li><a asp-area="Admin" asp-controller="Activity" asp-action="Index"><i class="fa fa-angle-right"></i> Activity Log</a></li>
                 </ul>
             </li>
 
@@ -152,8 +151,8 @@
             <li class="treeview @(messageOpen ? "active menu-open" : null)">
                 <a href="#"> <i class="fa fa-envelope icon-communication"></i> <span>Communication</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
                 <ul class="treeview-menu" style="@(messageOpen ? "display: block;" : "display: none;")">
+                    <li class="@(isActive("Notification","Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Notification" asp-action="Index"><i class="fa fa-angle-right"></i> Notifications</a></li>
                     <li class="@(string.Equals(controller, "Message", StringComparison.OrdinalIgnoreCase) ? "active" : null)"><a asp-area="User" asp-controller="Message" asp-action="Inbox"><i class="fa fa-angle-right"></i> Messages</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Notifications</a></li>
                 </ul>
             </li>
 
@@ -161,10 +160,7 @@
             <li class="treeview @(settingsOpen ? "active menu-open" : null)">
                 <a href="#"> <i class="fa fa-cogs icon-settings"></i> <span>Settings</span> <span class="pull-right-container"> <i class="fa fa-angle-left pull-right"></i> </span> </a>
                 <ul class="treeview-menu" style="@(settingsOpen ? "display: block;" : "display: none;")">
-                    <li><a href="#"><i class="fa fa-angle-right"></i> General</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Email</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Payments</a></li>
-                    <li><a href="#"><i class="fa fa-angle-right"></i> Integrations</a></li>
+                    <li class="@(isActive("Setting","Index") ? "active" : null)"><a asp-area="Admin" asp-controller="Setting" asp-action="Index"><i class="fa fa-angle-right"></i> General Settings</a></li>
                 </ul>
             </li>
             <li> <a asp-area="" asp-controller="Login" asp-action="Logout"> <i class="fa fa-sign-out icon-signout"></i> <span>Sign Out</span></a> </li>

@@ -28,6 +28,21 @@ public class ProductController : Controller
         _clientTokenService = clientTokenService;
     }
 
+    private void LogActivity(string action, string? details = null)
+    {
+        try
+        {
+            var root = Directory.GetCurrentDirectory();
+            var logDir = Path.Combine(root, "Frontends", "MultiShop.WebUI", "wwwroot", "logs");
+            Directory.CreateDirectory(logDir);
+            var logFile = Path.Combine(logDir, "admin-actions.log");
+            var user = User?.Identity?.Name ?? "anonymous";
+            var line = $"{DateTime.UtcNow:O}\t{user}\t{action}\t{details}";
+            System.IO.File.AppendAllLines(logFile, new[] { line });
+        }
+        catch { /* ignore logging errors */ }
+    }
+
     private async Task PopulateCategoriesAsync(string? selectedCategoryId = null)
     {
         var categories = await _categoryService.GetAllCategoryAsync();
@@ -65,6 +80,38 @@ public class ProductController : Controller
     }
 
     [HttpGet]
+    public async Task<IActionResult> ExportCsv()
+    {
+        var all = await _productService.GetProductsWithCategoryAsync();
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine("ProductId,ProductName,Category,Price,ImageUrl");
+        foreach (var p in all)
+        {
+            string line = string.Join(",",
+                new[]
+                {
+                    EscapeCsv(p.ProductId),
+                    EscapeCsv(p.ProductName),
+                    EscapeCsv(p.Category?.CategoryName),
+                    p.Price.ToString(System.Globalization.CultureInfo.InvariantCulture),
+                    EscapeCsv(p.ImageUrl)
+                });
+            sb.AppendLine(line);
+        }
+        var bytes = System.Text.Encoding.UTF8.GetBytes(sb.ToString());
+        var fileName = $"products_{DateTime.UtcNow:yyyyMMdd_HHmmss}.csv";
+        return File(bytes, "text/csv", fileName);
+    }
+
+    private static string EscapeCsv(string? value)
+    {
+        value ??= string.Empty;
+        bool mustQuote = value.Contains(',') || value.Contains('"') || value.Contains('\n') || value.Contains('\r');
+        if (value.Contains('"')) value = value.Replace("\"", "\"\"");
+        return mustQuote ? $"\"{value}\"" : value;
+    }
+
+    [HttpGet]
     public async Task<IActionResult> CreateProduct()
     {
         await PopulateCategoriesAsync();
@@ -80,6 +127,7 @@ public class ProductController : Controller
             return View(createProductDto);
         }
         await _productService.CreateProductAsync(createProductDto);
+        LogActivity("Product.Create", createProductDto.ProductName);
         return RedirectToAction("Index", "Product", new { area = "Admin" });
     }
 
@@ -94,7 +142,10 @@ public class ProductController : Controller
             CategoryId = read.CategoryId,
             Price = read.Price,
             Description = read.Description,
-            ImageUrl = read.ImageUrl
+            ImageUrl = read.ImageUrl,
+            StockQuantity = read.StockQuantity,
+            MinStock = read.MinStock,
+            MaxStock = read.MaxStock
         };
         await PopulateCategoriesAsync(model.CategoryId);
         return View(model);
@@ -109,6 +160,7 @@ public class ProductController : Controller
             return View(updateProductDto);
         }
         await _productService.UpdateProductAsync(updateProductDto);
+        LogActivity("Product.Update", updateProductDto.ProductId + ":" + updateProductDto.ProductName);
         return RedirectToAction("Index", "Product", new { area = "Admin" });
     }
 
@@ -116,7 +168,26 @@ public class ProductController : Controller
     public async Task<IActionResult> DeleteProduct(string id)
     {
         await _productService.DeleteProductAsync(id);
+        LogActivity("Product.Delete", id);
         return RedirectToAction("Index", "Product", new { area = "Admin" });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> BulkDelete([FromForm] List<string> ids)
+    {
+        if (ids == null || ids.Count == 0)
+        {
+            return RedirectToAction("Index", new { area = "Admin" });
+        }
+        foreach (var id in ids)
+        {
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                await _productService.DeleteProductAsync(id);
+            }
+        }
+        LogActivity("Product.BulkDelete", string.Join(',', ids));
+        return RedirectToAction("Index", new { area = "Admin" });
     }
 
     [HttpPost]

@@ -9,5 +9,8 @@ public class ResultProductsWithCategoryDto
     public string ImageUrl { get; set; }
     public string Description { get; set; }
     public string CategoryId { get; set; }
+    public int StockQuantity { get; set; }
+    public int MinStock { get; set; }
+    public int MaxStock { get; set; }
     public ResultCategoryDto Category { get; set; }
 }

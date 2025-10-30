@@ -1,0 +1,124 @@
+@using MultiShop.WebUI.Dtos.OrderDtos.OrderOrderingDtos
+@model List<ResultOrderingByUserIdDto>
+@{
+    ViewData["Title"] = "Cash Register";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    int count = 0;
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom:20px;">
+            <h3 style="margin:0; font-weight:600;">Cash Register</h3>
+            <p class="text-muted">Today's sales overview and transactions</p>
+        </div>
+    </div>
+
+    <!-- Today's Summary Cards -->
+    <div class="row">
+        <div class="col-lg-4 col-xs-6">
+            <div class="media-box" style="background:linear-gradient(135deg,#10b981,#34d399);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-money"></i> </div>
+                <div class="media-info">
+                    <h5>Today's Revenue</h5>
+                    <h3>@ViewBag.TodayRevenue?.ToString("C")</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-xs-6">
+            <div class="media-box bg-info" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-shopping-bag"></i> </div>
+                <div class="media-info">
+                    <h5>Today's Orders</h5>
+                    <h3>@ViewBag.TodayOrderCount</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-xs-6">
+            <div class="media-box bg-success" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;border-radius:10px;box-shadow:0 2px 8px rgba(16,24,40,.12);">
+                <div class="media-icon pull-left"><i class="fa fa-check-circle"></i> </div>
+                <div class="media-info">
+                    <h5>Delivered Today</h5>
+                    <h3>@ViewBag.TodayDeliveredCount</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Today's Transactions -->
+    <div class="row">
+        <div class="col-md-12" style="margin-top:20px;">
+            <div class="chart-box" style="border-radius:8px; border:1px solid rgba(0,0,0,.08);">
+                <div style="padding:15px;">
+                    <h4 style="margin:0; font-weight:600;">Today's Transactions</h4>
+                </div>
+                <div class="bs-example" data-example-id="simple-table">
+                    <table class="table table-striped table-hover" style="margin-bottom:0;">
+                        <thead>
+                            <tr>
+                                <th style="width:60px;">#</th>
+                                <th style="width:120px;">Order ID</th>
+                                <th>Customer</th>
+                                <th style="width:140px;">Status</th>
+                                <th style="width:160px;" class="text-right">Amount</th>
+                                <th style="width:220px;">Time</th>
+                                <th style="width:110px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ var userMap = ViewBag.UserMap as Dictionary<string, string> ?? new Dictionary<string, string>(); }
+                            @{ var todayOrders = ViewBag.TodayOrders as List<ResultOrderingByUserIdDto> ?? new List<ResultOrderingByUserIdDto>(); }
+                            @if (todayOrders.Any())
+                            {
+                                @foreach (var o in todayOrders.OrderByDescending(x => x.OrderDate))
+                                {
+                                    count++;
+                                    <tr>
+                                        <th scope="row">@count</th>
+                                        <td><span class="badge badge-inverse-primary">#@o.OrderingId</span></td>
+                                        <td style="max-width:280px;" class="text-truncate">@(userMap.ContainsKey(o.UserId) && !string.IsNullOrWhiteSpace(userMap[o.UserId]) ? userMap[o.UserId] : "—")</td>
+                                        <td>
+                                            @{ var statusClass = (o.Status ?? "New").ToLowerInvariant() switch {
+                                                "processing" => "badge-warning",
+                                                "shipped" => "badge-info",
+                                                "delivered" => "badge-success",
+                                                "cancelled" => "badge-danger",
+                                                _ => "badge-secondary"
+                                            }; }
+                                            <span class="badge @statusClass">@(o.Status ?? "New")</span>
+                                        </td>
+                                        <td class="text-right">@o.TotalPrice.ToString("C")</td>
+                                        <td>@o.OrderDate.ToString("dd MMM yyyy, HH:mm")</td>
+                                        <td>
+                                            <a href="/User/MyOrder/Detail/@o.OrderingId" class="btn btn-sm btn-view">
+                                                <i class="fa fa-eye"></i> View
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="7" class="text-center text-muted" style="padding:40px;">
+                                        <i class="fa fa-inbox" style="font-size:48px; opacity:0.3;"></i><br><br>
+                                        No transactions today
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .table .btn { border-radius: 16px; padding: 6px 10px; }
+    .btn-view{ background:#0dcaf0; border-color:#0dcaf0; color:#fff; }
+    .table > thead > tr > th,
+    .table > tbody > tr > th,
+    .table > tbody > tr > td { vertical-align: middle; }
+</style>
+

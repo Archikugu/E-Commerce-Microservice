@@ -53,6 +53,29 @@ public class ProductsController : ControllerBase
         return Ok("Product Successfully Updated");
     }
 
+    public class DecrementStockRequest { public string ProductId { get; set; } public int Quantity { get; set; } }
+
+    [HttpPost("DecrementStock")]
+    [AllowAnonymous]
+    public async Task<IActionResult> DecrementStock([FromBody] DecrementStockRequest req)
+    {
+        if (req == null || string.IsNullOrWhiteSpace(req.ProductId) || req.Quantity <= 0)
+            return BadRequest();
+        var ok = await _ProductsService.DecrementStockAsync(req.ProductId, req.Quantity);
+        try
+        {
+            var root = Directory.GetCurrentDirectory();
+            var logDir = Path.Combine(root, "wwwroot", "logs");
+            Directory.CreateDirectory(logDir);
+            var logFile = Path.Combine(logDir, "catalog-decrement.log");
+            var line = $"{DateTime.UtcNow:O}\t{req.ProductId}\t-{req.Quantity}\t{(ok ? "OK" : "FAIL")}";
+            System.IO.File.AppendAllLines(logFile, new[] { line });
+        }
+        catch { }
+        if (!ok) return Conflict("Insufficient stock or product not found");
+        return Ok(new { productId = req.ProductId, changed = ok });
+    }
+
     [HttpGet("GetProductsWithCategory")]
     [AllowAnonymous]
     public async Task<IActionResult> GetProductsWithCategory()

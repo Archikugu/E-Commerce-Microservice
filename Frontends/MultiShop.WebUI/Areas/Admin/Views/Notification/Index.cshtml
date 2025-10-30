@@ -1,0 +1,92 @@
+@{
+    ViewData["Title"] = "Notifications";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box" style="border-radius:8px; border:1px solid rgba(0,0,0,.08); padding:20px;">
+                <h3 style="margin:0 0 20px 0; font-weight:600;">Notifications</h3>
+                
+                <div class="row">
+                    <div class="col-md-4">
+                        <div style="background:linear-gradient(135deg,#ef4444,#f87171);color:#fff;border-radius:10px;padding:20px;text-align:center;">
+                            <i class="fa fa-shopping-cart" style="font-size:48px;opacity:0.8;margin-bottom:10px;"></i>
+                            <h3>@ViewBag.PendingOrders</h3>
+                            <h5>Pending Orders</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div style="background:linear-gradient(135deg,#2563eb,#3b82f6);color:#fff;border-radius:10px;padding:20px;text-align:center;">
+                            <i class="fa fa-envelope" style="font-size:48px;opacity:0.8;margin-bottom:10px;"></i>
+                            <h3>@ViewBag.UnreadMessages</h3>
+                            <h5>Unread Messages</h5>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);color:#fff;border-radius:10px;padding:20px;text-align:center;">
+                            <i class="fa fa-bell" style="font-size:48px;opacity:0.8;margin-bottom:10px;"></i>
+                            <h3>@((int)(ViewBag.PendingOrders ?? 0) + (int)(ViewBag.UnreadMessages ?? 0))</h3>
+                            <h5>Total Notifications</h5>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top:30px;">
+                    <h4 style="margin-bottom:15px;">Recent Notifications</h4>
+                    <div id="notificationsList">
+                        @{
+                            var notifications = ViewBag.RecentNotifications as List<object> ?? new List<object>();
+                        }
+                        @if (notifications.Count > 0)
+                        {
+                            @foreach (var notif in notifications)
+                            {
+                                <div style="padding:15px;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:10px;background:#f9fafb;">
+                                    <div style="display:flex;align-items:center;">
+                                        <i class="fa @(notif.GetType().GetProperty("type").GetValue(notif).ToString() == "order" ? "fa-shopping-cart text-danger" : "fa-envelope text-primary")" style="font-size:24px;margin-right:15px;"></i>
+                                        <div style="flex:1;">
+                                            <h5 style="margin:0 0 5px 0;">@notif.GetType().GetProperty("title").GetValue(notif)</h5>
+                                            <p style="margin:0;color:#6b7280;">@notif.GetType().GetProperty("message").GetValue(notif)</p>
+                                            <span style="font-size:12px;color:#9ca3af;">@DateTime.Parse(notif.GetType().GetProperty("date").GetValue(notif).ToString()).ToString("dd MMM yyyy, HH:mm")</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div style="text-align:center;padding:40px;color:#9ca3af;">
+                                <i class="fa fa-check-circle" style="font-size:48px;opacity:0.3;"></i>
+                                <p style="margin-top:15px;">No new notifications</p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<script>
+// Auto-refresh notifications every 30 seconds
+setInterval(async function() {
+    try {
+        const response = await fetch('/Admin/Notification/api/count');
+        const data = await response.json();
+        
+        // Update badge if exists
+        const badge = document.querySelector('.notification-badge');
+        if (badge) {
+            badge.textContent = data.count;
+            badge.style.display = data.count > 0 ? 'inline-block' : 'none';
+        }
+    } catch (error) {
+        console.error('Failed to fetch notification count:', error);
+    }
+}, 30000);
+</script>
+}
+

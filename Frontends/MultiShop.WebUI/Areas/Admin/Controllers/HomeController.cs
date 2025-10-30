@@ -4,6 +4,8 @@ using MultiShop.WebUI.Services.StatisticsServices.UserStatistic;
 using MultiShop.WebUI.Services.StatisticsServices.CommentStatisticServices;
 using MultiShop.WebUI.Services.MessageServices;
 using MultiShop.WebUI.Services.StatisticsServices.DiscountStatisticServices;
+using MultiShop.WebUI.Services.OrderServices.OrderOrderingServices;
+using MultiShop.WebUI.Services.UserIdentityServices;
 using System.Text.Json;
 using System.Linq;
 namespace MultiShop.WebUI.Areas.Admin.Controllers
@@ -16,15 +18,27 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
         private readonly ICommentStatisticsService _commentStatisticsService;
         private readonly IMessageService _messageService;
         private readonly IDiscountStatisticsService _discountStatisticsService;
+        private readonly IOrderOrderingService _orderService;
+        private readonly IUserIdentityService _userIdentityService;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public HomeController(ICatalogStatisticsService statisticsService, IUserStatisticsService userStatisticsService, ICommentStatisticsService commentStatisticsService, IMessageService messageService, IDiscountStatisticsService discountStatisticsService, IHttpClientFactory httpClientFactory)
+        public HomeController(
+            ICatalogStatisticsService statisticsService, 
+            IUserStatisticsService userStatisticsService, 
+            ICommentStatisticsService commentStatisticsService, 
+            IMessageService messageService, 
+            IDiscountStatisticsService discountStatisticsService,
+            IOrderOrderingService orderService,
+            IUserIdentityService userIdentityService,
+            IHttpClientFactory httpClientFactory)
         {
             _statisticsService = statisticsService;
             _userStatisticsService = userStatisticsService;
             _commentStatisticsService = commentStatisticsService;
             _messageService = messageService;
             _discountStatisticsService = discountStatisticsService;
+            _orderService = orderService;
+            _userIdentityService = userIdentityService;
             _httpClientFactory = httpClientFactory;
         }
 
@@ -67,6 +81,56 @@ namespace MultiShop.WebUI.Areas.Admin.Controllers
             ViewBag.InactiveCoupons = inactiveCoupons;
             ViewBag.ExpiredCoupons = expiredCoupons;
             ViewBag.ValidCoupons = validCoupons;
+
+            // Order statistics
+            var orders = await _orderService.GetOrderingListAsync();
+            var totalOrders = orders.Count;
+            var todayOrders = orders.Where(o => o.OrderDate.Date == DateTime.UtcNow.Date).ToList();
+            var todayRevenue = todayOrders.Sum(o => o.TotalPrice);
+            var totalRevenue = orders.Where(o => o.Status == "Delivered").Sum(o => o.TotalPrice);
+            var pendingOrders = orders.Count(o => o.Status == "New" || o.Status == "Processing");
+            var deliveredOrders = orders.Count(o => o.Status == "Delivered");
+            
+            ViewBag.TotalOrders = totalOrders;
+            ViewBag.TodayOrders = todayOrders.Count;
+            ViewBag.TodayRevenue = todayRevenue;
+            ViewBag.TotalRevenue = totalRevenue;
+            ViewBag.PendingOrders = pendingOrders;
+            ViewBag.DeliveredOrders = deliveredOrders;
+            ViewBag.RecentOrders = orders.OrderByDescending(o => o.OrderDate).Take(10).ToList();
+
+            // Chart data - Last 7 days sales
+            var salesData = new List<decimal>();
+            var salesLabels = new List<string>();
+            for (int i = 6; i >= 0; i--)
+            {
+                var date = DateTime.UtcNow.Date.AddDays(-i);
+                var dayRevenue = orders.Where(o => o.OrderDate.Date == date).Sum(o => o.TotalPrice);
+                salesData.Add(dayRevenue);
+                salesLabels.Add(date.ToString("ddd"));
+            }
+            ViewBag.SalesData = salesData;
+            ViewBag.SalesLabels = salesLabels;
+
+            // Order status distribution
+            var statusCounts = new Dictionary<string, int>
+            {
+                { "New", orders.Count(o => o.Status == "New") },
+                { "Processing", orders.Count(o => o.Status == "Processing") },
+                { "Shipped", orders.Count(o => o.Status == "Shipped") },
+                { "Delivered", orders.Count(o => o.Status == "Delivered") },
+                { "Cancelled", orders.Count(o => o.Status == "Cancelled") }
+            };
+            ViewBag.StatusCounts = statusCounts;
+
+            // User mapping for orders
+            try
+            {
+                var users = await _userIdentityService.GetAllUsersAsync();
+                var map = users?.GroupBy(u => u.Id).ToDictionary(g => g.Key, g => g.First().FullName ?? string.Empty) ?? new Dictionary<string, string>();
+                ViewBag.UserMap = map;
+            }
+            catch { ViewBag.UserMap = new Dictionary<string, string>(); }
 
             var currentTemp = await FetchCurrentTempAsync("ankara");
             ViewBag.Weather = currentTemp;

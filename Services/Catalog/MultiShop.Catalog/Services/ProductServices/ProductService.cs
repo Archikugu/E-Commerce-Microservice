@@ -68,4 +68,26 @@ public class ProductService : IProductService
         var values = _mapper.Map<Product>(updateProductDto);
         await _productsCollection.FindOneAndReplaceAsync(x => x.ProductId == updateProductDto.ProductId, values);
     }
+
+    public async Task<bool> DecrementStockAsync(string productId, int quantity)
+    {
+        if (quantity <= 0) return true;
+        var update = Builders<Product>.Update.Inc(p => p.StockQuantity, -quantity);
+        var filter = Builders<Product>.Filter.And(
+            Builders<Product>.Filter.Eq(p => p.ProductId, productId),
+            Builders<Product>.Filter.Gt(p => p.StockQuantity, 0)
+        );
+        var result = await _productsCollection.UpdateOneAsync(filter, update);
+        try
+        {
+            var root = Directory.GetCurrentDirectory();
+            var logDir = Path.Combine(root, "wwwroot", "logs");
+            Directory.CreateDirectory(logDir);
+            var logFile = Path.Combine(logDir, "catalog-decrement.log");
+            var line = $"{DateTime.UtcNow:O}\tUpdateResult Matched={result.MatchedCount} Modified={result.ModifiedCount}";
+            System.IO.File.AppendAllLines(logFile, new[] { line });
+        }
+        catch { }
+        return result.ModifiedCount > 0;
+    }
 }
