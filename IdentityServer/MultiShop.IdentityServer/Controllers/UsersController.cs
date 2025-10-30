@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MultiShop.IdentityServer.Models;
+using MultiShop.IdentityServer.Dtos;
 using static Duende.IdentityServer.IdentityServerConstants;
 
 namespace MultiShop.IdentityServer.Controllers;
@@ -21,6 +22,38 @@ public class UsersController : ControllerBase
         _userManager = userManager;
     }
 
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.OldPassword) || string.IsNullOrWhiteSpace(dto.NewPassword))
+            {
+                return BadRequest(new { message = "Invalid request" });
+            }
+            if (!string.Equals(dto.NewPassword, dto.ConfirmNewPassword))
+            {
+                return BadRequest(new { message = "Passwords do not match" });
+            }
+
+            var userId = User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                return Unauthorized(new { message = "User not found in token" });
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(new { message = "User not found" });
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, dto.OldPassword, dto.NewPassword);
+            if (!result.Succeeded)
+            {
+                var errors = result.Errors.Select(e => e.Description).ToList();
+                return BadRequest(new { message = "Failed to change password", errors });
+            }
+            return Ok(new { ok = true });
+        }
     [HttpGet("GetUserDetails")]
     public async Task<IActionResult> GetUserDetails()
     {

@@ -18,6 +18,11 @@ public class LoginController : Controller
     [HttpGet]
     public IActionResult Index()
     {
+        var pc = HttpContext.Request.Query["pc"].ToString();
+        if (pc == "1")
+        {
+            ViewBag.SuccessMessage = "Your password has been changed. Please sign in.";
+        }
         return View();
     }
     [HttpPost]

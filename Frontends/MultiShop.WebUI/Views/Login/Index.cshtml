@@ -197,6 +197,12 @@
         <div class="login-inner">
             <form method="post" class="login-form">
                 <h3>MultiShop Login</h3>
+                @if (ViewBag.SuccessMessage != null)
+                {
+                    <div class="alert alert-success" style="color:#1b5e20; background-color:#e8f5e9; border:1px solid #c8e6c9; padding:10px; border-radius:4px; margin-bottom:20px;">
+                        @ViewBag.SuccessMessage
+                    </div>
+                }
                 
                 @if (TempData["ErrorMessage"] != null)
                 {

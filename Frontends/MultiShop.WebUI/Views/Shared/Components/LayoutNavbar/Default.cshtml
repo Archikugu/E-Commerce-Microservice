@@ -87,7 +87,7 @@
 								@if (User?.Identity?.IsAuthenticated ?? false)
 								{
 									<a class="dropdown-item text-dark" href="/User">@localizer["Profile"]</a>
-									<a class="dropdown-item text-dark" href="/User/ChangePassword">@localizer["Change Password"]</a>
+									<a class="dropdown-item text-dark" href="/User/Account/ChangePassword">@localizer["Change Password"]</a>
 									<a class="dropdown-item text-dark" href="/Login/Logout">@localizer["Logout"]</a>
 								}
 								else
