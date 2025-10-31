@@ -1,0 +1,73 @@
+@model List<MultiShop.WebUI.Dtos.CatalogDtos.ProductDtos.GetByIdProductDto>
+@{
+    ViewData["Title"] = "My Wishlist";
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <div>
+                            <h4 class="card-title mb-1">My Wishlist</h4>
+                            <p class="card-description mb-0">Products you saved for later</p>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead>
+                                <tr>
+                                    <th style="width:90px;">Image</th>
+                                    <th>Product</th>
+                                    <th style="width:140px;" class="text-right">Price</th>
+                                    <th style="width:200px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Any())
+                                {
+                                    foreach (var p in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (!string.IsNullOrWhiteSpace(p.ImageUrl))
+                                                {
+                                                    <img src="@p.ImageUrl" alt="@p.ProductName" style="width:72px;height:54px;object-fit:cover;border-radius:6px;" />
+                                                }
+                                            </td>
+                                            <td>@p.ProductName</td>
+                                            <td class="text-right">@p.Price.ToString("C")</td>
+                                            <td>
+                                                <div class="btn-group btn-group-sm" role="group" style="white-space:nowrap;">
+                                                    <form asp-area="User" asp-controller="Wishlist" asp-action="Remove" method="post" style="display:inline;">
+                                                        <input type="hidden" name="id" value="@p.ProductId" />
+                                                        <button type="submit" class="btn btn-danger"><i class="mdi mdi-delete" style="margin-right:6px;"></i> Remove</button>
+                                                    </form>
+                                                    <form asp-area="User" asp-controller="Wishlist" asp-action="AddToCart" method="post" style="display:inline; margin-left:6px;">
+                                                        <input type="hidden" name="id" value="@p.ProductId" />
+                                                        <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                                        <button type="submit" class="btn btn-success"><i class="mdi mdi-cart" style="margin-right:6px;"></i> Add to Cart</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted" style="padding:40px;">Your wishlist is empty.</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

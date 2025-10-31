@@ -1,11 +1,26 @@
 @* Extracted from User layout sidebar *@
+@{
+    var currentArea = ViewContext.RouteData.Values["area"]?.ToString();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    System.Func<string, string, bool> isCurrent = (controller, action) =>
+        string.Equals(currentController, controller, System.StringComparison.OrdinalIgnoreCase)
+        && (action == null || string.Equals(currentAction, action, System.StringComparison.OrdinalIgnoreCase));
+
+    var dashboardActive = isCurrent("Home", "Index");
+
+    var ordersExpanded = isCurrent("MyOrder", null) || isCurrent("Invoice", null) || isCurrent("Address", null) || string.Equals(currentController, "Basket", System.StringComparison.OrdinalIgnoreCase);
+    var messagesExpanded = isCurrent("Message", null);
+    var accountExpanded = isCurrent("Profile", null) || isCurrent("Wishlist", null) || isCurrent("Reviews", null) || isCurrent("Account", null) || isCurrent("Discount", null) || isCurrent("Comments", null);
+    var helpExpanded = isCurrent("Contact", null);
+}
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
         <li class="nav-item sidebar-category">
             <p>Overview</p>
             <span></span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item @(dashboardActive ? "active" : null)">
             <a class="nav-link" href="/User/Home/Index">
                 <i class="mdi mdi-view-quilt menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
@@ -17,22 +32,27 @@
             <span></span>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/User/MyOrder/MyOrderList">
+            <a class="nav-link" data-toggle="collapse" href="#user-orders" aria-expanded="@(ordersExpanded.ToString().ToLower())" aria-controls="user-orders">
                 <i class="mdi mdi-cart-outline menu-icon"></i>
-                <span class="menu-title">My Orders</span>
+                <span class="menu-title">Orders & Basket</span>
+                <i class="menu-arrow"></i>
             </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/Order/Index">
-                <i class="mdi mdi-map-marker menu-icon"></i>
-                <span class="menu-title">Address Book</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/Basket/Index">
-                <i class="mdi mdi-basket menu-icon"></i>
-                <span class="menu-title">Basket</span>
-            </a>
+            <div class="collapse @(ordersExpanded ? "show" : null)" id="user-orders">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link @(isCurrent("MyOrder", null) ? "active" : null)" href="/User/MyOrder/MyOrderList">My Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(isCurrent("Invoice", null) ? "active" : null)" href="/User/MyOrder/MyOrderList">Invoices</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(isCurrent("Address", null) ? "active" : null)" href="/User/Address/Index">Address Book</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(string.Equals(currentController, "Basket", System.StringComparison.OrdinalIgnoreCase) ? "active" : null)" href="/Basket/Index">Basket</a>
+                    </li>
+                </ul>
+            </div>
         </li>
 
         <li class="nav-item sidebar-category">
@@ -40,15 +60,19 @@
             <span></span>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#user-messages" aria-expanded="false" aria-controls="user-messages">
+            <a class="nav-link" data-toggle="collapse" href="#user-messages" aria-expanded="@(messagesExpanded.ToString().ToLower())" aria-controls="user-messages">
                 <i class="mdi mdi-email menu-icon"></i>
                 <span class="menu-title">Messages</span>
                 <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="user-messages">
+            <div class="collapse @(messagesExpanded ? "show" : null)" id="user-messages">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="/User/Message/Inbox">Inbox</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="/User/Message/Sendbox">Sendbox</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link @(isCurrent("Message", "Inbox") ? "active" : null)" href="/User/Message/Inbox">Inbox</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(isCurrent("Message", "Sendbox") ? "active" : null)" href="/User/Message/Sendbox">Sendbox</a>
+                    </li>
                 </ul>
             </div>
         </li>
@@ -58,35 +82,37 @@
             <span></span>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/User/Home/Index">
+            <a class="nav-link" data-toggle="collapse" href="#user-account" aria-expanded="@(accountExpanded.ToString().ToLower())" aria-controls="user-account">
                 <i class="mdi mdi-account-circle menu-icon"></i>
-                <span class="menu-title">Account Info</span>
+                <span class="menu-title">Account Settings</span>
+                <i class="menu-arrow"></i>
             </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/User/Account/ChangePassword">
-                <i class="mdi mdi-lock-reset menu-icon"></i>
-                <span class="menu-title">Change Password</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/Discount/Index">
-                <i class="mdi mdi-tag menu-icon"></i>
-                <span class="menu-title">Discounts & Coupons</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/Comments/Index">
-                <i class="mdi mdi-comment-text-outline menu-icon"></i>
-                <span class="menu-title">Comments</span>
-            </a>
+            <div class="collapse @(accountExpanded ? "show" : null)" id="user-account">
+                <ul class="nav flex-column sub-menu">
+                    <li class="nav-item">
+                        <a class="nav-link @(isCurrent("Profile", null) ? "active" : null)" href="/User/Profile/Index">Account Info</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(isCurrent("Wishlist", null) ? "active" : null)" href="/User/Wishlist/Index">Wishlist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(isCurrent("Reviews", null) ? "active" : null)" href="/User/Reviews/Index">My Reviews</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(isCurrent("Account", "ChangePassword") ? "active" : null)" href="/User/Account/ChangePassword">Change Password</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(isCurrent("Discount", null) ? "active" : null)" href="/Discount/Index">Discounts & Coupons</a>
+                    </li>
+                </ul>
+            </div>
         </li>
 
         <li class="nav-item sidebar-category">
             <p>Help</p>
             <span></span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item @(helpExpanded ? "active" : null)">
             <a class="nav-link" href="/Contact/Index">
                 <i class="mdi mdi-help-circle-outline menu-icon"></i>
                 <span class="menu-title">Support / Contact</span>

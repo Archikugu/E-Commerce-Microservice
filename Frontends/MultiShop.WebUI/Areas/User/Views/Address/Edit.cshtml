@@ -1,0 +1,48 @@
+@model MultiShop.WebUI.Dtos.OrderDtos.OrderAddressDtos.UpdateOrderAddressDto
+@{
+    ViewData["Title"] = "Edit Address";
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box" style="border-radius:8px; border:1px solid rgba(0,0,0,.08); padding:20px;">
+                <h3 style="margin:0 0 12px 0; font-weight:600;">Edit Address</h3>
+                <form method="post">
+                    <input type="hidden" asp-for="AddressId" />
+                    <input type="hidden" asp-for="UserId" />
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group"><label>First Name</label><input class="form-control" asp-for="FirstName" /></div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group"><label>Last Name</label><input class="form-control" asp-for="LastName" /></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6"><div class="form-group"><label>Email</label><input class="form-control" asp-for="Email" /></div></div>
+                        <div class="col-md-6"><div class="form-group"><label>Phone</label><input class="form-control" asp-for="PhoneNumber" /></div></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4"><div class="form-group"><label>Country</label><input class="form-control" asp-for="Country" /></div></div>
+                        <div class="col-md-4"><div class="form-group"><label>City</label><input class="form-control" asp-for="City" /></div></div>
+                        <div class="col-md-4"><div class="form-group"><label>District</label><input class="form-control" asp-for="District" /></div></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4"><div class="form-group"><label>Zip Code</label><input class="form-control" asp-for="ZipCode" /></div></div>
+                        <div class="col-md-8"><div class="form-group"><label>Description</label><input class="form-control" asp-for="Description" /></div></div>
+                    </div>
+                    <div class="form-group"><label>Address Line 1</label><input class="form-control" asp-for="AddressLine1" /></div>
+                    <div class="form-group"><label>Address Line 2</label><input class="form-control" asp-for="AddressLine2" /></div>
+                    <div style="display:flex; gap:8px;">
+                        <button type="submit" class="btn btn-success"><i class="fa fa-save" style="margin-right:6px;"></i> Save</button>
+                        <a asp-area="User" asp-controller="Address" asp-action="Index" class="btn btn-default">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+

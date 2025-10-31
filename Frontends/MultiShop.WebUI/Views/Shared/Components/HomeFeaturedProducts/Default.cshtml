@@ -1,5 +1,18 @@
 ﻿@using MultiShop.WebUI.Dtos.CatalogDtos.ProductDtos
 @model List<ResultProductDto>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpAccessor
+@{
+    List<string> wlIds = new List<string>();
+    try
+    {
+        var s = HttpAccessor?.HttpContext?.Session?.GetString("user_wishlist_ids");
+        if (!string.IsNullOrWhiteSpace(s))
+        {
+            wlIds = System.Text.Json.JsonSerializer.Deserialize<List<string>>(s) ?? new List<string>();
+        }
+    }
+    catch { wlIds = new List<string>(); }
+}
 
 <!-- Products Start -->
 <div class="container-fluid pt-5 pb-3">
@@ -13,9 +26,28 @@
                         <img class="img-fluid w-100" src="@item.ImageUrl" alt="">
                         <div class="product-action">
                             <a class="btn btn-outline-dark btn-square" href="/Basket/AddBasketItem/@item.ProductId" title="Add to Cart"><i class="fa fa-shopping-cart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                            @if (wlIds.Contains(item.ProductId))
+                            {
+                                <form method="post" action="/User/Wishlist/Remove" style="display:inline;">
+                                    <input type="hidden" name="id" value="@item.ProductId" />
+                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                    <button type="submit" class="btn btn-outline-dark btn-square" title="Remove from Wishlist">
+                                        <i class="fa fa-heart text-danger"></i>
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form method="post" action="/User/Wishlist/Add" style="display:inline;">
+                                    <input type="hidden" name="id" value="@item.ProductId" />
+                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                    <button type="submit" class="btn btn-outline-dark btn-square" title="Add to Wishlist">
+                                        <i class="far fa-heart"></i>
+                                    </button>
+                                </form>
+                            }
+                            <a class="btn btn-outline-dark btn-square" href="#" title="Compare"><i class="fa fa-sync-alt"></i></a>
+                            <a class="btn btn-outline-dark btn-square" href="@Url.Action("ProductDetail", "ProductList", new { id = item.ProductId })" title="View"><i class="fa fa-search"></i></a>
                         </div>
                     </div>
                     <div class="text-center py-4">

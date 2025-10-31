@@ -4,59 +4,65 @@
     Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
 }
 
-          
+         
+<div class="row">
+    <div class="col-12 grid-margin">
+        <div class="row">
+            <div class="col-md-3 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body" style="display:flex;align-items:center;gap:12px;">
+                        <i class="mdi mdi-cart-outline" style="font-size:28px;color:#6366f1;"></i>
+                        <div>
+                            <p class="text-muted mb-0">Total Orders</p>
+                            <h4 class="mb-0">@ViewBag.TotalOrders</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body" style="display:flex;align-items:center;gap:12px;">
+                        <i class="mdi mdi-truck-delivery" style="font-size:28px;color:#16a34a;"></i>
+                        <div>
+                            <p class="text-muted mb-0">Delivered</p>
+                            <h4 class="mb-0">@ViewBag.DeliveredOrders</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body" style="display:flex;align-items:center;gap:12px;">
+                        <i class="mdi mdi-progress-clock" style="font-size:28px;color:#f59e0b;"></i>
+                        <div>
+                            <p class="text-muted mb-0">Processing</p>
+                            <h4 class="mb-0">@ViewBag.ProcessingOrders</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body" style="display:flex;align-items:center;gap:12px;">
+                        <i class="mdi mdi-email-outline" style="font-size:28px;color:#ef4444;"></i>
+                        <div>
+                            <p class="text-muted mb-0">Unread Messages</p>
+                            <h4 class="mb-0">@ViewBag.UnreadMessages</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-12 col-xl-6 grid-margin stretch-card">
         <div class="row w-100 flex-grow">
             <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-title">Gokhan</p>
-                        <p class="text-muted">25% more traffic than previous week</p>
-                        <div class="row mb-3">
-                            <div class="col-md-7">
-                                <div class="d-flex justify-content-between traffic-status">
-                                    <div class="item">
-                                        <p class="mb-">Users</p>
-                                        <h5 class="font-weight-bold mb-0">93,956</h5>
-                                        <div class="color-border"></div>
-                                    </div>
-                                    <div class="item">
-                                        <p class="mb-">Bounce Rate</p>
-                                        <h5 class="font-weight-bold mb-0">58,605</h5>
-                                        <div class="color-border"></div>
-                                    </div>
-                                    <div class="item">
-                                        <p class="mb-">Page Views</p>
-                                        <h5 class="font-weight-bold mb-0">78,254</h5>
-                                        <div class="color-border"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-5">
-                                <ul class="nav nav-pills nav-pills-custom justify-content-md-end" id="pills-tab-custom"
-                                    role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="pills-home-tab-custom" data-toggle="pill"
-                                           href="#pills-health" role="tab" aria-controls="pills-home" aria-selected="true">
-                                            Day
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="pills-profile-tab-custom" data-toggle="pill" href="#pills-career"
-                                           role="tab" aria-controls="pills-profile" aria-selected="false">
-                                            Week
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="pills-contact-tab-custom" data-toggle="pill" href="#pills-music"
-                                           role="tab" aria-controls="pills-contact" aria-selected="false">
-                                            Month
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <p class="card-title">Orders (Last 7 days)</p>
                         <canvas id="audience-chart"></canvas>
                     </div>
                 </div>
@@ -65,12 +71,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between flex-wrap">
-                            <p class="card-title">Weekly Balance</p>
-                            <p class="text-success font-weight-medium">20.15 %</p>
-                        </div>
-                        <div class="d-flex align-items-center flex-wrap mb-3">
-                            <h5 class="font-weight-normal mb-0 mb-md-1 mb-lg-0 mr-3">$22.736</h5>
-                            <p class="text-muted mb-0">Avg Sessions</p>
+                            <p class="card-title">Revenue (Last 7 days)</p>
                         </div>
                         <canvas id="balance-chart" height="130"></canvas>
                     </div>
@@ -80,12 +81,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex align-items-center justify-content-between flex-wrap">
-                            <p class="card-title">Today Task</p>
-                            <p class="text-success font-weight-medium">45.39 %</p>
-                        </div>
-                        <div class="d-flex align-items-center flex-wrap mb-3">
-                            <h5 class="font-weight-normal mb-0 mb-md-1 mb-lg-0 mr-3">17.247</h5>
-                            <p class="text-muted mb-0">Avg Sessions</p>
+                            <p class="card-title">Status Distribution</p>
                         </div>
                         <canvas id="task-chart" height="130"></canvas>
                     </div>
@@ -98,11 +94,51 @@
             <div class="col-md-6 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-title">Regional Load</p>
-                        <p class="text-muted">Last update: 2 Hours ago</p>
-                        <div class="regional-chart-legend d-flex align-items-center flex-wrap mb-1"
-                             id="regional-chart-legend"></div>
-                        <canvas height="280" id="regional-chart"></canvas>
+                        <p class="card-title">Wishlist</p>
+                        <p class="text-muted">Items you saved</p>
+                        
+                        <div style="display:flex;align-items:flex-start;gap:16px;">
+                            <i class="mdi mdi-heart-outline" style="font-size:32px;color:#ef4444;margin-top:2px;"></i>
+                            <div style="flex:1;">
+                                <div style="display:flex;align-items:baseline;gap:10px;">
+                                    <h3 class="mb-0" style="font-weight:700;">@ViewBag.WishlistCount</h3>
+                                    <span class="text-muted">items</span>
+                                </div>
+                                @{
+                                    var names = ViewBag.WishlistNames as System.Collections.Generic.List<string> ?? new System.Collections.Generic.List<string>();
+                                }
+                                @if (names.Any())
+                                {
+                                    <style>
+                                        .wishlist-list { counter-reset: wl; list-style: none; margin-top:10px; padding-left:0; }
+                                        .wishlist-list li { display:flex; align-items:center; margin-bottom:8px; font-size:15px; font-weight:600; color:#111827; }
+                                        .wishlist-list li::before {
+                                            counter-increment: wl; content: counter(wl);
+                                            display:inline-flex; align-items:center; justify-content:center;
+                                            width:28px; height:28px; border-radius:50%;
+                                            background:#eef2ff; color:#3730a3; border:1px solid #c7d2fe;
+                                            font-size:14px; font-weight:700; margin-right:10px;
+                                        }
+                                    </style>
+                                    <ol class="wishlist-list">
+                                        @for (int i = 0; i < names.Count; i++)
+                                        {
+                                            <li>@names[i]</li>
+                                        }
+                                    </ol>
+                                    @if ((ViewBag.WishlistCount as int? ?? 0) > names.Count)
+                                    {
+                                        <div style="margin-top:4px;">
+                                            <span class="badge" style="background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;padding:6px 10px;border-radius:9999px;font-size:13px;font-weight:600;">+@((ViewBag.WishlistCount as int?) - names.Count) more</span>
+                                        </div>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="text-muted" style="font-size:14px;margin-top:8px;">No items</div>
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -110,53 +146,37 @@
                 <div class="card">
                     <div class="card-body pb-0">
                         <div class="d-flex align-items-center mb-4">
-                            <p class="card-title mb-0 mr-1">Today activity</p>
-                            <div class="badge badge-info badge-pill">2</div>
+                            <p class="card-title mb-0 mr-1">Recent Orders</p>
+                            <div class="badge badge-info badge-pill">@((ViewBag.RecentOrders as System.Collections.ICollection)?.Count ?? 0)</div>
                         </div>
-                        <div class="d-flex flex-wrap pt-2">
-                            <div class="mr-4 mb-lg-2 mb-xl-0">
-                                <p>Time On Site</p>
-                                <h4 class="font-weight-bold mb-0">77.15 %</h4>
-                            </div>
-                            <div>
-                                <p>Page Views</p>
-                                <h4 class="font-weight-bold mb-0">14.15 %</h4>
-                            </div>
+                        <div class="d-flex flex-column pt-2">
+                            @{
+                                var rec = ViewBag.RecentOrders as System.Collections.Generic.List<MultiShop.WebUI.Dtos.OrderDtos.OrderOrderingDtos.ResultOrderingByUserIdDto> ?? new System.Collections.Generic.List<MultiShop.WebUI.Dtos.OrderDtos.OrderOrderingDtos.ResultOrderingByUserIdDto>();
+                            }
+                            @if (rec.Any())
+                            {
+                                foreach (var r in rec)
+                                {
+                                    var cls = (r.Status ?? "New").ToLowerInvariant() == "delivered" ? "badge-success" : ((r.Status ?? "").ToLowerInvariant()=="processing"?"badge-warning":"badge-secondary");
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span>#@r.OrderingId</span>
+                                        <span>@r.OrderDate.ToString("dd MMM")</span>
+                                        <span class="badge @cls">@(r.Status ?? "New")</span>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">No recent orders.</span>
+                            }
                         </div>
                     </div>
-                    <canvas height="150" id="activity-chart"></canvas>
                 </div>
             </div>
             <div class="col-md-12 stretch-card">
                 <div class="card">
                     <div class="card-body pb-0">
-                        <p class="card-title">Server Status 247</p>
-                        <div class="d-flex justify-content-between flex-wrap">
-                            <p class="text-muted">Last update: 2 Hours ago</p>
-                            <div class="d-flex align-items-center flex-wrap server-status-legend mt-3 mb-3 mb-md-0">
-                                <div class="item mr-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="color-bullet"></div>
-                                        <h5 class="font-weight-bold mb-0">128GB</h5>
-                                    </div>
-                                    <p class="mb-">Total Usage</p>
-                                </div>
-                                <div class="item mr-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="color-bullet"></div>
-                                        <h5 class="font-weight-bold mb-0">92%</h5>
-                                    </div>
-                                    <p class="mb-">Memory Usage</p>
-                                </div>
-                                <div class="item mr-3">
-                                    <div class="d-flex align-items-center">
-                                        <div class="color-bullet"></div>
-                                        <h5 class="font-weight-bold mb-0">16%</h5>
-                                    </div>
-                                    <p class="mb-">Disk Usage</p>
-                                </div>
-                            </div>
-                        </div>
+                        <p class="card-title">Status by Day (Last 7)</p>
                     </div>
                     <canvas height="170" id="status-chart"></canvas>
                 </div>
@@ -164,3 +184,145 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+<script>
+    (function(){
+        try {
+            var orders = @{
+                var all = ViewBag.OrdersForCharts as System.Collections.Generic.List<MultiShop.WebUI.Dtos.OrderDtos.OrderOrderingDtos.ResultOrderingByUserIdDto>
+                          ?? new System.Collections.Generic.List<MultiShop.WebUI.Dtos.OrderDtos.OrderOrderingDtos.ResultOrderingByUserIdDto>();
+                var json = System.Text.Json.JsonSerializer.Serialize(all);
+            }@Html.Raw(json);
+
+            // Build last 7 days buckets
+            var days = [];
+            var counts = [];
+            var revenue = [];
+            var map = {};
+            for (var i = 6; i >= 0; i--) {
+                var d = new Date(); d.setDate(d.getDate() - i);
+                var key = d.getFullYear()+"-"+(('0'+(d.getMonth()+1)).slice(-2))+"-"+(('0'+d.getDate()).slice(-2));
+                days.push((d.getMonth()+1) + "/" + d.getDate());
+                map[key] = { count: 0, total: 0 };
+            }
+            orders.forEach(function(o){
+                if (!o || !o.OrderDate) return;
+                var d = new Date(o.OrderDate);
+                var key = d.getFullYear()+"-"+(('0'+(d.getMonth()+1)).slice(-2))+"-"+(('0'+d.getDate()).slice(-2));
+                if (map[key]) {
+                    map[key].count += 1;
+                    var price = (typeof o.TotalPrice === 'number') ? o.TotalPrice : (o.TotalPrice?.value || 0);
+                    map[key].total += price || 0;
+                }
+            });
+            days.forEach(function(_, idx){
+                var d = new Date(); d.setDate(d.getDate() - (6-idx));
+                var key = d.getFullYear()+"-"+(('0'+(d.getMonth()+1)).slice(-2))+"-"+(('0'+d.getDate()).slice(-2));
+                counts.push(map[key]?.count || 0);
+                revenue.push(map[key]?.total || 0);
+            });
+
+            // Status distribution (overall)
+            var statusCounts = { delivered:0, processing:0, shipped:0, other:0 };
+            orders.forEach(function(o){
+                var s = (o.Status || '').toLowerCase();
+                if (s === 'delivered') statusCounts.delivered++;
+                else if (s === 'processing') statusCounts.processing++;
+                else if (s === 'shipped') statusCounts.shipped++;
+                else statusCounts.other++;
+            });
+
+            // Status per day (last 7 days)
+            var deliveredPerDay = [], processingPerDay = [], shippedPerDay = [], otherPerDay = [];
+            days.forEach(function(_, idx){
+                var d = new Date(); d.setDate(d.getDate() - (6-idx));
+                var key = d.getFullYear()+"-"+(('0'+(d.getMonth()+1)).slice(-2))+"-"+(('0'+d.getDate()).slice(-2));
+                var countsByStatus = { delivered:0, processing:0, shipped:0, other:0 };
+                orders.forEach(function(o){
+                    if (!o || !o.OrderDate) return;
+                    var od = new Date(o.OrderDate);
+                    var ok = od.getFullYear()+"-"+(('0'+(od.getMonth()+1)).slice(-2))+"-"+(('0'+od.getDate()).slice(-2));
+                    if (ok === key){
+                        var s = (o.Status || '').toLowerCase();
+                        if (s === 'delivered') countsByStatus.delivered++;
+                        else if (s === 'processing') countsByStatus.processing++;
+                        else if (s === 'shipped') countsByStatus.shipped++;
+                        else countsByStatus.other++;
+                    }
+                });
+                deliveredPerDay.push(countsByStatus.delivered);
+                processingPerDay.push(countsByStatus.processing);
+                shippedPerDay.push(countsByStatus.shipped);
+                otherPerDay.push(countsByStatus.other);
+            });
+
+            function destroyIfExists(canvas){
+                if (!window.Chart || !canvas) return;
+                try {
+                    var inst = Chart.getChart ? Chart.getChart(canvas) : (canvas.__chartist || canvas._chartInstance || null);
+                    if (inst && inst.destroy) inst.destroy();
+                } catch(e) {}
+            }
+
+            if (window.Chart) {
+                var ac = document.getElementById('audience-chart');
+                if (ac) {
+                    destroyIfExists(ac);
+                    new Chart(ac.getContext('2d'), {
+                        type: 'line',
+                        data: { labels: days, datasets: [{ label: 'Orders', data: counts, borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.15)', tension: 0.3, fill: true }]},
+                        options: { plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true } } }
+                    });
+                }
+                var bc = document.getElementById('balance-chart');
+                if (bc) {
+                    destroyIfExists(bc);
+                    new Chart(bc.getContext('2d'), {
+                        type: 'bar',
+                        data: { labels: days, datasets: [{ label: 'Revenue', data: revenue, backgroundColor: '#16a34a' }]},
+                        options: { plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true } } }
+                    });
+                }
+                var tc = document.getElementById('task-chart');
+                if (tc) {
+                    destroyIfExists(tc);
+                    new Chart(tc.getContext('2d'), {
+                        type: 'doughnut',
+                        data: { labels: ['Delivered','Processing','Shipped','Other'], datasets: [{ data: [statusCounts.delivered, statusCounts.processing, statusCounts.shipped, statusCounts.other], backgroundColor: ['#16a34a','#f59e0b','#3b82f6','#9ca3af'] }]},
+                        options: { plugins:{ legend:{ position:'bottom' } } }
+                    });
+                }
+
+                // Optional: if regional/status canvases exist, render too
+                var rc = document.getElementById('regional-chart');
+                if (rc) {
+                    destroyIfExists(rc);
+                    new Chart(rc.getContext('2d'), {
+                        type: 'pie',
+                        data: { labels: ['Delivered','Processing','Shipped','Other'], datasets: [{ data: [statusCounts.delivered, statusCounts.processing, statusCounts.shipped, statusCounts.other], backgroundColor: ['#16a34a','#f59e0b','#3b82f6','#9ca3af'] }]},
+                        options: { plugins:{ legend:{ position:'bottom' } } }
+                    });
+                }
+                var sc = document.getElementById('status-chart');
+                if (sc) {
+                    destroyIfExists(sc);
+                    new Chart(sc.getContext('2d'), {
+                        type: 'bar',
+                        data: {
+                            labels: days,
+                            datasets: [
+                                { label:'Delivered', data: deliveredPerDay, backgroundColor:'#16a34a' },
+                                { label:'Processing', data: processingPerDay, backgroundColor:'#f59e0b' },
+                                { label:'Shipped', data: shippedPerDay, backgroundColor:'#3b82f6' },
+                                { label:'Other', data: otherPerDay, backgroundColor:'#9ca3af' }
+                            ]
+                        },
+                        options: { plugins:{ legend:{ position:'bottom' } }, scales:{ x:{ stacked:true }, y:{ stacked:true, beginAtZero:true } } }
+                    });
+                }
+            }
+        } catch (e) { /* silent */ }
+    })();
+</script>
+}

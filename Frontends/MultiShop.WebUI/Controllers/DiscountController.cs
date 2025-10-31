@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MultiShop.WebUI.Services.DiscountServices.DiscountCouponServices;
 using MultiShop.WebUI.Services.BasketServices;
 using MultiShop.WebUI.Dtos.BasketDtos;
+using MultiShop.WebUI.Dtos.DiscountDtos.DiscountCouponDtos;
 
 namespace MultiShop.WebUI.Controllers;
 
@@ -15,6 +16,29 @@ public class DiscountController : Controller
     {
         _discountService = discountService;
         _basketService = basketService;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        try
+        {
+            var allCoupons = await _discountService.GetAllAsync();
+            var todayUtc = DateTime.UtcNow.Date;
+            var activeCoupons = allCoupons
+                .Where(c => c.IsActive && c.ValidDate.Date >= todayUtc)
+                .OrderByDescending(c => c.ValidDate)
+                .ToList();
+
+            ViewBag.DiscountCount = activeCoupons.Count;
+            return View(activeCoupons);
+        }
+        catch (Exception ex)
+        {
+            TempData["ErrorMessage"] = $"Failed to load coupons: {ex.Message}";
+            ViewBag.DiscountCount = 0;
+            return View(new List<ResultDiscountCouponDto>());
+        }
     }
 
     [HttpPost]

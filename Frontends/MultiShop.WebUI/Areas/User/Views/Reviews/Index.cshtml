@@ -1,0 +1,58 @@
+@using MultiShop.WebUI.Dtos.CommentDtos
+@model List<ResultCommentDto>
+@{
+    ViewData["Title"] = "My Reviews";
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-2">My Reviews</h4>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th style="width:120px;">Date</th>
+                                    <th>Product</th>
+                                    <th style="width:120px;">Rating</th>
+                                    <th>Comment</th>
+                                    <th style="width:120px;">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Any())
+                                {
+                                    foreach (var c in Model.OrderByDescending(x => x.CreatedDate))
+                                    {
+                                        <tr>
+                                            <td>@c.CreatedDate.ToString("dd MMM yyyy")</td>
+                                            <td>@c.ProductId</td>
+                                            <td>
+                                                <div style="color:#f59e0b;">
+                                                    @{ var filled = Math.Max(0, Math.Min(5, c.Rating)); var empty = 5 - filled; }
+                                                    @for (int i = 0; i < filled; i++) { <i class="mdi mdi-star" aria-hidden="true"></i> }
+                                                    @for (int i = 0; i < empty; i++) { <i class="mdi mdi-star-outline" aria-hidden="true"></i> }
+                                                </div>
+                                            </td>
+                                            <td>@c.CommentDetail</td>
+                                            <td><span class="badge @(c.Status?"badge-success":"badge-secondary")">@(c.Status?"Approved":"Pending")</span></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr><td colspan="5" class="text-center text-muted">You have not posted any reviews.</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

@@ -1,0 +1,36 @@
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+    var name = User?.FindFirst("name")?.Value ?? User?.Identity?.Name ?? "User";
+    var email = User?.FindFirst("email")?.Value ?? "";
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box" style="border-radius:8px; border:1px solid rgba(0,0,0,.08); padding:20px;">
+                <h3 style="margin:0 0 12px 0; font-weight:600;">My Profile</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input class="form-control" value="@name" readonly />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input class="form-control" value="@email" readonly />
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <a asp-area="User" asp-controller="Address" asp-action="Index" class="btn btn-primary"><i class="fa fa-map-marker" style="margin-right:6px;"></i> Manage Addresses</a>
+                    <a asp-area="User" asp-controller="Account" asp-action="ChangePassword" class="btn btn-default"><i class="fa fa-lock" style="margin-right:6px;"></i> Change Password</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+

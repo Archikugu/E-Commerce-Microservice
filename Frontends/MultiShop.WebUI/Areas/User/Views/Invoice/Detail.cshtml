@@ -1,0 +1,70 @@
+@using MultiShop.WebUI.Dtos.OrderDtos.OrderDetailDtos
+@model List<ResultOrderDetailDto>
+@{
+    ViewData["Title"] = "Invoice";
+    Layout = "~/Areas/User/Views/Shared/_UserLayout.cshtml";
+    var order = ViewBag.Order;
+}
+
+<section class="content container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-box" style="border-radius:8px; border:1px solid rgba(0,0,0,.08); padding:20px;">
+                <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <h3 style="margin:0; font-weight:600;">Invoice #@order?.OrderingId</h3>
+                    <button class="btn btn-primary" onclick="window.print()"><i class="mdi mdi-printer"></i> Print / Save PDF</button>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Billing To</h5>
+                        <div class="text-muted">
+                            <div>@User?.Identity?.Name</div>
+                            <div>@User?.FindFirst("email")?.Value</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <h5>Order Info</h5>
+                        <div class="text-muted">
+                            <div>Date: @order?.OrderDate.ToString("dd MMM yyyy, HH:mm")</div>
+                            <div>Status: @order?.Status</div>
+                            <div>Total: @order?.TotalPrice.ToString("C")</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive" style="margin-top:16px;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th class="text-right" style="width:140px;">Unit Price</th>
+                                <th class="text-right" style="width:100px;">Qty</th>
+                                <th class="text-right" style="width:160px;">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var d in Model)
+                            {
+                                <tr>
+                                    <td>@d.ProductName</td>
+                                    <td class="text-right">@d.ProductPrice.ToString("C")</td>
+                                    <td class="text-right">@d.ProductAmount</td>
+                                    <td class="text-right">@d.ProductTotalPrice.ToString("C")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+@@media print {
+    .sidebar, .navbar, .btn, .content-header { display: none !important; }
+    .chart-box { border: none !important; }
+}
+</style>
+
+

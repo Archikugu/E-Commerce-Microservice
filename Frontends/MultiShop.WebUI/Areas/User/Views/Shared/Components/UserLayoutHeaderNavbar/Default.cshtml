@@ -8,6 +8,10 @@
     var end = DateTime.Now;
     var start = end.AddDays(-30);
     var dateRange = $"{start:MMM dd, yyyy} - {end:MMM dd, yyyy}";
+    var unreadMessageCount = ((int?)ViewBag.UnreadMessageCount) ?? 0;
+    var notificationCount = ((int?)ViewBag.NotificationCount) ?? 0;
+    var recentMessages = (IEnumerable<dynamic>)(ViewBag.RecentMessages ?? new List<dynamic>());
+    var recentNotifications = (IEnumerable<dynamic>)(ViewBag.RecentNotifications ?? new List<dynamic>());
 }
 <nav class="navbar col-lg-12 col-12 px-0 py-0 py-lg-4 d-flex flex-row">
     <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -25,98 +29,80 @@
             </li>
             <li class="nav-item dropdown mr-1">
                 <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-toggle="dropdown">
-                    <i class="mdi mdi-calendar mx-0"></i>
-                    <span class="count bg-info">2</span>
+                    <i class="mdi mdi-email-outline mx-0"></i>
+                    @if (unreadMessageCount > 0)
+                    {
+                        <span class="count bg-info">@unreadMessageCount</span>
+                    }
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
                     <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <img src="~/SpicaUserTemplate/images/faces/face4.jpg" alt="image" class="profile-pic">
-                        </div>
-                        <div class="preview-item-content flex-grow">
-                            <h6 class="preview-subject ellipsis font-weight-normal">
-                                David Grey
-                            </h6>
-                            <p class="font-weight-light small-text text-muted mb-0">
-                                The meeting is cancelled
-                            </p>
-                        </div>
-                    </a>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <img src="~/SpicaUserTemplate/images/faces/face2.jpg" alt="image" class="profile-pic">
-                        </div>
-                        <div class="preview-item-content flex-grow">
-                            <h6 class="preview-subject ellipsis font-weight-normal">
-                                Tim Cook
-                            </h6>
-                            <p class="font-weight-light small-text text-muted mb-0">
-                                New product launch
-                            </p>
-                        </div>
-                    </a>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <img src="images/faces/face3.jpg" alt="image" class="profile-pic">
-                        </div>
-                        <div class="preview-item-content flex-grow">
-                            <h6 class="preview-subject ellipsis font-weight-normal">
-                                Johnson
-                            </h6>
-                            <p class="font-weight-light small-text text-muted mb-0">
-                                Upcoming board meeting
-                            </p>
-                        </div>
-                    </a>
+                    @if (recentMessages.Any())
+                    {
+                        foreach (var m in recentMessages)
+                        {
+                            var sender = (string)(m?.SenderName ?? m?.FromName ?? "");
+                            var text = (string)(m?.Text ?? m?.Preview ?? m?.Subject ?? "");
+                            var avatar = (string)(m?.AvatarUrl ?? Url.Content("~/SpicaUserTemplate/images/faces/face4.jpg"));
+                            var url = (string)(m?.Url ?? "/User/Message/Inbox");
+                            <a class="dropdown-item preview-item" href="@url">
+                                <div class="preview-thumbnail">
+                                    <img src="@avatar" alt="image" class="profile-pic">
+                                </div>
+                                <div class="preview-item-content flex-grow">
+                                    <h6 class="preview-subject ellipsis font-weight-normal">@sender</h6>
+                                    <p class="font-weight-light small-text text-muted mb-0">@text</p>
+                                </div>
+                            </a>
+                        }
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-center" href="/User/Message/Inbox">View all messages</a>
+                    }
+                    else
+                    {
+                        <div class="px-3 py-2 text-muted small">No recent messages</div>
+                    }
                 </div>
             </li>
             <li class="nav-item dropdown mr-2">
                 <a class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center" id="notificationDropdown" href="#" data-toggle="dropdown">
-                    <i class="mdi mdi-email-open mx-0"></i>
-                    <span class="count bg-danger">1</span>
+                    <i class="mdi mdi-bell-outline mx-0"></i>
+                    @if (notificationCount > 0)
+                    {
+                        <span class="count bg-danger">@notificationCount</span>
+                    }
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="notificationDropdown">
                     <p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-success">
-                                <i class="mdi mdi-information mx-0"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <h6 class="preview-subject font-weight-normal">Application Error</h6>
-                            <p class="font-weight-light small-text mb-0 text-muted">
-                                Just now
-                            </p>
-                        </div>
-                    </a>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-warning">
-                                <i class="mdi mdi-settings mx-0"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <h6 class="preview-subject font-weight-normal">Settings</h6>
-                            <p class="font-weight-light small-text mb-0 text-muted">
-                                Private message
-                            </p>
-                        </div>
-                    </a>
-                    <a class="dropdown-item preview-item">
-                        <div class="preview-thumbnail">
-                            <div class="preview-icon bg-info">
-                                <i class="mdi mdi-account-box mx-0"></i>
-                            </div>
-                        </div>
-                        <div class="preview-item-content">
-                            <h6 class="preview-subject font-weight-normal">New user registration</h6>
-                            <p class="font-weight-light small-text mb-0 text-muted">
-                                2 days ago
-                            </p>
-                        </div>
-                    </a>
+                    @if (recentNotifications.Any())
+                    {
+                        foreach (var n in recentNotifications)
+                        {
+                            var title = (string)(n?.Title ?? n?.Subject ?? "Notification");
+                            var text = (string)(n?.Text ?? n?.Message ?? "");
+                            var level = (string)(n?.Level ?? n?.Type ?? "info").ToString().ToLower();
+                            var bgClass = level == "success" ? "bg-success" : level == "warning" ? "bg-warning" : level == "error" ? "bg-danger" : "bg-info";
+                            var icon = level == "success" ? "mdi-check-circle" : level == "warning" ? "mdi-alert" : level == "error" ? "mdi-information" : "mdi-bell";
+                            var url = (string)(n?.Url ?? "/User/Notification/Index");
+                            <a class="dropdown-item preview-item" href="@url">
+                                <div class="preview-thumbnail">
+                                    <div class="preview-icon @bgClass">
+                                        <i class="mdi @icon mx-0"></i>
+                                    </div>
+                                </div>
+                                <div class="preview-item-content">
+                                    <h6 class="preview-subject font-weight-normal">@title</h6>
+                                    <p class="font-weight-light small-text mb-0 text-muted">@text</p>
+                                </div>
+                            </a>
+                        }
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item text-center" href="/User/Notification/Index">View all notifications</a>
+                    }
+                    else
+                    {
+                        <div class="px-3 py-2 text-muted small">No notifications</div>
+                    }
                 </div>
             </li>
         </ul>

@@ -13,7 +13,9 @@ namespace MultiShop.WebUI.Services.CatalogServices.ProductImageServices
 
         public async Task<ProductImageSliderDto> GetProductImageSliderByProductIdAsync(string productId)
         {
-            var resp = await _httpClient.GetAsync($"productimages/ProductImageSliderByProductId/{productId}");
+            // Ocelot upstream already prefixes /services/catalog -> maps to downstream /api
+            // So we must NOT include "api/" here
+            var resp = await _httpClient.GetAsync($"ProductImages/ProductImageSliderByProductId/{productId}");
             if (!resp.IsSuccessStatusCode)
             {
                 var error = await resp.Content.ReadAsStringAsync();
